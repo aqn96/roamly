@@ -2,14 +2,15 @@ package com.roamly.app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Roamly brand colors — Ocean Blue + Teal
-val RoamlyBlue = Color(0xFF1E88E5)
-val RoamlyTeal = Color(0xFF00BCD4)
-val RoamlyNavy = Color(0xFF1A1A2E)
+// Roamly brand colors — Adventure Earth
+val RoamlyTerracotta = Color(0xFFE07B39)
+val RoamlyForestGreen = Color(0xFF4A7C59)
+val RoamlySand = Color(0xFFFFF8F3)
+val RoamlyDarkBrown = Color(0xFF2C1810)
 val RoamlyGray = Color(0xFF666666)
 val RoamlyLightGray = Color(0xFFF5F5F5)
 val RoamlyWhite = Color(0xFFFFFFFF)
 
 // Dark theme variants
-val RoamlyBlueDark = Color(0xFF1565C0)
-val RoamlyNavyLight = Color(0xFF2D2D4E)
+val RoamlyTerracottaDark = Color(0xFFC46A2A)
+val RoamlyForestGreenDark = Color(0xFF3A6347)

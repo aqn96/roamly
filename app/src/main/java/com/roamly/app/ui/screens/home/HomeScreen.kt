@@ -38,9 +38,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.roamly.app.ui.components.BottomNavTab
 import com.roamly.app.ui.components.RoamlyBottomNavBar
-import com.roamly.app.ui.theme.RoamlyBlue
+import com.roamly.app.ui.theme.RoamlyTerracotta
 import com.roamly.app.ui.theme.RoamlyLightGray
-import com.roamly.app.ui.theme.RoamlyTeal
+import com.roamly.app.ui.theme.RoamlyForestGreen
 import com.roamly.app.ui.theme.RoamlyTheme
 
 @Composable
@@ -111,7 +111,7 @@ fun HomeScreen(
                         .shadow(4.dp, CircleShape)
                         .clip(CircleShape)
                         .background(Color.White)
-                        .border(2.dp, RoamlyBlue, CircleShape)
+                        .border(2.dp, RoamlyTerracotta, CircleShape)
                         .clickable {
                             // TODO: Navigate to profile/settings screen:
                             //   onNavigateToProfile()
@@ -124,7 +124,7 @@ fun HomeScreen(
                     Icon(
                         imageVector = Icons.Default.Person,
                         contentDescription = "Profile",
-                        tint = RoamlyBlue,
+                        tint = RoamlyTerracotta,
                         modifier = Modifier.size(24.dp)
                     )
                 }
@@ -134,7 +134,7 @@ fun HomeScreen(
                     text = "Roamly",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    color = RoamlyBlue
+                    color = RoamlyTerracotta
                 )
 
                 // Spacer to balance the row
@@ -154,7 +154,7 @@ fun HomeScreen(
                         .clip(CircleShape)
                         .background(
                             Brush.radialGradient(
-                                colors = listOf(RoamlyBlue, RoamlyTeal)
+                                colors = listOf(RoamlyTerracotta, RoamlyForestGreen)
                             )
                         )
                         .clickable { onStartTrip() },

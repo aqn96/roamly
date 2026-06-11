@@ -34,8 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.roamly.app.ui.components.RoamlyButton
 import com.roamly.app.ui.components.RoamlyTextField
-import com.roamly.app.ui.theme.RoamlyBlue
-import com.roamly.app.ui.theme.RoamlyTeal
+import com.roamly.app.ui.theme.RoamlyTerracotta
+import com.roamly.app.ui.theme.RoamlyForestGreen
 import com.roamly.app.ui.theme.RoamlyTheme
 
 @Composable
@@ -59,7 +59,7 @@ fun SignUpScreen(
                 .fillMaxHeight(0.30f)
                 .background(
                     Brush.verticalGradient(
-                        colors = listOf(RoamlyBlue, RoamlyTeal)
+                        colors = listOf(RoamlyTerracotta, RoamlyForestGreen)
                     )
                 ),
             contentAlignment = Alignment.Center
@@ -147,7 +147,7 @@ fun SignUpScreen(
                 ) {
                     Text(text = "Already have an account?", color = Color.Gray)
                     TextButton(onClick = onNavigateToLogin) {
-                        Text(text = "Log In", color = RoamlyBlue)
+                        Text(text = "Log In", color = RoamlyTerracotta)
                     }
                 }
             }

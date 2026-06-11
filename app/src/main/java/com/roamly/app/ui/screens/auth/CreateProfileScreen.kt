@@ -41,9 +41,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.roamly.app.ui.components.RoamlyButton
 import com.roamly.app.ui.components.RoamlyTextField
-import com.roamly.app.ui.theme.RoamlyBlue
+import com.roamly.app.ui.theme.RoamlyTerracotta
 import com.roamly.app.ui.theme.RoamlyLightGray
-import com.roamly.app.ui.theme.RoamlyTeal
+import com.roamly.app.ui.theme.RoamlyForestGreen
 import com.roamly.app.ui.theme.RoamlyTheme
 
 private val travelStyles = listOf("Solo Trip", "Group Trip", "Nomad")
@@ -70,7 +70,7 @@ fun CreateProfileScreen(
                 .fillMaxHeight(0.28f)
                 .background(
                     Brush.verticalGradient(
-                        colors = listOf(RoamlyBlue, RoamlyTeal)
+                        colors = listOf(RoamlyTerracotta, RoamlyForestGreen)
                     )
                 ),
             contentAlignment = Alignment.Center
@@ -132,7 +132,7 @@ fun CreateProfileScreen(
                             .size(90.dp)
                             .clip(CircleShape)
                             .background(RoamlyLightGray)
-                            .border(2.dp, RoamlyBlue, CircleShape)
+                            .border(2.dp, RoamlyTerracotta, CircleShape)
                             .clickable {
                                 // TODO: Launch image picker here using:
                                 //   val launcher = rememberLauncherForActivityResult(
@@ -148,7 +148,7 @@ fun CreateProfileScreen(
                         Icon(
                             imageVector = Icons.Default.CameraAlt,
                             contentDescription = "Add profile photo",
-                            tint = RoamlyBlue,
+                            tint = RoamlyTerracotta,
                             modifier = Modifier.size(32.dp)
                         )
                     }
@@ -229,12 +229,12 @@ private fun SelectorRow(
                         .weight(1f)
                         .height(44.dp)
                         .background(
-                            color = if (isSelected) RoamlyBlue else Color.White,
+                            color = if (isSelected) RoamlyTerracotta else Color.White,
                             shape = RoundedCornerShape(10.dp)
                         )
                         .border(
                             width = 1.dp,
-                            color = if (isSelected) RoamlyBlue else Color.LightGray,
+                            color = if (isSelected) RoamlyTerracotta else Color.LightGray,
                             shape = RoundedCornerShape(10.dp)
                         )
                         .clickable { onSelect(option) },

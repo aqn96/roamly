@@ -12,7 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.roamly.app.ui.theme.RoamlyBlue
+import com.roamly.app.ui.theme.RoamlyTerracotta
 import com.roamly.app.ui.theme.RoamlyTheme
 
 enum class BottomNavTab { HOME, FEED, PROFILE }
@@ -28,21 +28,21 @@ fun RoamlyBottomNavBar(
             onClick = { onTabSelected(BottomNavTab.HOME) },
             icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
             label = { Text("Home") },
-            colors = NavigationBarItemDefaults.colors(indicatorColor = RoamlyBlue.copy(alpha = 0.15f))
+            colors = NavigationBarItemDefaults.colors(indicatorColor = RoamlyTerracotta.copy(alpha = 0.15f))
         )
         NavigationBarItem(
             selected = selectedTab == BottomNavTab.FEED,
             onClick = { onTabSelected(BottomNavTab.FEED) },
             icon = { Icon(Icons.Default.Explore, contentDescription = "Feed") },
             label = { Text("Discover") },
-            colors = NavigationBarItemDefaults.colors(indicatorColor = RoamlyBlue.copy(alpha = 0.15f))
+            colors = NavigationBarItemDefaults.colors(indicatorColor = RoamlyTerracotta.copy(alpha = 0.15f))
         )
         NavigationBarItem(
             selected = selectedTab == BottomNavTab.PROFILE,
             onClick = { onTabSelected(BottomNavTab.PROFILE) },
             icon = { Icon(Icons.Default.Person, contentDescription = "Profile") },
             label = { Text("Profile") },
-            colors = NavigationBarItemDefaults.colors(indicatorColor = RoamlyBlue.copy(alpha = 0.15f))
+            colors = NavigationBarItemDefaults.colors(indicatorColor = RoamlyTerracotta.copy(alpha = 0.15f))
         )
     }
 }
