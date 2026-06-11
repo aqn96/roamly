@@ -23,7 +23,7 @@ private val DarkColorScheme = darkColorScheme(
     secondary = RoamlyForestGreenDark,
     onSecondary = RoamlyWhite,
     background = RoamlyDarkBrown,
-    surface = Color(0xFF3D2418),
+    surface = RoamlyDarkSurface,
     onBackground = RoamlyWhite,
     onSurface = RoamlyWhite,
 )

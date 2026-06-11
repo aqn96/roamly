@@ -14,3 +14,4 @@ val RoamlyWhite = Color(0xFFFFFFFF)
 // Dark theme variants
 val RoamlyTerracottaDark = Color(0xFFC46A2A)
 val RoamlyForestGreenDark = Color(0xFF3A6347)
+val RoamlyDarkSurface = Color(0xFF3D2418)
