@@ -2,16 +2,15 @@ package com.roamly.app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Roamly brand colors — Adventure Earth
-val RoamlyTerracotta = Color(0xFFE07B39)
-val RoamlyForestGreen = Color(0xFF4A7C59)
-val RoamlySand = Color(0xFFFFF8F3)
-val RoamlyDarkBrown = Color(0xFF2C1810)
-val RoamlyGray = Color(0xFF666666)
-val RoamlyLightGray = Color(0xFFF5F5F5)
-val RoamlyWhite = Color(0xFFFFFFFF)
-
-// Dark theme variants
-val RoamlyTerracottaDark = Color(0xFFC46A2A)
-val RoamlyForestGreenDark = Color(0xFF3A6347)
-val RoamlyDarkSurface = Color(0xFF3D2418)
+// Roamly — Midnight Nomad color system
+val RoamlyMidnight   = Color(0xFF0F172A)   // main background
+val RoamlySlate      = Color(0xFF1E293B)   // card / elevated surfaces
+val RoamlySlateLight = Color(0xFF334155)   // borders, dividers
+val RoamlyElectric   = Color(0xFF38BDF8)   // primary accent (start trip, buttons)
+val RoamlyElectricDeep = Color(0xFF0EA5E9) // gradient end / deeper accent
+val RoamlyAurora     = Color(0xFF34D399)   // achievements, unlocked state
+val RoamlyTextLight  = Color(0xFFE2E8F0)   // primary text on dark
+val RoamlyTextMuted  = Color(0xFF94A3B8)   // secondary text on dark
+val RoamlyWhite      = Color(0xFFFFFFFF)
+val RoamlyLightGray  = Color(0xFFF5F5F5)
+val RoamlyGray       = Color(0xFF666666)

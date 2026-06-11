@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
 //                LoginScreen()
 //                SignUpScreen()
 //                CreateProfileScreen()
-                HomeScreen()
+//                HomeScreen()
             }
         }
     }

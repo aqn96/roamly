@@ -22,7 +22,6 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -45,8 +44,13 @@ import com.roamly.app.ui.components.BottomNavTab
 import com.roamly.app.ui.components.RoamlyBottomNavBar
 import com.roamly.app.ui.theme.MontserratFamily
 import com.roamly.app.ui.theme.NunitoFamily
-import com.roamly.app.ui.theme.RoamlyForestGreen
-import com.roamly.app.ui.theme.RoamlyTerracotta
+import com.roamly.app.ui.theme.RoamlyAurora
+import com.roamly.app.ui.theme.RoamlyElectric
+import com.roamly.app.ui.theme.RoamlyElectricDeep
+import com.roamly.app.ui.theme.RoamlyMidnight
+import com.roamly.app.ui.theme.RoamlySlate
+import com.roamly.app.ui.theme.RoamlyTextLight
+import com.roamly.app.ui.theme.RoamlyTextMuted
 import com.roamly.app.ui.theme.RoamlyTheme
 
 @Composable
@@ -60,6 +64,7 @@ fun HomeScreen(
     var selectedTab by remember { mutableStateOf(BottomNavTab.HOME) }
 
     Scaffold(
+        containerColor = RoamlyMidnight,
         bottomBar = {
             RoamlyBottomNavBar(
                 selectedTab = selectedTab,
@@ -88,20 +93,15 @@ fun HomeScreen(
                     .background(
                         Brush.verticalGradient(
                             colors = listOf(
-                                Color(0xFFDCEEFA),
-                                Color(0xFFB8DDF0),
-                                Color(0xFF9ECFE8)
+                                Color(0xFF0D2137),
+                                Color(0xFF0F172A),
+                                Color(0xFF0A1628)
                             )
                         )
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "Map View",
-                    color = Color(0xFF7AAFCC),
-                    fontSize = 16.sp,
-                    fontFamily = NunitoFamily
-                )
+                Text(text = "Map View", color = RoamlyTextMuted, fontFamily = NunitoFamily, fontSize = 14.sp)
             }
 
             // ── Top bar overlay ───────────────────────────────────────────
@@ -113,14 +113,14 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Avatar — top left (bigger, better placeholder)
+                // Avatar — top left
                 Box(
                     modifier = Modifier
                         .size(62.dp)
                         .shadow(6.dp, CircleShape)
                         .clip(CircleShape)
-                        .background(Color.White)
-                        .border(3.dp, RoamlyTerracotta, CircleShape)
+                        .background(RoamlySlate)
+                        .border(3.dp, RoamlyElectric, CircleShape)
                         .clickable {
                             // TODO: Navigate to profile/settings screen:
                             //   onNavigateToProfile()
@@ -133,18 +133,17 @@ fun HomeScreen(
                     Icon(
                         imageVector = Icons.Default.Person,
                         contentDescription = "Profile",
-                        tint = RoamlyTerracotta,
+                        tint = RoamlyElectric,
                         modifier = Modifier.size(36.dp)
                     )
                 }
 
-                // App name
                 Text(
                     text = "Roamly",
                     fontSize = 42.sp,
                     fontWeight = FontWeight.ExtraBold,
                     fontFamily = MontserratFamily,
-                    color = RoamlyTerracotta
+                    color = RoamlyElectric
                 )
 
                 Spacer(modifier = Modifier.size(62.dp))
@@ -159,11 +158,11 @@ fun HomeScreen(
                 Box(
                     modifier = Modifier
                         .size(150.dp)
-                        .shadow(10.dp, CircleShape)
+                        .shadow(12.dp, CircleShape)
                         .clip(CircleShape)
                         .background(
                             Brush.radialGradient(
-                                colors = listOf(RoamlyTerracotta, RoamlyForestGreen)
+                                colors = listOf(RoamlyElectric, RoamlyElectricDeep)
                             )
                         )
                         .clickable { onStartTrip() },
@@ -173,14 +172,14 @@ fun HomeScreen(
                         Icon(
                             imageVector = Icons.Default.DirectionsWalk,
                             contentDescription = "Start Trip",
-                            tint = Color.White,
+                            tint = RoamlyMidnight,
                             modifier = Modifier.size(44.dp)
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             text = "Start Trip",
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold,
+                            color = RoamlyMidnight,
+                            fontWeight = FontWeight.ExtraBold,
                             fontFamily = MontserratFamily,
                             fontSize = 15.sp
                         )
@@ -188,7 +187,7 @@ fun HomeScreen(
                 }
                 Text(
                     text = "Tap to begin recording your route",
-                    color = Color.White,
+                    color = RoamlyTextMuted,
                     fontFamily = NunitoFamily,
                     fontSize = 13.sp
                 )
@@ -201,7 +200,7 @@ fun HomeScreen(
                     .align(Alignment.BottomCenter)
                     .padding(horizontal = 16.dp, vertical = 12.dp),
                 shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.95f)),
+                colors = CardDefaults.cardColors(containerColor = RoamlySlate),
                 elevation = CardDefaults.cardElevation(8.dp)
             ) {
                 Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 14.dp)) {
@@ -215,12 +214,12 @@ fun HomeScreen(
                             fontFamily = MontserratFamily,
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
-                            color = Color.Black
+                            color = RoamlyTextLight
                         )
                         TextButton(onClick = onNavigateToTripStats) {
                             Text(
                                 text = "See more →",
-                                color = RoamlyTerracotta,
+                                color = RoamlyElectric,
                                 fontFamily = NunitoFamily,
                                 fontWeight = FontWeight.SemiBold,
                                 fontSize = 13.sp
@@ -233,9 +232,9 @@ fun HomeScreen(
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         // TODO: Replace dummy values with real data from Firestore
-                        StatItem(value = "12", label = "Trips")
-                        StatItem(value = "234 km", label = "Distance")
-                        StatItem(value = "8", label = "Unlocked")
+                        StatItem(value = "12", label = "Trips", highlight = false)
+                        StatItem(value = "234 km", label = "Distance", highlight = false)
+                        StatItem(value = "8", label = "Unlocked", highlight = true)
                     }
                 }
             }
@@ -244,20 +243,20 @@ fun HomeScreen(
 }
 
 @Composable
-private fun StatItem(value: String, label: String) {
+private fun StatItem(value: String, label: String, highlight: Boolean) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = value,
             fontFamily = MontserratFamily,
             fontWeight = FontWeight.ExtraBold,
             fontSize = 20.sp,
-            color = RoamlyTerracotta
+            color = if (highlight) RoamlyAurora else RoamlyElectric
         )
         Text(
             text = label,
             fontFamily = NunitoFamily,
             fontSize = 12.sp,
-            color = Color.Gray
+            color = RoamlyTextMuted
         )
     }
 }

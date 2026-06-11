@@ -34,17 +34,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.roamly.app.ui.components.RoamlyButton
 import com.roamly.app.ui.components.RoamlyTextField
-import com.roamly.app.ui.theme.RoamlyTerracotta
-import com.roamly.app.ui.theme.RoamlyLightGray
-import com.roamly.app.ui.theme.RoamlyForestGreen
 import com.roamly.app.ui.theme.MontserratFamily
+import com.roamly.app.ui.theme.NunitoFamily
+import com.roamly.app.ui.theme.RoamlyElectric
+import com.roamly.app.ui.theme.RoamlyMidnight
+import com.roamly.app.ui.theme.RoamlySlate
+import com.roamly.app.ui.theme.RoamlySlateLight
+import com.roamly.app.ui.theme.RoamlyTextLight
+import com.roamly.app.ui.theme.RoamlyTextMuted
 import com.roamly.app.ui.theme.RoamlyTheme
 
 private val travelStyles = listOf("Solo Trip", "Group Trip", "Nomad")
@@ -60,7 +63,7 @@ fun CreateProfileScreen(
     var selectedStyle by rememberSaveable { mutableStateOf("Solo Trip") }
     var selectedFrequency by rememberSaveable { mutableStateOf("Regular") }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize().background(RoamlyMidnight)) {
 
         // ── Hero section ─────────────────────────────────────────────────
         // TODO: Replace gradient with a real travel photo using:
@@ -71,7 +74,7 @@ fun CreateProfileScreen(
                 .fillMaxHeight(0.28f)
                 .background(
                     Brush.verticalGradient(
-                        colors = listOf(RoamlyTerracotta, RoamlyForestGreen)
+                        colors = listOf(RoamlyElectric.copy(alpha = 0.3f), RoamlyMidnight)
                     )
                 ),
             contentAlignment = Alignment.Center
@@ -81,7 +84,7 @@ fun CreateProfileScreen(
                 //   Image(painter = painterResource(R.drawable.roamly_logo), ...)
                 Text(
                     text = "Roamly",
-                    color = Color.White,
+                    color = RoamlyElectric,
                     fontSize = 38.sp,
                     fontWeight = FontWeight.ExtraBold,
                     fontFamily = MontserratFamily
@@ -89,7 +92,8 @@ fun CreateProfileScreen(
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "Tell us about yourself",
-                    color = Color.White.copy(alpha = 0.85f),
+                    color = RoamlyTextMuted,
+                    fontFamily = NunitoFamily,
                     fontSize = 14.sp
                 )
             }
@@ -102,7 +106,7 @@ fun CreateProfileScreen(
                 .fillMaxHeight(0.80f)
                 .align(Alignment.BottomCenter),
             shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
+            colors = CardDefaults.cardColors(containerColor = RoamlySlate),
             elevation = CardDefaults.cardElevation(8.dp)
         ) {
             Column(
@@ -117,13 +121,13 @@ fun CreateProfileScreen(
                     text = "Set Up Your Profile",
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black,
+                    color = RoamlyTextLight,
                     modifier = Modifier.fillMaxWidth()
                 )
                 Text(
                     text = "This helps us tailor recommendations for you",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray,
+                    color = RoamlyTextMuted,
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -133,8 +137,8 @@ fun CreateProfileScreen(
                         modifier = Modifier
                             .size(90.dp)
                             .clip(CircleShape)
-                            .background(RoamlyLightGray)
-                            .border(2.dp, RoamlyTerracotta, CircleShape)
+                            .background(RoamlyMidnight)
+                            .border(2.dp, RoamlyElectric, CircleShape)
                             .clickable {
                                 // TODO: Launch image picker here using:
                                 //   val launcher = rememberLauncherForActivityResult(
@@ -150,54 +154,23 @@ fun CreateProfileScreen(
                         Icon(
                             imageVector = Icons.Default.CameraAlt,
                             contentDescription = "Add profile photo",
-                            tint = RoamlyTerracotta,
+                            tint = RoamlyElectric,
                             modifier = Modifier.size(32.dp)
                         )
                     }
                     Spacer(modifier = Modifier.height(6.dp))
-                    Text(
-                        text = "Tap to add photo",
-                        color = Color.Gray,
-                        fontSize = 12.sp
-                    )
+                    Text(text = "Tap to add photo", color = RoamlyTextMuted, fontFamily = NunitoFamily, fontSize = 12.sp)
                 }
 
-                RoamlyTextField(
-                    value = username,
-                    onValueChange = { username = it },
-                    label = "Username"
-                )
-                RoamlyTextField(
-                    value = homeCountry,
-                    onValueChange = { homeCountry = it },
-                    label = "Home Country"
-                )
+                RoamlyTextField(value = username, onValueChange = { username = it }, label = "Username")
+                RoamlyTextField(value = homeCountry, onValueChange = { homeCountry = it }, label = "Home Country")
 
-                // ── Travel style selector ─────────────────────────────────
-                SelectorRow(
-                    label = "Travel Style",
-                    options = travelStyles,
-                    selected = selectedStyle,
-                    onSelect = { selectedStyle = it }
-                )
+                SelectorRow(label = "Travel Style", options = travelStyles, selected = selectedStyle, onSelect = { selectedStyle = it })
+                SelectorRow(label = "How Often Do You Travel?", options = travelFrequencies, selected = selectedFrequency, onSelect = { selectedFrequency = it })
 
-                // ── Travel frequency selector ─────────────────────────────
-                SelectorRow(
-                    label = "How Often Do You Travel?",
-                    options = travelFrequencies,
-                    selected = selectedFrequency,
-                    onSelect = { selectedFrequency = it }
-                )
-
-                // ── Favorite location ─────────────────────────────────────
-                RoamlyTextField(
-                    value = favoriteLocation,
-                    onValueChange = { favoriteLocation = it },
-                    label = "Favorite Destination (e.g. Tokyo, Japan)"
-                )
+                RoamlyTextField(value = favoriteLocation, onValueChange = { favoriteLocation = it }, label = "Favorite Destination (e.g. Tokyo, Japan)")
 
                 Spacer(modifier = Modifier.height(4.dp))
-
                 RoamlyButton(text = "Get Started", onClick = onProfileSaved)
             }
         }
@@ -211,19 +184,9 @@ private fun SelectorRow(
     selected: String,
     onSelect: (String) -> Unit
 ) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelLarge,
-            color = Color.Black
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
+    Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(text = label, style = MaterialTheme.typography.labelLarge, color = RoamlyTextLight)
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             options.forEach { option ->
                 val isSelected = selected == option
                 Box(
@@ -231,12 +194,12 @@ private fun SelectorRow(
                         .weight(1f)
                         .height(44.dp)
                         .background(
-                            color = if (isSelected) RoamlyTerracotta else Color.White,
+                            color = if (isSelected) RoamlyElectric else RoamlyMidnight,
                             shape = RoundedCornerShape(10.dp)
                         )
                         .border(
                             width = 1.dp,
-                            color = if (isSelected) RoamlyTerracotta else Color.LightGray,
+                            color = if (isSelected) RoamlyElectric else RoamlySlateLight,
                             shape = RoundedCornerShape(10.dp)
                         )
                         .clickable { onSelect(option) },
@@ -244,8 +207,9 @@ private fun SelectorRow(
                 ) {
                     Text(
                         text = option,
-                        color = if (isSelected) Color.White else Color.Gray,
-                        style = MaterialTheme.typography.labelMedium
+                        color = if (isSelected) RoamlyMidnight else RoamlyTextMuted,
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                     )
                 }
             }

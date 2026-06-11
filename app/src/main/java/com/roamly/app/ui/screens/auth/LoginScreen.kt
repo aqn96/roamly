@@ -36,9 +36,13 @@ import androidx.compose.ui.unit.sp
 import com.roamly.app.ui.components.RoamlyButton
 import com.roamly.app.ui.components.RoamlyTextField
 import com.roamly.app.ui.components.SocialSignInButton
-import com.roamly.app.ui.theme.RoamlyForestGreen
-import com.roamly.app.ui.theme.RoamlyTerracotta
 import com.roamly.app.ui.theme.MontserratFamily
+import com.roamly.app.ui.theme.NunitoFamily
+import com.roamly.app.ui.theme.RoamlyElectric
+import com.roamly.app.ui.theme.RoamlyMidnight
+import com.roamly.app.ui.theme.RoamlySlate
+import com.roamly.app.ui.theme.RoamlyTextLight
+import com.roamly.app.ui.theme.RoamlyTextMuted
 import com.roamly.app.ui.theme.RoamlyTheme
 
 @Composable
@@ -49,10 +53,10 @@ fun LoginScreen(
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize().background(RoamlyMidnight)) {
 
-        // ── Hero section (top half) ──────────────────────────────────────
-        // TODO: Replace this gradient with a real travel photo using:
+        // ── Hero section ─────────────────────────────────────────────────
+        // TODO: Replace gradient with a real travel photo using:
         //   Image(painter = painterResource(R.drawable.hero_travel), contentScale = ContentScale.Crop)
         Box(
             modifier = Modifier
@@ -60,7 +64,7 @@ fun LoginScreen(
                 .fillMaxHeight(0.45f)
                 .background(
                     Brush.verticalGradient(
-                        colors = listOf(RoamlyTerracotta, RoamlyForestGreen)
+                        colors = listOf(RoamlyElectric.copy(alpha = 0.3f), RoamlyMidnight)
                     )
                 ),
             contentAlignment = Alignment.Center
@@ -68,7 +72,8 @@ fun LoginScreen(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     text = "Explore the world with us",
-                    color = Color.White,
+                    color = RoamlyTextMuted,
+                    fontFamily = NunitoFamily,
                     fontSize = 14.sp
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -76,26 +81,26 @@ fun LoginScreen(
                 //   Image(painter = painterResource(R.drawable.roamly_logo), ...)
                 Text(
                     text = "Roamly",
-                    color = Color.White,
+                    color = RoamlyElectric,
                     fontSize = 42.sp,
                     fontWeight = FontWeight.ExtraBold,
                     fontFamily = MontserratFamily
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedButton(onClick = onNavigateToSignUp) {
-                    Text(text = "Explore", color = Color.White)
+                    Text(text = "Explore", color = RoamlyElectric, fontFamily = NunitoFamily)
                 }
             }
         }
 
-        // ── Login card (slides up over hero) ────────────────────────────
+        // ── Login card ────────────────────────────────────────────────────
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.65f)
                 .align(Alignment.BottomCenter),
             shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
+            colors = CardDefaults.cardColors(containerColor = RoamlySlate),
             elevation = CardDefaults.cardElevation(8.dp)
         ) {
             Column(
@@ -108,28 +113,19 @@ fun LoginScreen(
                 Text(
                     text = "Welcome back, traveler!",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray
+                    color = RoamlyTextMuted
                 )
                 Text(
                     text = "Log In",
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black
+                    color = RoamlyTextLight
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                RoamlyTextField(
-                    value = email,
-                    onValueChange = { email = it },
-                    label = "Email"
-                )
-                RoamlyTextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    label = "Password",
-                    isPassword = true
-                )
+                RoamlyTextField(value = email, onValueChange = { email = it }, label = "Email")
+                RoamlyTextField(value = password, onValueChange = { password = it }, label = "Password", isPassword = true)
 
                 Spacer(modifier = Modifier.height(4.dp))
 
@@ -144,9 +140,9 @@ fun LoginScreen(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Don't have an account?", color = Color.Gray)
+                    Text(text = "Don't have an account?", color = RoamlyTextMuted, fontFamily = NunitoFamily)
                     TextButton(onClick = onNavigateToSignUp) {
-                        Text(text = "Sign Up", color = RoamlyTerracotta)
+                        Text(text = "Sign Up", color = RoamlyElectric, fontFamily = NunitoFamily)
                     }
                 }
             }
