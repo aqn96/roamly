@@ -15,12 +15,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DirectionsWalk
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,16 +43,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.roamly.app.ui.components.BottomNavTab
 import com.roamly.app.ui.components.RoamlyBottomNavBar
-import com.roamly.app.ui.theme.RoamlyTerracotta
-import com.roamly.app.ui.theme.RoamlyLightGray
-import com.roamly.app.ui.theme.RoamlyForestGreen
 import com.roamly.app.ui.theme.MontserratFamily
+import com.roamly.app.ui.theme.NunitoFamily
+import com.roamly.app.ui.theme.RoamlyForestGreen
+import com.roamly.app.ui.theme.RoamlyTerracotta
 import com.roamly.app.ui.theme.RoamlyTheme
 
 @Composable
 fun HomeScreen(
     onStartTrip: () -> Unit = {},
-    onNavigateToFeed: () -> Unit = {},
+    onNavigateToTripStats: () -> Unit = {},
+    onNavigateToDiscover: () -> Unit = {},
+    onNavigateToFavorites: () -> Unit = {},
     onNavigateToProfile: () -> Unit = {}
 ) {
     var selectedTab by remember { mutableStateOf(BottomNavTab.HOME) }
@@ -59,8 +66,8 @@ fun HomeScreen(
                 onTabSelected = { tab ->
                     selectedTab = tab
                     // TODO: Wire up tab navigation once NavGraph is set up:
-                    //   BottomNavTab.FEED -> onNavigateToFeed()
-                    //   BottomNavTab.PROFILE -> onNavigateToProfile()
+                    //   BottomNavTab.DISCOVER -> onNavigateToDiscover()
+                    //   BottomNavTab.FAVORITES -> onNavigateToFavorites()
                 }
             )
         }
@@ -92,7 +99,8 @@ fun HomeScreen(
                 Text(
                     text = "Map View",
                     color = Color(0xFF7AAFCC),
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
+                    fontFamily = NunitoFamily
                 )
             }
 
@@ -105,32 +113,32 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Avatar — top left
+                // Avatar — top left (bigger, better placeholder)
                 Box(
                     modifier = Modifier
-                        .size(44.dp)
-                        .shadow(4.dp, CircleShape)
+                        .size(62.dp)
+                        .shadow(6.dp, CircleShape)
                         .clip(CircleShape)
                         .background(Color.White)
-                        .border(2.dp, RoamlyTerracotta, CircleShape)
+                        .border(3.dp, RoamlyTerracotta, CircleShape)
                         .clickable {
                             // TODO: Navigate to profile/settings screen:
                             //   onNavigateToProfile()
                         },
                     contentAlignment = Alignment.Center
                 ) {
-                    // TODO: Replace Icon with actual user profile photo:
+                    // TODO: Replace with actual user profile photo:
                     //   Image(bitmap = userAvatarBitmap, contentScale = ContentScale.Crop,
                     //         modifier = Modifier.fillMaxSize().clip(CircleShape))
                     Icon(
                         imageVector = Icons.Default.Person,
                         contentDescription = "Profile",
                         tint = RoamlyTerracotta,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(36.dp)
                     )
                 }
 
-                // App name centered
+                // App name
                 Text(
                     text = "Roamly",
                     fontSize = 42.sp,
@@ -139,11 +147,10 @@ fun HomeScreen(
                     color = RoamlyTerracotta
                 )
 
-                // Spacer to balance the row
-                Spacer(modifier = Modifier.size(44.dp))
+                Spacer(modifier = Modifier.size(62.dp))
             }
 
-            // ── Start Trip button — center of screen ──────────────────────
+            // ── Start Trip button — center ────────────────────────────────
             Column(
                 modifier = Modifier.align(Alignment.Center),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -151,8 +158,8 @@ fun HomeScreen(
             ) {
                 Box(
                     modifier = Modifier
-                        .size(140.dp)
-                        .shadow(8.dp, CircleShape)
+                        .size(150.dp)
+                        .shadow(10.dp, CircleShape)
                         .clip(CircleShape)
                         .background(
                             Brush.radialGradient(
@@ -167,24 +174,91 @@ fun HomeScreen(
                             imageVector = Icons.Default.DirectionsWalk,
                             contentDescription = "Start Trip",
                             tint = Color.White,
-                            modifier = Modifier.size(40.dp)
+                            modifier = Modifier.size(44.dp)
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             text = "Start Trip",
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp
+                            fontFamily = MontserratFamily,
+                            fontSize = 15.sp
                         )
                     }
                 }
                 Text(
                     text = "Tap to begin recording your route",
                     color = Color.White,
-                    fontSize = 12.sp
+                    fontFamily = NunitoFamily,
+                    fontSize = 13.sp
                 )
             }
+
+            // ── Trip stats card — bottom overlay ──────────────────────────
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.95f)),
+                elevation = CardDefaults.cardElevation(8.dp)
+            ) {
+                Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 14.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "My Stats",
+                            fontFamily = MontserratFamily,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp,
+                            color = Color.Black
+                        )
+                        TextButton(onClick = onNavigateToTripStats) {
+                            Text(
+                                text = "See more →",
+                                color = RoamlyTerracotta,
+                                fontFamily = NunitoFamily,
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 13.sp
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        // TODO: Replace dummy values with real data from Firestore
+                        StatItem(value = "12", label = "Trips")
+                        StatItem(value = "234 km", label = "Distance")
+                        StatItem(value = "8", label = "Unlocked")
+                    }
+                }
+            }
         }
+    }
+}
+
+@Composable
+private fun StatItem(value: String, label: String) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = value,
+            fontFamily = MontserratFamily,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = 20.sp,
+            color = RoamlyTerracotta
+        )
+        Text(
+            text = label,
+            fontFamily = NunitoFamily,
+            fontSize = 12.sp,
+            color = Color.Gray
+        )
     }
 }
 
