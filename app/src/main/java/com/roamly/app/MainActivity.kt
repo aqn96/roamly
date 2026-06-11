@@ -17,9 +17,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             RoamlyTheme {
 //                LoginScreen()
-//                SignUpScreen()
+                SignUpScreen()
 //                CreateProfileScreen()
-                HomeScreen()
+//                HomeScreen()
             }
         }
     }

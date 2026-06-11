@@ -36,6 +36,7 @@ import com.roamly.app.ui.components.RoamlyButton
 import com.roamly.app.ui.components.RoamlyTextField
 import com.roamly.app.ui.theme.RoamlyTerracotta
 import com.roamly.app.ui.theme.RoamlyForestGreen
+import com.roamly.app.ui.theme.MontserratFamily
 import com.roamly.app.ui.theme.RoamlyTheme
 
 @Composable
@@ -70,8 +71,9 @@ fun SignUpScreen(
                 Text(
                     text = "Roamly",
                     color = Color.White,
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold
+                    fontSize = 38.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontFamily = MontserratFamily
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(

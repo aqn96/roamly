@@ -38,6 +38,7 @@ import com.roamly.app.ui.components.RoamlyTextField
 import com.roamly.app.ui.components.SocialSignInButton
 import com.roamly.app.ui.theme.RoamlyForestGreen
 import com.roamly.app.ui.theme.RoamlyTerracotta
+import com.roamly.app.ui.theme.MontserratFamily
 import com.roamly.app.ui.theme.RoamlyTheme
 
 @Composable
@@ -76,8 +77,9 @@ fun LoginScreen(
                 Text(
                     text = "Roamly",
                     color = Color.White,
-                    fontSize = 36.sp,
-                    fontWeight = FontWeight.Bold
+                    fontSize = 42.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontFamily = MontserratFamily
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedButton(onClick = onNavigateToSignUp) {

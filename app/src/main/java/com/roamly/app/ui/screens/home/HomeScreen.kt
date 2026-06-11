@@ -41,6 +41,7 @@ import com.roamly.app.ui.components.RoamlyBottomNavBar
 import com.roamly.app.ui.theme.RoamlyTerracotta
 import com.roamly.app.ui.theme.RoamlyLightGray
 import com.roamly.app.ui.theme.RoamlyForestGreen
+import com.roamly.app.ui.theme.MontserratFamily
 import com.roamly.app.ui.theme.RoamlyTheme
 
 @Composable
@@ -132,8 +133,9 @@ fun HomeScreen(
                 // App name centered
                 Text(
                     text = "Roamly",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontSize = 42.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontFamily = MontserratFamily,
                     color = RoamlyTerracotta
                 )
 
