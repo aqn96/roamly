@@ -7,9 +7,9 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
 private val LightColorScheme = lightColorScheme(
-    primary = RoamlyCoral,
+    primary = RoamlyBlue,
     onPrimary = RoamlyWhite,
-    secondary = RoamlyOrange,
+    secondary = RoamlyTeal,
     onSecondary = RoamlyWhite,
     background = RoamlyWhite,
     surface = RoamlyLightGray,
@@ -18,9 +18,9 @@ private val LightColorScheme = lightColorScheme(
 )
 
 private val DarkColorScheme = darkColorScheme(
-    primary = RoamlyCoralDark,
+    primary = RoamlyBlueDark,
     onPrimary = RoamlyWhite,
-    secondary = RoamlyOrange,
+    secondary = RoamlyTeal,
     onSecondary = RoamlyWhite,
     background = RoamlyNavy,
     surface = RoamlyNavyLight,

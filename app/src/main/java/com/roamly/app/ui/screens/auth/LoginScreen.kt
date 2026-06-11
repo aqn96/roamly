@@ -36,8 +36,8 @@ import androidx.compose.ui.unit.sp
 import com.roamly.app.ui.components.RoamlyButton
 import com.roamly.app.ui.components.RoamlyTextField
 import com.roamly.app.ui.components.SocialSignInButton
-import com.roamly.app.ui.theme.RoamlyCoral
-import com.roamly.app.ui.theme.RoamlyOrange
+import com.roamly.app.ui.theme.RoamlyBlue
+import com.roamly.app.ui.theme.RoamlyTeal
 import com.roamly.app.ui.theme.RoamlyTheme
 
 @Composable
@@ -59,7 +59,7 @@ fun LoginScreen(
                 .fillMaxHeight(0.45f)
                 .background(
                     Brush.verticalGradient(
-                        colors = listOf(RoamlyCoral, RoamlyOrange)
+                        colors = listOf(RoamlyBlue, RoamlyTeal)
                     )
                 ),
             contentAlignment = Alignment.Center
@@ -144,7 +144,7 @@ fun LoginScreen(
                 ) {
                     Text(text = "Don't have an account?", color = Color.Gray)
                     TextButton(onClick = onNavigateToSignUp) {
-                        Text(text = "Sign Up", color = RoamlyCoral)
+                        Text(text = "Sign Up", color = RoamlyBlue)
                     }
                 }
             }
