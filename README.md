@@ -125,13 +125,11 @@ Dark-first theme optimized for battery efficiency during passive background reco
 
 ## Current Status
 
-| Goal | Description | Status |
+| Milestone | Description | Status |
 |---|---|---|
-| Goal 5 | Project proposal + wireframes | ✅ Complete |
-| Goal 6 | UI screens skeleton | ✅ Complete |
-| Goal 7 | Firebase auth + navigation | 🔄 In progress |
-| Goal 8 | Location tracking + Foreground Service | ⏳ Upcoming |
-| Final | Full MVP submission | ⏳ Jun 20, 2026 |
+| Proposal + wireframes | App concept, screens, backend design | ✅ Complete |
+| UI screens | All screens built with Compose, dark theme, reusable components | ✅ Complete |
+| Final submission | Firebase auth, navigation, location tracking, Foreground Service | ⏳ Jun 20, 2026 |
 
 ---
 
