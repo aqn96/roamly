@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.roamly.app.data.AuthRepository
 import com.roamly.app.ui.screens.auth.CreateProfileScreen
 import com.roamly.app.ui.screens.auth.LoginScreen
 import com.roamly.app.ui.screens.auth.SignUpScreen
@@ -32,9 +33,12 @@ import com.roamly.app.ui.screens.trip.TripSummaryScreen
 fun RoamlyNavGraph(
     navController: NavHostController = rememberNavController(),
 ) {
+    // Returning users (already signed in to Firebase) skip straight to Home.
+    val startDestination: Any = if (AuthRepository().isLoggedIn) Home else Login
+
     NavHost(
         navController = navController,
-        startDestination = Login,
+        startDestination = startDestination,
     ) {
         // ── Auth flow ─────────────────────────────────────────────────────────
         composable<Login> {

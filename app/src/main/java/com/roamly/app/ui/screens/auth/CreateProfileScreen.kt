@@ -26,14 +26,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -55,13 +59,23 @@ private val travelFrequencies = listOf("Occasional", "Regular", "Frequent")
 
 @Composable
 fun CreateProfileScreen(
-    onProfileSaved: () -> Unit = {}
+    onProfileSaved: () -> Unit = {},
+    authViewModel: AuthViewModel = viewModel()
 ) {
     var username by rememberSaveable { mutableStateOf("") }
     var homeCountry by rememberSaveable { mutableStateOf("") }
     var favoriteLocation by rememberSaveable { mutableStateOf("") }
     var selectedStyle by rememberSaveable { mutableStateOf("Solo Trip") }
     var selectedFrequency by rememberSaveable { mutableStateOf("Regular") }
+    val uiState by authViewModel.uiState.collectAsStateWithLifecycle()
+
+    // Once the profile is written to Firestore, enter the app.
+    LaunchedEffect(uiState) {
+        if (uiState is AuthUiState.Success) {
+            authViewModel.resetState()
+            onProfileSaved()
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize().background(RoamlyMidnight)) {
 
@@ -170,8 +184,29 @@ fun CreateProfileScreen(
 
                 RoamlyTextField(value = favoriteLocation, onValueChange = { favoriteLocation = it }, label = "Favorite Destination (e.g. Tokyo, Japan)")
 
+                if (uiState is AuthUiState.Error) {
+                    Text(
+                        text = (uiState as AuthUiState.Error).message,
+                        color = Color(0xFFEF4444),
+                        fontFamily = NunitoFamily,
+                        fontSize = 13.sp,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(4.dp))
-                RoamlyButton(text = "Get Started", onClick = onProfileSaved)
+                RoamlyButton(
+                    text = if (uiState is AuthUiState.Loading) "Saving…" else "Get Started",
+                    onClick = {
+                        authViewModel.saveProfile(
+                            username = username,
+                            homeCountry = homeCountry,
+                            favoriteDestination = favoriteLocation,
+                            travelStyle = selectedStyle,
+                            travelFrequency = selectedFrequency,
+                        )
+                    }
+                )
             }
         }
     }

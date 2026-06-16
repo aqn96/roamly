@@ -20,13 +20,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,12 +49,22 @@ import com.roamly.app.ui.theme.RoamlyTheme
 @Composable
 fun SignUpScreen(
     onNavigateToLogin: () -> Unit = {},
-    onSignUpSuccess: () -> Unit = {}
+    onSignUpSuccess: () -> Unit = {},
+    authViewModel: AuthViewModel = viewModel()
 ) {
     var fullName by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var confirmPassword by rememberSaveable { mutableStateOf("") }
+    val uiState by authViewModel.uiState.collectAsStateWithLifecycle()
+
+    // On successful account creation, continue to profile setup.
+    LaunchedEffect(uiState) {
+        if (uiState is AuthUiState.Success) {
+            authViewModel.resetState()
+            onSignUpSuccess()
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize().background(RoamlyMidnight)) {
 
@@ -124,9 +138,21 @@ fun SignUpScreen(
                 RoamlyTextField(value = password, onValueChange = { password = it }, label = "Password", isPassword = true)
                 RoamlyTextField(value = confirmPassword, onValueChange = { confirmPassword = it }, label = "Confirm Password", isPassword = true)
 
+                if (uiState is AuthUiState.Error) {
+                    Text(
+                        text = (uiState as AuthUiState.Error).message,
+                        color = Color(0xFFEF4444),
+                        fontFamily = NunitoFamily,
+                        fontSize = 13.sp
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(4.dp))
 
-                RoamlyButton(text = "Sign Up", onClick = onSignUpSuccess)
+                RoamlyButton(
+                    text = if (uiState is AuthUiState.Loading) "Creating account…" else "Sign Up",
+                    onClick = { authViewModel.signUp(fullName, email, password, confirmPassword) }
+                )
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),

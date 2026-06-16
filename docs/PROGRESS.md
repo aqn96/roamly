@@ -70,11 +70,33 @@ Patterns follow course Topic 06/07: ViewModel + StateFlow, one-shot `Channel` ev
 
 ---
 
-## Stage 3 — Firebase backend wired (in progress)
+## Stage 3 — Firebase backend wired ✅
 
 - Added the `google-services` plugin (4.4.4) + Firebase BoM (34.14.1) with **Auth** and **Cloud Firestore**.
 - Project builds and packages against the real Firebase project `roamly-e7c4d`.
-- Next: data models, repositories, ViewModels; real email/password auth; Firestore CRUD for profiles,
-  trips, posts, comments, favorites, and follows (multi-user feed).
 
-_Rubric targets: Cloud Database Integration (60), User Data Management (20), Multi-User Features (20)._
+## Stage 4 — Authentication + profile persistence ✅
+
+**What was built**
+- `AuthRepository`: the gateway to Firebase Auth + the Firestore `users` collection (sign-up,
+  login, sign-out, save/load profile). Firebase handles are lazy so Previews stay safe.
+- `RoamlyUser`: the Firestore profile document model (profile, stats, social counts, derived travel level).
+- `AuthViewModel`: validates input and exposes a sealed `AuthUiState` (Idle/Loading/Success/Error)
+  via `StateFlow` (course Topic 06 pattern).
+- `LoginScreen` / `SignUpScreen` / `CreateProfileScreen` now drive real Firebase auth: inline
+  errors, loading button text, and navigation only on success.
+- `FirebaseExt.awaitResult()`: coroutine bridge for Firebase `Task<T>`.
+- The app auto-skips Login when a user is already signed in (session persistence).
+
+**Rubric criteria addressed**
+- **User Data Management (20 pts)** — account creation, login, persistent session, profile stored in the cloud.
+- Contributes to **Cloud Database Integration (60 pts)** — the `users` collection (create + read).
+
+**Demo steps**
+1. **Sign Up** with name/email/password → account is created in Firebase Auth.
+2. **Create Profile** (username, home country, travel style…) → written to Firestore `users/{uid}`.
+   Show the document live in the Firebase console.
+3. Kill and relaunch the app → it opens straight to Home (session persisted).
+4. Sign out, then **Log In** with the same credentials → back in.
+
+_Still in progress for the data layer: Firestore CRUD for trips, posts, comments, favorites, follows (multi-user feed)._

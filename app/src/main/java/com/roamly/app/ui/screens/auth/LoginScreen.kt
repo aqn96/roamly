@@ -21,10 +21,13 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -48,10 +51,20 @@ import com.roamly.app.ui.theme.RoamlyTheme
 @Composable
 fun LoginScreen(
     onNavigateToSignUp: () -> Unit = {},
-    onLoginSuccess: () -> Unit = {}
+    onLoginSuccess: () -> Unit = {},
+    authViewModel: AuthViewModel = viewModel()
 ) {
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
+    val uiState by authViewModel.uiState.collectAsStateWithLifecycle()
+
+    // When Firebase authentication succeeds, navigate onward (and reset the one-shot state).
+    LaunchedEffect(uiState) {
+        if (uiState is AuthUiState.Success) {
+            authViewModel.resetState()
+            onLoginSuccess()
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize().background(RoamlyMidnight)) {
 
@@ -127,9 +140,21 @@ fun LoginScreen(
                 RoamlyTextField(value = email, onValueChange = { email = it }, label = "Email")
                 RoamlyTextField(value = password, onValueChange = { password = it }, label = "Password", isPassword = true)
 
+                if (uiState is AuthUiState.Error) {
+                    Text(
+                        text = (uiState as AuthUiState.Error).message,
+                        color = Color(0xFFEF4444),
+                        fontFamily = NunitoFamily,
+                        fontSize = 13.sp
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(4.dp))
 
-                RoamlyButton(text = "Log In", onClick = onLoginSuccess)
+                RoamlyButton(
+                    text = if (uiState is AuthUiState.Loading) "Logging in…" else "Log In",
+                    onClick = { authViewModel.login(email, password) }
+                )
 
                 SocialSignInButton(provider = "Apple")
                 SocialSignInButton(provider = "Google")
