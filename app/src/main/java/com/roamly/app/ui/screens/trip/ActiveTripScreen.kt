@@ -1,5 +1,9 @@
 package com.roamly.app.ui.screens.trip
 
+import android.content.Intent
+import android.net.Uri
+import android.os.SystemClock
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,55 +16,91 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FiberManualRecord
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.roamly.app.data.TrackPoint
 import com.roamly.app.ui.theme.MontserratFamily
 import com.roamly.app.ui.theme.NunitoFamily
 import com.roamly.app.ui.theme.RoamlyAurora
 import com.roamly.app.ui.theme.RoamlyElectric
 import com.roamly.app.ui.theme.RoamlyMidnight
 import com.roamly.app.ui.theme.RoamlySlate
-import com.roamly.app.ui.theme.RoamlySlateLight
 import com.roamly.app.ui.theme.RoamlyTextLight
 import com.roamly.app.ui.theme.RoamlyTextMuted
 import com.roamly.app.ui.theme.RoamlyTheme
 
+/**
+ * What: The live trip screen. On appear it starts the GPS Foreground Service via TripViewModel,
+ *       observes the recorded route + distance as StateFlow, draws the path as a Canvas polyline,
+ *       ticks a live duration timer, and offers a button to hand navigation off to Google Maps
+ *       (per the proposal: "Google Maps handles navigation, route logging is Roamly's own").
+ * Who:  An Nguyen
+ * When: Goal 7 — Final project (Jun 2026)
+ */
 @Composable
 fun ActiveTripScreen(
     onStopTrip: () -> Unit = {},
-    onSeeMoreStats: () -> Unit = {}
+    onSeeMoreStats: () -> Unit = {},
+    tripViewModel: TripViewModel = viewModel(),
 ) {
+    val context = LocalContext.current
+    val routePoints by tripViewModel.routePoints.collectAsStateWithLifecycle()
+    val distanceKm by tripViewModel.distanceKm.collectAsStateWithLifecycle()
+    val isRecording by tripViewModel.isRecording.collectAsStateWithLifecycle()
+
+    // Start the Foreground Service exactly once when this screen first appears.
+    LaunchedEffect(Unit) { tripViewModel.startTrip(context) }
+
+    // Live duration ticker — recomputes once per second while recording.
+    var elapsedMs by remember { mutableLongStateOf(0L) }
+    LaunchedEffect(isRecording) {
+        while (isRecording) {
+            elapsedMs = SystemClock.elapsedRealtime() - com.roamly.app.location.TripSession.startElapsedMs
+            kotlinx.coroutines.delay(1000)
+        }
+    }
+
+    val durationText = formatDuration(elapsedMs)
+    val avgSpeedKmh = if (elapsedMs > 0) distanceKm / (elapsedMs / 3_600_000.0) else 0.0
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(RoamlyMidnight)
     ) {
 
-        // ── Map with live route ───────────────────────────────────────────
-        // TODO: Replace with live Google Maps + Polyline drawn from FusedLocationProvider:
-        //   GoogleMap(modifier = Modifier.fillMaxSize(), ...) {
-        //     Polyline(points = routePoints, color = RoamlyElectric, width = 8f)
-        //   }
+        // ── Live route polyline (Canvas — no Maps API key / billing required) ──────
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -71,9 +111,13 @@ fun ActiveTripScreen(
                 ),
             contentAlignment = Alignment.Center
         ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(text = "Live Map", color = RoamlyTextMuted, fontFamily = NunitoFamily, fontSize = 14.sp)
-                Text(text = "Route drawing here", color = RoamlyElectric.copy(alpha = 0.4f), fontFamily = NunitoFamily, fontSize = 12.sp)
+            if (routePoints.size < 2) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(text = "Waiting for GPS…", color = RoamlyTextMuted, fontFamily = NunitoFamily, fontSize = 14.sp)
+                    Text(text = "Move around to start drawing your route", color = RoamlyElectric.copy(alpha = 0.5f), fontFamily = NunitoFamily, fontSize = 12.sp)
+                }
+            } else {
+                RoutePolyline(points = routePoints, modifier = Modifier.fillMaxSize().padding(40.dp))
             }
         }
 
@@ -86,11 +130,10 @@ fun ActiveTripScreen(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Timer — TODO: drive with a LaunchedEffect + ticker coroutine
             Column {
                 Text(text = "Duration", fontFamily = NunitoFamily, fontSize = 11.sp, color = RoamlyTextMuted)
                 Text(
-                    text = "00:12:34",
+                    text = durationText,
                     fontFamily = MontserratFamily,
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 28.sp,
@@ -98,7 +141,6 @@ fun ActiveTripScreen(
                 )
             }
 
-            // Recording pulse indicator
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
@@ -110,11 +152,11 @@ fun ActiveTripScreen(
                 Icon(
                     imageVector = Icons.Default.FiberManualRecord,
                     contentDescription = null,
-                    tint = Color.Red,
+                    tint = if (isRecording) Color.Red else RoamlyTextMuted,
                     modifier = Modifier.size(10.dp)
                 )
                 Text(
-                    text = "Recording",
+                    text = if (isRecording) "Recording" else "Paused",
                     fontFamily = NunitoFamily,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 12.sp,
@@ -122,11 +164,10 @@ fun ActiveTripScreen(
                 )
             }
 
-            // Distance
             Column(horizontalAlignment = Alignment.End) {
                 Text(text = "Distance", fontFamily = NunitoFamily, fontSize = 11.sp, color = RoamlyTextMuted)
                 Text(
-                    text = "2.3 km",
+                    text = "%.2f km".format(distanceKm),
                     fontFamily = MontserratFamily,
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 28.sp,
@@ -136,8 +177,6 @@ fun ActiveTripScreen(
         }
 
         // ── Foreground service banner ─────────────────────────────────────
-        // TODO: This banner reflects the active ForegroundService notification.
-        //   Shown while Google Maps is in the foreground and Roamly logs GPS in background.
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -155,7 +194,7 @@ fun ActiveTripScreen(
             )
         }
 
-        // ── Live stats card + Stop button — bottom ────────────────────────
+        // ── Live stats card + actions — bottom ────────────────────────────
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -184,18 +223,31 @@ fun ActiveTripScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        // TODO: Replace with real-time values from ForegroundService location updates
-                        LiveStatItem(value = "2.3 km", label = "Distance")
-                        LiveStatItem(value = "00:12:34", label = "Duration")
-                        LiveStatItem(value = "11.5 km/h", label = "Avg Speed")
-                        LiveStatItem(value = "8", label = "Unlocked", highlight = true)
+                        LiveStatItem(value = "%.2f km".format(distanceKm), label = "Distance")
+                        LiveStatItem(value = durationText, label = "Duration")
+                        LiveStatItem(value = "%.1f km/h".format(avgSpeedKmh), label = "Avg Speed")
+                        LiveStatItem(value = "${routePoints.size}", label = "GPS pts", highlight = true)
                     }
                 }
             }
 
-            // Stop Trip button
+            // Hand navigation off to the Google Maps app (logging continues in our service).
+            OutlinedButton(
+                onClick = { context.startActivity(buildMapsIntent(routePoints)) },
+                modifier = Modifier.fillMaxWidth().height(48.dp),
+                shape = RoundedCornerShape(14.dp),
+            ) {
+                Icon(Icons.Default.Map, contentDescription = null, tint = RoamlyElectric, modifier = Modifier.size(20.dp))
+                Spacer(modifier = Modifier.size(8.dp))
+                Text(text = "Navigate with Google Maps", color = RoamlyElectric, fontFamily = NunitoFamily, fontWeight = FontWeight.SemiBold)
+            }
+
+            // Stop Trip button — stops the service, then lets the NavGraph route to the summary.
             Button(
-                onClick = onStopTrip,
+                onClick = {
+                    tripViewModel.stopTrip(context)
+                    onStopTrip()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
@@ -216,6 +268,39 @@ fun ActiveTripScreen(
     }
 }
 
+/**
+ * Draws the recorded route as a connected polyline, normalising lat/lng into the canvas bounds.
+ * Latitude is flipped because screen-Y grows downward while latitude grows upward (north).
+ */
+@Composable
+private fun RoutePolyline(points: List<TrackPoint>, modifier: Modifier = Modifier) {
+    Canvas(modifier = modifier) {
+        val minLat = points.minOf { it.latitude }
+        val maxLat = points.maxOf { it.latitude }
+        val minLng = points.minOf { it.longitude }
+        val maxLng = points.maxOf { it.longitude }
+        val latSpan = (maxLat - minLat).takeIf { it > 0 } ?: 1.0
+        val lngSpan = (maxLng - minLng).takeIf { it > 0 } ?: 1.0
+
+        val offsets = points.map { p ->
+            val x = ((p.longitude - minLng) / lngSpan) * size.width
+            val y = (1.0 - (p.latitude - minLat) / latSpan) * size.height
+            Offset(x.toFloat(), y.toFloat())
+        }
+        for (i in 1 until offsets.size) {
+            drawLine(
+                color = RoamlyElectric,
+                start = offsets[i - 1],
+                end = offsets[i],
+                strokeWidth = 10f,
+                cap = StrokeCap.Round,
+            )
+        }
+        // Mark the current position.
+        offsets.lastOrNull()?.let { drawCircle(color = RoamlyAurora, radius = 14f, center = it) }
+    }
+}
+
 @Composable
 private fun LiveStatItem(value: String, label: String, highlight: Boolean = false) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -228,6 +313,26 @@ private fun LiveStatItem(value: String, label: String, highlight: Boolean = fals
         )
         Text(text = label, fontFamily = NunitoFamily, fontSize = 11.sp, color = RoamlyTextMuted)
     }
+}
+
+/** "HH:MM:SS" from a millisecond duration. */
+private fun formatDuration(ms: Long): String {
+    val totalSeconds = ms / 1000
+    val h = totalSeconds / 3600
+    val m = (totalSeconds % 3600) / 60
+    val s = totalSeconds % 60
+    return "%02d:%02d:%02d".format(h, m, s)
+}
+
+/** Opens the Google Maps app centred on the latest GPS fix (or a neutral point if none yet). */
+private fun buildMapsIntent(points: List<TrackPoint>): Intent {
+    val last = points.lastOrNull()
+    val uri = if (last != null) {
+        Uri.parse("geo:${last.latitude},${last.longitude}?q=${last.latitude},${last.longitude}(You are here)")
+    } else {
+        Uri.parse("geo:0,0")
+    }
+    return Intent(Intent.ACTION_VIEW, uri).apply { setPackage("com.google.android.apps.maps") }
 }
 
 @Preview(showBackground = true, showSystemUi = true)

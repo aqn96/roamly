@@ -26,6 +26,10 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import android.Manifest
+import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,6 +59,20 @@ fun LocationPermissionScreen(
     onAllowClicked: () -> Unit = {},
     onNotNowClicked: () -> Unit = {}
 ) {
+    // Request location (+ notifications on Android 13+) at runtime. Whatever the user picks,
+    // we proceed to the trip screen; the Foreground Service simply gets no fixes if denied.
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { onAllowClicked() }
+
+    val requestedPermissions = buildList {
+        add(Manifest.permission.ACCESS_FINE_LOCATION)
+        add(Manifest.permission.ACCESS_COARSE_LOCATION)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            add(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }.toTypedArray()
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -161,16 +179,13 @@ fun LocationPermissionScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Button(
-                    onClick = onAllowClicked,
+                    onClick = { permissionLauncher.launch(requestedPermissions) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(52.dp),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = RoamlyElectric)
                 ) {
-                    // TODO: onAllowClicked should call:
-                    //   ActivityCompat.requestPermissions(context,
-                    //     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE)
                     Text(
                         text = "Allow Location Access",
                         fontFamily = MontserratFamily,
