@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -56,6 +57,10 @@ dependencies {
     implementation(libs.play.services.location)
     // Async image loading for avatars / route photos (URLs stored in Firestore)
     implementation(libs.coil.compose)
+    // Firebase — Auth (email/password) + Cloud Firestore (BoM keeps versions aligned)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)

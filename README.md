@@ -20,9 +20,11 @@ A passive travel route-logging Android app that rewards you for sharing the rout
 |---|---|
 | Language | Kotlin |
 | UI | Jetpack Compose + Material 3 |
-| Navigation | Navigation Compose |
-| Backend | Firebase Auth + Cloud Firestore + Firebase Storage *(Goal 7+)* |
-| Location | FusedLocationProviderClient + Foreground Service *(Goal 7+)* |
+| Navigation | Navigation Compose (type-safe `@Serializable` routes) |
+| Backend | Firebase Auth (Email/Password) + Cloud Firestore |
+| Architecture | ViewModel + StateFlow (UDF), `collectAsStateWithLifecycle` |
+| Location | FusedLocationProviderClient + Foreground Service |
+| Images | Coil (loads photo URLs stored in Firestore) |
 | Fonts | Montserrat (headings) + Nunito (body) |
 | Min SDK | API 28 (Android 9.0) |
 | Target SDK | API 37 |
@@ -53,8 +55,10 @@ git clone https://github.com/aqn96/roamly.git
 
 ```
 app/src/main/java/com/roamly/app/
-├── MainActivity.kt
-├── navigation/              # NavGraph (Goal 7)
+├── MainActivity.kt          # Hosts the navigation graph
+├── navigation/              # Type-safe @Serializable routes + RoamlyNavGraph
+├── data/                    # Domain models (TrackPoint, ...)
+├── location/                # TripLocationService (Foreground Service) + TripSession
 ├── ui/
 │   ├── theme/
 │   │   ├── Color.kt         # Midnight Nomad color system
@@ -129,7 +133,12 @@ Dark-first theme optimized for battery efficiency during passive background reco
 |---|---|---|
 | Proposal + wireframes | App concept, screens, backend design | ✅ Complete |
 | UI screens | All screens built with Compose, dark theme, reusable components | ✅ Complete |
-| Final submission | Firebase auth, navigation, location tracking, Foreground Service | ⏳ Jun 20, 2026 |
+| Navigation | Type-safe NavGraph wiring all screens + bottom-nav tabs | ✅ Complete |
+| GPS trip recording | Foreground Service + FusedLocationProvider + live route polyline | ✅ Complete |
+| Firebase backend | Auth + Cloud Firestore wired (data layer in progress) | 🔨 In progress |
+| Multi-user + cloud data | Profiles, posts, comments, favorites, follows in Firestore | ⏳ Jun 20, 2026 |
+
+> See [`docs/PROGRESS.md`](docs/PROGRESS.md) for a per-stage build log (used to build the final presentation).
 
 ---
 
