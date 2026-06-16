@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -46,6 +47,15 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.compose.material.icons)
+    // Type-safe navigation routes (course Topic 06/07 style: @Serializable destinations)
+    implementation(libs.kotlinx.serialization.json)
+    // ViewModel + StateFlow collectors for Compose (collectAsStateWithLifecycle / viewModel())
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    // GPS route logging via FusedLocationProviderClient
+    implementation(libs.play.services.location)
+    // Async image loading for avatars / route photos (URLs stored in Firestore)
+    implementation(libs.coil.compose)
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)

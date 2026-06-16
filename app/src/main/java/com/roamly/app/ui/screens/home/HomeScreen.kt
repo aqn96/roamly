@@ -88,8 +88,12 @@ fun HomeScreen(
         bottomBar = {
             RoamlyBottomNavBar(
                 selectedTab = BottomNavTab.HOME,
-                onTabSelected = {
-                    // TODO: wire up tab navigation once NavGraph is set up
+                onTabSelected = { tab ->
+                    when (tab) {
+                        BottomNavTab.HOME -> Unit // already here
+                        BottomNavTab.DISCOVER -> onNavigateToDiscover()
+                        BottomNavTab.FAVORITES -> onNavigateToFavorites()
+                    }
                 }
             )
         }

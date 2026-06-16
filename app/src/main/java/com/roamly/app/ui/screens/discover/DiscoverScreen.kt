@@ -106,8 +106,12 @@ fun DiscoverScreen(
         bottomBar = {
             RoamlyBottomNavBar(
                 selectedTab = BottomNavTab.DISCOVER,
-                onTabSelected = {
-                    // TODO: Wire up tab navigation once NavGraph is set up
+                onTabSelected = { tab ->
+                    when (tab) {
+                        BottomNavTab.HOME -> onNavigateToHome()
+                        BottomNavTab.DISCOVER -> Unit // already here
+                        BottomNavTab.FAVORITES -> onNavigateToFavorites()
+                    }
                 }
             )
         }

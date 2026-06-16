@@ -100,8 +100,12 @@ fun ProfileScreen(
         bottomBar = {
             RoamlyBottomNavBar(
                 selectedTab = BottomNavTab.HOME,
-                onTabSelected = {
-                    // TODO: wire up tab navigation once NavGraph is set up
+                onTabSelected = { tab ->
+                    when (tab) {
+                        BottomNavTab.HOME -> onNavigateToHome()
+                        BottomNavTab.DISCOVER -> onNavigateToDiscover()
+                        BottomNavTab.FAVORITES -> onNavigateToFavorites()
+                    }
                 }
             )
         }

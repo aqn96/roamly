@@ -4,36 +4,23 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.roamly.app.ui.screens.auth.CreateProfileScreen
-import com.roamly.app.ui.screens.auth.LoginScreen
-import com.roamly.app.ui.screens.auth.SignUpScreen
-import com.roamly.app.ui.screens.discover.DiscoverScreen
-import com.roamly.app.ui.screens.discover.PostDetailScreen
-import com.roamly.app.ui.screens.favorites.FavoritesScreen
-import com.roamly.app.ui.screens.home.HomeScreen
-import com.roamly.app.ui.screens.home.LocationPermissionScreen
-import com.roamly.app.ui.screens.profile.ProfileScreen
-import com.roamly.app.ui.screens.trip.ActiveTripScreen
-import com.roamly.app.ui.screens.trip.TripSummaryScreen
+import com.roamly.app.navigation.RoamlyNavGraph
 import com.roamly.app.ui.theme.RoamlyTheme
 
+/**
+ * What: The single Activity that hosts Roamly's Compose UI. It applies the Midnight Nomad
+ *       theme and launches the type-safe navigation graph (RoamlyNavGraph), which owns every
+ *       screen and transition.
+ * Who:  An Nguyen
+ * When: Goal 7 — Final project (Jun 2026)
+ */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             RoamlyTheme {
-                LoginScreen()
-//                SignUpScreen()
-//                CreateProfileScreen()
-//                HomeScreen()
-//                LocationPermissionScreen()
-//                DiscoverScreen()
-//                PostDetailScreen()
-//                ProfileScreen()
-//                ActiveTripScreen()
-//                TripSummaryScreen()
-//                FavoritesScreen()
+                RoamlyNavGraph()
             }
         }
     }

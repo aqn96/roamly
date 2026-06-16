@@ -70,8 +70,12 @@ fun FavoritesScreen(
         bottomBar = {
             RoamlyBottomNavBar(
                 selectedTab = BottomNavTab.FAVORITES,
-                onTabSelected = {
-                    // TODO: wire up tab navigation once NavGraph is set up
+                onTabSelected = { tab ->
+                    when (tab) {
+                        BottomNavTab.HOME -> onNavigateToHome()
+                        BottomNavTab.DISCOVER -> onNavigateToDiscover()
+                        BottomNavTab.FAVORITES -> Unit // already here
+                    }
                 }
             )
         }
