@@ -16,10 +16,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -40,31 +44,15 @@ import com.roamly.app.ui.theme.RoamlyTextLight
 import com.roamly.app.ui.theme.RoamlyTextMuted
 import com.roamly.app.ui.theme.RoamlyTheme
 
-// TODO: Populate from Firestore user favorites subcollection:
-//   db.collection("users").document(userId).collection("favorites")
-//   Each document stores a postId reference — fetch full post data from "posts" collection
-private val dummyFavorites = listOf(
-    RoutePost(
-        username = "traveler_maya", userLocation = "Kyoto, Japan", distanceAway = "5.1 km away",
-        routeTitle = "Fushimi Inari at Sunrise",
-        description = "Skip the crowds — start the torii gate trail at 5:30am.",
-        tags = listOf("hiking", "temples", "solo"), distanceKm = "6.8 km", durationMin = "2h 10min",
-        likeCount = 342, commentCount = 47, isUnlocked = true
-    ),
-    RoutePost(
-        username = "nomad_kris", userLocation = "Osaka, Japan", distanceAway = "12 km away",
-        routeTitle = "Dotonbori Night Walk",
-        description = "Best street food crawl in Osaka. Start from Namba, hit the canal.",
-        tags = listOf("food", "nightlife", "group"), distanceKm = "4.1 km", durationMin = "1h 30min",
-        likeCount = 89, commentCount = 12, isUnlocked = true
-    )
-)
-
 @Composable
 fun FavoritesScreen(
     onNavigateToHome: () -> Unit = {},
-    onNavigateToDiscover: () -> Unit = {}
+    onNavigateToDiscover: () -> Unit = {},
+    onPostClicked: (RoutePost) -> Unit = {},
+    favoritesViewModel: FavoritesViewModel = viewModel()
 ) {
+    val state by favoritesViewModel.uiState.collectAsStateWithLifecycle()
+
     Scaffold(
         containerColor = RoamlyMidnight,
         bottomBar = {
@@ -110,7 +98,11 @@ fun FavoritesScreen(
                 )
             }
 
-            if (dummyFavorites.isEmpty()) {
+            if (state.isLoading) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator(color = RoamlyElectric)
+                }
+            } else if (state.favorites.isEmpty()) {
                 // ── Empty state ───────────────────────────────────────────
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Column(
@@ -146,13 +138,14 @@ fun FavoritesScreen(
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
-                    items(dummyFavorites) { post ->
+                    items(state.favorites, key = { it.id }) { post ->
                         RoutePostCard(
                             post = post,
                             showUnlockedBadge = false,
-                            onLike = { /* TODO: toggle like in Firestore */ },
-                            onComment = { /* TODO: navigate to post detail comments */ },
-                            onSave = { /* TODO: remove from favorites subcollection */ }
+                            isSaved = true,
+                            onClick = { onPostClicked(post) },
+                            onComment = { onPostClicked(post) },
+                            onSave = { favoritesViewModel.removeFavorite(post) }
                         )
                     }
                     item { Spacer(modifier = Modifier.height(8.dp)) }

@@ -84,6 +84,7 @@ fun RoamlyNavGraph(
             FavoritesScreen(
                 onNavigateToHome = { navController.navigateTab(Home) },
                 onNavigateToDiscover = { navController.navigateTab(Discover) },
+                onPostClicked = { post -> navController.navigate(PostDetail(post.id)) },
             )
         }
 
@@ -123,8 +124,9 @@ fun RoamlyNavGraph(
         composable<Profile> { entry ->
             val route = entry.toRoute<Profile>()
             ProfileScreen(
+                userId = route.userId,
                 onEditProfile = { navController.navigate(CreateProfile) },
-                onSuggestedUserClicked = { username -> navController.navigate(Profile(username)) },
+                onSuggestedUserClicked = { userId -> navController.navigate(Profile(userId)) },
                 onNavigateToHome = { navController.navigateTab(Home) },
                 onNavigateToDiscover = { navController.navigateTab(Discover) },
                 onNavigateToFavorites = { navController.navigateTab(Favorites) },

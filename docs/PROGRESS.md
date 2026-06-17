@@ -144,4 +144,23 @@ Patterns follow course Topic 06/07: ViewModel + StateFlow, one-shot `Channel` ev
 1. From two accounts: record a trip on account A → switch to account B → Discover shows A's post.
 2. Tap a post → like it, follow the author, add a comment → all reflected in Firebase console.
 
-_Next: Favorites screen + Profile (own/other) from Firestore + suggested-users follow._
+## Stage 7 — Favorites + Profile (own/other) + follow ✅
+
+**What was built**
+- `FavoritesViewModel` + `FavoritesScreen`: loads the user's bookmarked posts from
+  `users/{uid}/favorites`, supports removing a bookmark, opens detail on tap.
+- `ProfileViewModel` + rewritten `ProfileScreen`: loads the signed-in user's **own** profile or
+  **another** traveler's (by uid) from Firestore, shows real stats / social counts / travel level,
+  Edit on own profile vs Follow/Following on others, and a "Travelers to Follow" row that follows
+  suggested users — all persisted, with follower/following counters kept in sync.
+
+**Rubric criteria addressed**
+- **Cloud Database Integration (60 pts)** — favorites + profile reads/writes; follow graph.
+- **Multi-User Features (20 pts)** — view others' profiles, follow/unfollow, suggested travelers.
+
+**Demo steps**
+1. Save a post on Discover → it appears on the Favorites tab; un-save removes it.
+2. Open a post → tap the author → their profile loads; tap Follow → counts update in the console.
+3. Your own profile shows your real stats and travel level computed from your trips.
+
+_Remaining: code What/Who/When header comments pass; optional Home recommendations from Firestore._
