@@ -1,3 +1,9 @@
+/**
+ * What: The Login screen — email/password sign-in driven by AuthViewModel (Firebase Auth), with
+ *       inline error + loading states and a link to Sign Up.
+ * Who:  An Nguyen
+ * When: Goal 7 — Final project (Jun 2026)
+ */
 package com.roamly.app.ui.screens.auth
 
 import androidx.compose.foundation.background

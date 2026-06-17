@@ -163,4 +163,18 @@ Patterns follow course Topic 06/07: ViewModel + StateFlow, one-shot `Channel` ev
 2. Open a post → tap the author → their profile loads; tap Follow → counts update in the console.
 3. Your own profile shows your real stats and travel level computed from your trips.
 
-_Remaining: code What/Who/When header comments pass; optional Home recommendations from Firestore._
+## Stage 8 — Code documentation pass ✅
+
+- Added **What / Who / When** header comments to every Kotlin source file.
+- Verified **`@Preview`** exists for every Composable (screens + components).
+
+**Rubric criteria addressed**
+- **Code Documentation and Previews (10 pts)** — What/Who/When comments + @Preview throughout.
+
+---
+
+## Outstanding / backend setup
+
+- ⚠️ **Cloud Firestore must be enabled** in project `roamly-e7c4d` (create the database in the Firebase
+  console). Auth works; Firestore writes currently fail server-side with `PERMISSION_DENIED` until enabled.
+- Optional polish: Home "Recommended Routes" from Firestore; real photo uploads (would need Firebase Storage / Blaze).

@@ -1,3 +1,8 @@
+/**
+ * What: RoamlyTheme — the Material 3 dark theme wrapper (Midnight Nomad color scheme + typography).
+ * Who:  An Nguyen
+ * When: Goal 7 — Final project (Jun 2026)
+ */
 package com.roamly.app.ui.theme
 
 import androidx.compose.material3.MaterialTheme

@@ -1,3 +1,8 @@
+/**
+ * What: The app's bottom navigation bar (Home / Discover / Favorites) and the BottomNavTab enum.
+ * Who:  An Nguyen
+ * When: Goal 7 — Final project (Jun 2026)
+ */
 package com.roamly.app.ui.components
 
 import androidx.compose.material.icons.Icons

@@ -1,3 +1,8 @@
+/**
+ * What: A reusable outlined text field with optional password masking, used across the auth forms.
+ * Who:  An Nguyen
+ * When: Goal 7 — Final project (Jun 2026)
+ */
 package com.roamly.app.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth

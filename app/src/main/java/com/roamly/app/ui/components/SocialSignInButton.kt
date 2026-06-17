@@ -1,3 +1,9 @@
+/**
+ * What: A reusable outlined "Sign in with <provider>" button (Apple/Google/Facebook) for the auth
+ *       screens. Decorative in this build — only email/password auth is wired.
+ * Who:  An Nguyen
+ * When: Goal 7 — Final project (Jun 2026)
+ */
 package com.roamly.app.ui.components
 
 import androidx.compose.foundation.BorderStroke

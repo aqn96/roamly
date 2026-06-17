@@ -1,3 +1,9 @@
+/**
+ * What: The Sign Up screen — creates a Firebase account via AuthViewModel (with validation +
+ *       inline errors), then continues to profile setup.
+ * Who:  An Nguyen
+ * When: Goal 7 — Final project (Jun 2026)
+ */
 package com.roamly.app.ui.screens.auth
 
 import androidx.compose.foundation.background

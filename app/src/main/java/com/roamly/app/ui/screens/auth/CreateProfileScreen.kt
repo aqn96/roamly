@@ -1,3 +1,9 @@
+/**
+ * What: The Create Profile screen — collects username, home country, travel style/frequency, and
+ *       favorite destination, then persists them to Firestore via AuthViewModel before entering the app.
+ * Who:  An Nguyen
+ * When: Goal 7 — Final project (Jun 2026)
+ */
 package com.roamly.app.ui.screens.auth
 
 import androidx.compose.foundation.background

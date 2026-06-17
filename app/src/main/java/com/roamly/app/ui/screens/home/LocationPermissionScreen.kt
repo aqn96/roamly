@@ -1,3 +1,9 @@
+/**
+ * What: Pre-permission rationale screen explaining why Roamly needs location, then requesting the
+ *       location (+ Android 13 notification) runtime permissions before starting trip recording.
+ * Who:  An Nguyen
+ * When: Goal 7 — Final project (Jun 2026)
+ */
 package com.roamly.app.ui.screens.home
 
 import androidx.compose.foundation.background

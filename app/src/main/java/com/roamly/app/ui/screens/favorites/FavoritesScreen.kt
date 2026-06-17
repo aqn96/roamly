@@ -1,3 +1,9 @@
+/**
+ * What: The Favorites screen — shows the routes the user bookmarked from Discover (loaded from
+ *       Firestore via FavoritesViewModel), with an empty state and tap-to-open / un-save.
+ * Who:  An Nguyen
+ * When: Goal 7 — Final project (Jun 2026)
+ */
 package com.roamly.app.ui.screens.favorites
 
 import androidx.compose.foundation.background

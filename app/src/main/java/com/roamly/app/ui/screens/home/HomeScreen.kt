@@ -1,3 +1,9 @@
+/**
+ * What: The Home screen — map placeholder, destination search, the central Start Trip button,
+ *       a recommended-routes row, and bottom navigation.
+ * Who:  An Nguyen
+ * When: Goal 7 — Final project (Jun 2026)
+ */
 package com.roamly.app.ui.screens.home
 
 import androidx.compose.foundation.background

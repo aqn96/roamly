@@ -1,3 +1,8 @@
+/**
+ * What: Typography — Montserrat (headings) + Nunito (body) font families and the Material 3 type scale.
+ * Who:  An Nguyen
+ * When: Goal 7 — Final project (Jun 2026)
+ */
 package com.roamly.app.ui.theme
 
 import androidx.compose.material3.Typography

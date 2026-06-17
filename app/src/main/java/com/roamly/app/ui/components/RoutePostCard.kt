@@ -1,3 +1,9 @@
+/**
+ * What: The RoutePost model (doubles as the Firestore "posts" document) and RoutePostCard — the
+ *       feed item shown in Discover and Favorites, with like / comment / save actions.
+ * Who:  An Nguyen
+ * When: Goal 7 — Final project (Jun 2026)
+ */
 package com.roamly.app.ui.components
 
 import androidx.compose.foundation.background
