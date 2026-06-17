@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -31,6 +32,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -60,46 +63,28 @@ import com.roamly.app.ui.theme.RoamlyTheme
 
 private val feedFilters = listOf("For You", "Nearby", "Trending", "Following")
 
-// Dummy data — TODO: replace with real Firestore posts query
-private val dummyPosts = listOf(
-    RoutePost(
-        username = "aqn96", userLocation = "Tokyo, Japan", distanceAway = "2.4 km away",
-        routeTitle = "Hidden Alley Route in Shibuya",
-        description = "Discovered this amazing path through the back streets of Shibuya — way less crowded than the main crossing.",
-        tags = listOf("solo", "urban", "japan"), distanceKm = "3.2 km", durationMin = "48 min",
-        likeCount = 124, commentCount = 18, isUnlocked = true
-    ),
-    RoutePost(
-        username = "traveler_maya", userLocation = "Kyoto, Japan", distanceAway = "5.1 km away",
-        routeTitle = "Fushimi Inari at Sunrise",
-        description = "Skip the crowds — start the torii gate trail at 5:30am. The light is incredible and you'll have it almost to yourself.",
-        tags = listOf("hiking", "temples", "solo"), distanceKm = "6.8 km", durationMin = "2h 10min",
-        likeCount = 342, commentCount = 47, isUnlocked = true
-    ),
-    RoutePost(
-        username = "nomad_kris", userLocation = "Osaka, Japan", distanceAway = "12 km away",
-        routeTitle = "Dotonbori Night Walk",
-        description = "Best street food crawl in Osaka. Start from Namba, hit the canal, and end at Kuromon Market.",
-        tags = listOf("food", "nightlife", "group"), distanceKm = "4.1 km", durationMin = "1h 30min",
-        likeCount = 89, commentCount = 12, isUnlocked = false
-    ),
-    RoutePost(
-        username = "roamer_jess", userLocation = "Nara, Japan", distanceAway = "28 km away",
-        routeTitle = "Deer Park Loop Trail",
-        description = "A peaceful loop through Nara Park past Todai-ji. The deer literally follow you if you have crackers.",
-        tags = listOf("nature", "wildlife", "family"), distanceKm = "5.5 km", durationMin = "1h 20min",
-        likeCount = 201, commentCount = 33, isUnlocked = false
-    )
-)
-
 @Composable
 fun DiscoverScreen(
     onNavigateToHome: () -> Unit = {},
     onNavigateToFavorites: () -> Unit = {},
-    onPostClicked: (RoutePost) -> Unit = {}
+    onPostClicked: (RoutePost) -> Unit = {},
+    discoverViewModel: DiscoverViewModel = viewModel()
 ) {
     var selectedFilter by remember { mutableStateOf("For You") }
     var searchQuery by remember { mutableStateOf("") }
+    val uiState by discoverViewModel.uiState.collectAsStateWithLifecycle()
+
+    // Simple client-side filtering for the chips; "Trending" sorts by engagement.
+    val visiblePosts = remember(uiState.posts, selectedFilter, searchQuery) {
+        uiState.posts
+            .let { if (selectedFilter == "Trending") it.sortedByDescending { p -> p.likeCount } else it }
+            .filter { p ->
+                searchQuery.isBlank() ||
+                    p.routeTitle.contains(searchQuery, true) ||
+                    p.userLocation.contains(searchQuery, true) ||
+                    p.username.contains(searchQuery, true)
+            }
+    }
 
     Scaffold(
         containerColor = RoamlyMidnight,
@@ -188,19 +173,40 @@ fun DiscoverScreen(
             }
 
             // ── Feed ──────────────────────────────────────────────────────
-            LazyColumn(
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(14.dp)
-            ) {
-                items(dummyPosts) { post ->
-                    RoutePostCard(
-                        post = post,
-                        onLike = { /* TODO: update likeCount in Firestore */ },
-                        onComment = { /* TODO: navigate to post comments screen */ },
-                        onSave = { /* TODO: add to user's favorites subcollection */ }
-                    )
+            when {
+                uiState.isLoading -> {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(color = RoamlyElectric)
+                    }
                 }
-                item { Spacer(modifier = Modifier.height(8.dp)) }
+                visiblePosts.isEmpty() -> {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text(
+                            text = "No routes yet.\nRecord a trip to share the first one!",
+                            color = RoamlyTextMuted, fontFamily = NunitoFamily, fontSize = 14.sp,
+                            modifier = Modifier.padding(32.dp)
+                        )
+                    }
+                }
+                else -> {
+                    LazyColumn(
+                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                        verticalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        items(visiblePosts, key = { it.id }) { post ->
+                            RoutePostCard(
+                                post = post,
+                                isLiked = post.id in uiState.likedPostIds,
+                                isSaved = post.id in uiState.savedPostIds,
+                                onClick = { onPostClicked(post) },
+                                onComment = { onPostClicked(post) },
+                                onLike = { discoverViewModel.toggleLike(post) },
+                                onSave = { discoverViewModel.toggleSave(post) }
+                            )
+                        }
+                        item { Spacer(modifier = Modifier.height(8.dp)) }
+                    }
+                }
             }
         }
     }

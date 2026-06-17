@@ -103,6 +103,72 @@ class ContentRepository {
             .toObjects(Trip::class.java)
     }
 
+    // ── Discover feed / posts (multi-user) ──────────────────────────────────
+
+    /** The global Discover feed: every traveler's posts, newest first. */
+    suspend fun getFeed(limit: Long = 50): Result<List<RoutePost>> = runCatching {
+        db.collection("posts")
+            .orderBy("createdAt", Query.Direction.DESCENDING)
+            .limit(limit)
+            .get().awaitResult()
+            .toObjects(RoutePost::class.java)
+    }
+
+    suspend fun getPost(postId: String): Result<RoutePost?> = runCatching {
+        db.collection("posts").document(postId).get().awaitResult().toObject(RoutePost::class.java)
+    }
+
+    /** Whether the signed-in user has liked this post. */
+    suspend fun isLiked(postId: String): Result<Boolean> = runCatching {
+        val uid = uid() ?: return@runCatching false
+        db.collection("users").document(uid).collection("likes").document(postId)
+            .get().awaitResult().exists()
+    }
+
+    /** Toggles a like: tracks it per-user and keeps the post's likeCount in sync. Returns new state. */
+    suspend fun toggleLike(postId: String): Result<Boolean> = runCatching {
+        val uid = uid() ?: error("Not signed in")
+        val likeRef = db.collection("users").document(uid).collection("likes").document(postId)
+        val postRef = db.collection("posts").document(postId)
+        val alreadyLiked = likeRef.get().awaitResult().exists()
+        if (alreadyLiked) {
+            likeRef.delete().awaitResult()
+            postRef.update("likeCount", FieldValue.increment(-1)).awaitResult()
+            false
+        } else {
+            likeRef.set(mapOf("createdAt" to System.currentTimeMillis())).awaitResult()
+            postRef.update("likeCount", FieldValue.increment(1)).awaitResult()
+            true
+        }
+    }
+
+    // ── Comments ────────────────────────────────────────────────────────────
+
+    suspend fun getComments(postId: String): Result<List<Comment>> = runCatching {
+        db.collection("posts").document(postId).collection("comments")
+            .orderBy("createdAt", Query.Direction.DESCENDING)
+            .get().awaitResult()
+            .toObjects(Comment::class.java)
+    }
+
+    /** Adds a comment authored by the signed-in user and bumps the post's commentCount. */
+    suspend fun addComment(postId: String, text: String): Result<Unit> = runCatching {
+        val uid = uid() ?: error("Not signed in")
+        val profile = db.collection("users").document(uid).get().awaitResult().toObject(RoamlyUser::class.java)
+        val postRef = db.collection("posts").document(postId)
+        val commentRef = postRef.collection("comments").document()
+        val comment = Comment(
+            id = commentRef.id,
+            authorUid = uid,
+            username = profile?.username?.ifBlank { "traveler" } ?: "traveler",
+            text = text.trim(),
+            createdAt = System.currentTimeMillis(),
+        )
+        commentRef.set(comment).awaitResult()
+        postRef.update("commentCount", FieldValue.increment(1)).awaitResult()
+        Unit
+    }
+
     private fun formatDuration(ms: Long): String {
         val totalMinutes = ms / 60000
         val h = totalMinutes / 60

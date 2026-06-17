@@ -1,6 +1,7 @@
 package com.roamly.app.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,8 +15,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.ChatBubbleOutline
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Card
@@ -73,11 +76,14 @@ fun RoutePostCard(
     onLike: () -> Unit = {},
     onComment: () -> Unit = {},
     onSave: () -> Unit = {},
+    onClick: () -> Unit = {},
     showUnlockedBadge: Boolean = true,
+    isLiked: Boolean = false,
+    isSaved: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = RoamlySlate)
     ) {
@@ -227,7 +233,12 @@ fun RoutePostCard(
                 ) {
                     Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
                         IconButton(onClick = onLike, modifier = Modifier.size(36.dp)) {
-                            Icon(Icons.Default.FavoriteBorder, contentDescription = "Like", tint = RoamlyTextMuted, modifier = Modifier.size(20.dp))
+                            Icon(
+                                imageVector = if (isLiked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                contentDescription = "Like",
+                                tint = if (isLiked) Color(0xFFEF4444) else RoamlyTextMuted,
+                                modifier = Modifier.size(20.dp)
+                            )
                         }
                         Text(text = "${post.likeCount}", color = RoamlyTextMuted, fontFamily = NunitoFamily, fontSize = 12.sp)
                         Spacer(modifier = Modifier.width(8.dp))
@@ -237,7 +248,12 @@ fun RoutePostCard(
                         Text(text = "${post.commentCount}", color = RoamlyTextMuted, fontFamily = NunitoFamily, fontSize = 12.sp)
                     }
                     IconButton(onClick = onSave, modifier = Modifier.size(36.dp)) {
-                        Icon(Icons.Default.BookmarkBorder, contentDescription = "Save", tint = RoamlyElectric, modifier = Modifier.size(20.dp))
+                        Icon(
+                            imageVector = if (isSaved) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+                            contentDescription = "Save",
+                            tint = RoamlyElectric,
+                            modifier = Modifier.size(20.dp)
+                        )
                     }
                 }
             }

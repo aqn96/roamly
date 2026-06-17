@@ -122,4 +122,26 @@ Patterns follow course Topic 06/07: ViewModel + StateFlow, one-shot `Channel` ev
 3. In Firebase console: `users/{uid}/trips` has the trip (with `path`), `users/{uid}` stats incremented,
    and `posts` has a new public post.
 
-_Next: Discover feed reads everyone's posts; likes, comments, favorites, follows, and Profile from Firestore._
+## Stage 6 — Discover feed + likes + Post Detail + comments ✅
+
+**What was built**
+- `ContentRepository` feed/post methods: `getFeed()` (all travelers' posts, newest first), `getPost()`,
+  `toggleLike()` (per-user like tracked in `users/{uid}/likes`, post `likeCount` kept in sync),
+  `getComments()`, `addComment()` (writes to `posts/{id}/comments`, bumps `commentCount`).
+- `SocialRepository`: favorite (bookmark) + follow/unfollow with synced counters, suggested users.
+- `Comment` model.
+- `DiscoverViewModel`: loads the live multi-user feed, tracks liked/saved sets, like + save actions;
+  `DiscoverScreen` renders real posts with working like/save, search, Trending sort, and card → detail.
+- `PostDetailViewModel` + rewritten `PostDetailScreen`: real post + comments, like, follow author,
+  and post a comment — all persisted to Firestore.
+- `RoutePostCard` gained click + liked/saved icon states.
+
+**Rubric criteria addressed**
+- **Cloud Database Integration (60 pts)** — feed/post/comment/like reads + writes across collections.
+- **Multi-User Features (20 pts)** — see others' posts, like, comment, follow.
+
+**Demo steps**
+1. From two accounts: record a trip on account A → switch to account B → Discover shows A's post.
+2. Tap a post → like it, follow the author, add a comment → all reflected in Firebase console.
+
+_Next: Favorites screen + Profile (own/other) from Firestore + suggested-users follow._

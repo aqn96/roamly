@@ -77,7 +77,7 @@ fun RoamlyNavGraph(
             DiscoverScreen(
                 onNavigateToHome = { navController.navigateTab(Home) },
                 onNavigateToFavorites = { navController.navigateTab(Favorites) },
-                onPostClicked = { navController.navigate(PostDetail()) },
+                onPostClicked = { post -> navController.navigate(PostDetail(post.id)) },
             )
         }
         composable<Favorites> {
@@ -112,10 +112,12 @@ fun RoamlyNavGraph(
         }
 
         // ── Detail screens ──────────────────────────────────────────────────────
-        composable<PostDetail> {
+        composable<PostDetail> { entry ->
+            val route = entry.toRoute<PostDetail>()
             PostDetailScreen(
+                postId = route.postId,
                 onBack = { navController.popBackStack() },
-                onUserClicked = { username -> navController.navigate(Profile(username)) },
+                onUserClicked = { userId -> navController.navigate(Profile(userId)) },
             )
         }
         composable<Profile> { entry ->
