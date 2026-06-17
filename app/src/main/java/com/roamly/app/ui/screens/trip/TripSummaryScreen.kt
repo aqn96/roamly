@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,6 +23,7 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -33,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,6 +44,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.roamly.app.data.Trip
 import com.roamly.app.ui.theme.MontserratFamily
 import com.roamly.app.ui.theme.NunitoFamily
 import com.roamly.app.ui.theme.RoamlyAurora
@@ -54,27 +58,24 @@ import com.roamly.app.ui.theme.RoamlyTextLight
 import com.roamly.app.ui.theme.RoamlyTextMuted
 import com.roamly.app.ui.theme.RoamlyTheme
 
-private data class PastTrip(
-    val title: String,
-    val date: String,
-    val distanceKm: String,
-    val duration: String,
-    val routesUnlocked: Int
-)
-
-private val dummyPastTrips = listOf(
-    PastTrip("Shibuya Back Alleys", "Jun 10, 2026", "3.2 km", "48 min", 2),
-    PastTrip("Fushimi Inari Trail", "Jun 8, 2026", "6.8 km", "2h 10min", 3),
-    PastTrip("Dotonbori Night Walk", "Jun 5, 2026", "4.1 km", "1h 30min", 1),
-    PastTrip("Deer Park Loop", "Jun 2, 2026", "5.5 km", "1h 20min", 2)
-)
-
+/**
+ * What: Trip Summary screen. Reads the just-recorded trip + the user's trip history and all-time
+ *       stats from Firestore (via TripSummaryViewModel, which also persists the finished trip).
+ *       Shows the latest route, an "unlocked recommendations" badge, aggregate stats, and the
+ *       past-trips list.
+ * Who:  An Nguyen
+ * When: Goal 7 — Final project (Jun 2026)
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TripSummaryScreen(
     onBack: () -> Unit = {},
-    onViewRecommendations: () -> Unit = {}
+    onViewRecommendations: () -> Unit = {},
+    tripSummaryViewModel: TripSummaryViewModel = viewModel(),
 ) {
+    val state by tripSummaryViewModel.uiState.collectAsStateWithLifecycle()
+    val latest = state.latestTrip
+
     Scaffold(
         containerColor = RoamlyMidnight,
         topBar = {
@@ -91,14 +92,20 @@ fun TripSummaryScreen(
             )
         }
     ) { innerPadding ->
+        if (state.isLoading) {
+            Box(modifier = Modifier.fillMaxSize().padding(innerPadding), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(color = RoamlyElectric)
+            }
+            return@Scaffold
+        }
+
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(innerPadding),
             contentPadding = PaddingValues(bottom = 24.dp)
         ) {
 
-            // ── Latest trip map ───────────────────────────────────────────
+            // ── Latest trip map (Canvas placeholder gradient) ─────────────
             item {
-                // TODO: Replace with static route map snapshot from last trip
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -121,47 +128,52 @@ fun TripSummaryScreen(
                     colors = CardDefaults.cardColors(containerColor = RoamlySlate)
                 ) {
                     Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                        Text(text = "Shibuya Back Alleys", fontFamily = MontserratFamily, fontWeight = FontWeight.ExtraBold, fontSize = 18.sp, color = RoamlyTextLight)
-
+                        Text(
+                            text = latest?.title ?: "No trips yet",
+                            fontFamily = MontserratFamily, fontWeight = FontWeight.ExtraBold, fontSize = 18.sp, color = RoamlyTextLight,
+                        )
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                            // TODO: Populate from Firestore trip document
-                            TripStatItem(icon = Icons.Default.LocationOn, value = "3.2 km", label = "Distance")
-                            TripStatItem(icon = Icons.Default.Timer, value = "48 min", label = "Duration")
-                            TripStatItem(icon = Icons.Default.CalendarToday, value = "Jun 10", label = "Date")
+                            TripStatItem(icon = Icons.Default.LocationOn, value = latest?.distanceKm ?: "—", label = "Distance")
+                            TripStatItem(icon = Icons.Default.Timer, value = latest?.durationMin ?: "—", label = "Duration")
+                            TripStatItem(icon = Icons.Default.CalendarToday, value = latest?.date ?: "—", label = "Date")
                         }
                     }
                 }
             }
 
             // ── Unlocked badge ────────────────────────────────────────────
-            item {
-                Card(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = RoamlyAurora.copy(alpha = 0.12f))
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
+            if ((latest?.routesUnlocked ?: 0) > 0) {
+                item {
+                    Card(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = CardDefaults.cardColors(containerColor = RoamlyAurora.copy(alpha = 0.12f))
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(16.dp).clip(RoundedCornerShape(12.dp)),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        ) {
                             Box(
                                 modifier = Modifier.size(44.dp).clip(CircleShape).background(RoamlyAurora.copy(alpha = 0.2f)),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Icon(Icons.Default.EmojiEvents, contentDescription = null, tint = RoamlyAurora, modifier = Modifier.size(24.dp))
                             }
-                            Column {
-                                Text(text = "You unlocked 2 new routes!", fontFamily = MontserratFamily, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = RoamlyAurora)
-                                Text(text = "Explore recommendations from nearby travelers", fontFamily = NunitoFamily, fontSize = 12.sp, color = RoamlyTextMuted)
+                            Column(modifier = Modifier.clip(RoundedCornerShape(8.dp))) {
+                                Text(text = "You unlocked ${latest?.routesUnlocked} new route(s)!", fontFamily = MontserratFamily, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = RoamlyAurora)
+                                Text(
+                                    text = "Tap to explore recommendations from nearby travelers",
+                                    fontFamily = NunitoFamily, fontSize = 12.sp, color = RoamlyTextMuted,
+                                    modifier = Modifier.clip(RoundedCornerShape(4.dp)),
+                                )
                             }
                         }
                     }
                 }
             }
 
-            // ── Overall stats ─────────────────────────────────────────────
+            // ── All-time stats ────────────────────────────────────────────
             item {
                 Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text(text = "All Time Stats", fontFamily = MontserratFamily, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = RoamlyTextLight)
@@ -171,10 +183,9 @@ fun TripSummaryScreen(
                         colors = CardDefaults.cardColors(containerColor = RoamlySlate)
                     ) {
                         Row(modifier = Modifier.fillMaxWidth().padding(20.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
-                            // TODO: Pull aggregate stats from Firestore user document
-                            AllTimeStatItem(value = "12", label = "Total Trips")
-                            AllTimeStatItem(value = "234 km", label = "Distance")
-                            AllTimeStatItem(value = "8", label = "Unlocked", highlight = true)
+                            AllTimeStatItem(value = "${state.totalTrips}", label = "Total Trips")
+                            AllTimeStatItem(value = "${state.totalDistanceKm} km", label = "Distance")
+                            AllTimeStatItem(value = "${state.routesUnlocked}", label = "Unlocked", highlight = true)
                         }
                     }
                 }
@@ -185,17 +196,23 @@ fun TripSummaryScreen(
             item {
                 Text(
                     text = "Past Trips",
-                    fontFamily = MontserratFamily,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    color = RoamlyTextLight,
+                    fontFamily = MontserratFamily, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = RoamlyTextLight,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
                 )
             }
 
-            // TODO: Replace with real Firestore trips subcollection query ordered by date desc
-            items(dummyPastTrips) { trip ->
-                PastTripRow(trip = trip)
+            if (state.trips.isEmpty()) {
+                item {
+                    Text(
+                        text = "Your recorded trips will appear here. Tap Start Trip on Home to log your first route!",
+                        fontFamily = NunitoFamily, fontSize = 13.sp, color = RoamlyTextMuted,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                    )
+                }
+            } else {
+                items(state.trips, key = { it.id }) { trip ->
+                    PastTripRow(trip = trip)
+                }
             }
         }
     }
@@ -219,22 +236,21 @@ private fun AllTimeStatItem(value: String, label: String, highlight: Boolean = f
 }
 
 @Composable
-private fun PastTripRow(trip: PastTrip) {
+private fun PastTripRow(trip: Trip) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Box(
-            modifier = Modifier.size(44.dp).clip(RoundedCornerShape(10.dp))
-                .background(RoamlySlate),
+            modifier = Modifier.size(44.dp).clip(RoundedCornerShape(10.dp)).background(RoamlySlate),
             contentAlignment = Alignment.Center
         ) {
             Icon(Icons.Default.LocationOn, contentDescription = null, tint = RoamlyElectric, modifier = Modifier.size(20.dp))
         }
         Column(modifier = Modifier.weight(1f)) {
             Text(text = trip.title, fontFamily = MontserratFamily, fontWeight = FontWeight.SemiBold, fontSize = 13.sp, color = RoamlyTextLight)
-            Text(text = "${trip.date}  ·  ${trip.distanceKm}  ·  ${trip.duration}", fontFamily = NunitoFamily, fontSize = 11.sp, color = RoamlyTextMuted)
+            Text(text = "${trip.date}  ·  ${trip.distanceKm}  ·  ${trip.durationMin}", fontFamily = NunitoFamily, fontSize = 11.sp, color = RoamlyTextMuted)
         }
         if (trip.routesUnlocked > 0) {
             Box(

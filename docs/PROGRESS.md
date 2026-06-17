@@ -99,4 +99,27 @@ Patterns follow course Topic 06/07: ViewModel + StateFlow, one-shot `Channel` ev
 3. Kill and relaunch the app → it opens straight to Home (session persisted).
 4. Sign out, then **Log In** with the same credentials → back in.
 
-_Still in progress for the data layer: Firestore CRUD for trips, posts, comments, favorites, follows (multi-user feed)._
+## Stage 5 — Trips → Firestore + "Contribute" post creation ✅
+
+**What was built**
+- `ContentRepository.saveTrip()`: on Stop Trip it (1) writes the trip with its full GPS route to
+  `users/{uid}/trips/{tripId}`, (2) increments the user's aggregate stats with `FieldValue.increment`,
+  and (3) publishes a public **post** to `posts/{id}` so the route shows up in other travelers' feeds.
+  This is the give-to-get "Contribute" step — a real recorded trip unlocks 1–2 recommendations.
+- `Trip` model (route stored as an array of GPS coordinates, per the proposal).
+- `RoutePost` extended into the Firestore `posts` document model (id, authorUid, defaults).
+- `TripSummaryViewModel`: persists the finished trip exactly once (via a `TripSession` pending-save
+  handoff so the write survives navigation), then loads trip history + all-time stats as `StateFlow`.
+- `TripSummaryScreen` now shows **real** latest trip, unlocked badge, all-time stats, and past trips.
+
+**Rubric criteria addressed**
+- **Cloud Database Integration (60 pts)** — writes trips + posts + stat updates; reads trip history.
+- **Multi-User Features (20 pts)** — a user's trip becomes a public post for others to discover.
+
+**Demo steps**
+1. Home → Start Trip → record a route → Stop Trip.
+2. Trip Summary shows the new trip, the unlocked-routes badge, and updated all-time stats.
+3. In Firebase console: `users/{uid}/trips` has the trip (with `path`), `users/{uid}` stats incremented,
+   and `posts` has a new public post.
+
+_Next: Discover feed reads everyone's posts; likes, comments, favorites, follows, and Profile from Firestore._

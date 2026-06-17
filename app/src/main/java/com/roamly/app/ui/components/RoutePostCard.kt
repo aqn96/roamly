@@ -44,18 +44,27 @@ import com.roamly.app.ui.theme.RoamlyTextLight
 import com.roamly.app.ui.theme.RoamlyTextMuted
 import com.roamly.app.ui.theme.RoamlyTheme
 
+/**
+ * A shared route post. Doubles as the Firestore "posts/{id}" document model, so every field has a
+ * default value (required for Firestore's toObject() deserialization). One user's posts become
+ * another user's Discover feed — the multi-user core of the app.
+ */
 data class RoutePost(
-    val username: String,
-    val userLocation: String,
-    val distanceAway: String,
-    val routeTitle: String,
-    val description: String,
-    val tags: List<String>,
-    val distanceKm: String,
-    val durationMin: String,
-    val likeCount: Int,
-    val commentCount: Int,
-    val isUnlocked: Boolean
+    val id: String = "",
+    val authorUid: String = "",
+    val username: String = "",
+    val userLocation: String = "",
+    val distanceAway: String = "",
+    val routeTitle: String = "",
+    val description: String = "",
+    val tags: List<String> = emptyList(),
+    val distanceKm: String = "",
+    val durationMin: String = "",
+    val mapImageUrl: String = "",
+    val likeCount: Int = 0,
+    val commentCount: Int = 0,
+    val isUnlocked: Boolean = true,
+    val createdAt: Long = 0L,
 )
 
 @Composable
