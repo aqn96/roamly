@@ -24,6 +24,7 @@ data class PostDetailUiState(
     val post: RoutePost? = null,
     val comments: List<Comment> = emptyList(),
     val isLiked: Boolean = false,
+    val isSaved: Boolean = false,
     val isFollowingAuthor: Boolean = false,
 )
 
@@ -43,12 +44,14 @@ class PostDetailViewModel : ViewModel() {
             val post = content.getPost(postId).getOrNull()
             val comments = content.getComments(postId).getOrDefault(emptyList())
             val liked = content.isLiked(postId).getOrDefault(false)
+            val saved = social.getFavoriteIds().getOrDefault(emptySet()).contains(postId)
             val following = post?.authorUid?.let { social.isFollowing(it).getOrDefault(false) } ?: false
             _uiState.value = PostDetailUiState(
                 isLoading = false,
                 post = post,
                 comments = comments,
                 isLiked = liked,
+                isSaved = saved,
                 isFollowingAuthor = following,
             )
         }
@@ -67,6 +70,13 @@ class PostDetailViewModel : ViewModel() {
         if (text.isBlank()) return
         viewModelScope.launch {
             content.addComment(postId, text).onSuccess { load(postId) }
+        }
+    }
+
+    fun toggleSave() = viewModelScope.launch {
+        val post = _uiState.value.post ?: return@launch
+        social.toggleFavorite(post).onSuccess { saved ->
+            _uiState.value = _uiState.value.copy(isSaved = saved)
         }
     }
 

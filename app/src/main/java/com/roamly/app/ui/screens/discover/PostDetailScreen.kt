@@ -21,6 +21,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.ChatBubbleOutline
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -210,20 +212,34 @@ fun PostDetailScreen(
                             }
                         }
 
-                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                            IconButton(onClick = { postDetailViewModel.toggleLike() }, modifier = Modifier.size(36.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                IconButton(onClick = { postDetailViewModel.toggleLike() }, modifier = Modifier.size(36.dp)) {
+                                    Icon(
+                                        imageVector = if (state.isLiked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                        contentDescription = "Like",
+                                        tint = if (state.isLiked) Color(0xFFEF4444) else RoamlyTextMuted,
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
+                                Text(text = "${post.likeCount}", color = RoamlyTextMuted, fontFamily = NunitoFamily, fontSize = 13.sp)
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Icon(Icons.Default.ChatBubbleOutline, contentDescription = "Comments", tint = RoamlyTextMuted, modifier = Modifier.size(20.dp))
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text(text = "${post.commentCount}", color = RoamlyTextMuted, fontFamily = NunitoFamily, fontSize = 13.sp)
+                            }
+                            IconButton(onClick = { postDetailViewModel.toggleSave() }, modifier = Modifier.size(36.dp)) {
                                 Icon(
-                                    imageVector = if (state.isLiked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                                    contentDescription = "Like",
-                                    tint = if (state.isLiked) Color(0xFFEF4444) else RoamlyTextMuted,
-                                    modifier = Modifier.size(20.dp)
+                                    imageVector = if (state.isSaved) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+                                    contentDescription = "Save",
+                                    tint = RoamlyElectric,
+                                    modifier = Modifier.size(22.dp)
                                 )
                             }
-                            Text(text = "${post.likeCount}", color = RoamlyTextMuted, fontFamily = NunitoFamily, fontSize = 13.sp)
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Icon(Icons.Default.ChatBubbleOutline, contentDescription = "Comments", tint = RoamlyTextMuted, modifier = Modifier.size(20.dp))
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(text = "${post.commentCount}", color = RoamlyTextMuted, fontFamily = NunitoFamily, fontSize = 13.sp)
                         }
                     }
                     Divider(color = RoamlySlateLight, thickness = 1.dp)

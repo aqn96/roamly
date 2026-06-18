@@ -34,27 +34,32 @@
 
 ---
 
-## Timed shot list (sums to 180 s)
+## Recorded as TWO clips (each < 180 s; stitch in editing)
 
-| # | Scene | Window | Dur | On-screen actions | Voiceover |
-|---|-------|--------|-----|-------------------|-----------|
-| 1 | **Login** | 0:00–0:10 | 10s | Show Login; briefly tap **Sign Up** to reveal that page, tap back; tap **Log In** → Home | "Roamly uses Firebase email/password auth. Here's the login and sign-up screens." |
-| 2 | **Home** | 0:10–0:30 | 20s | Search bar, Recommended Routes row, the central **Start Trip**, bottom nav; tap the avatar | "The Home hub: search, recommended routes, and one-tap trip recording." |
-| 3 | **Profile** | 0:30–0:50 | 20s | Stats (trips/distance/unlocked), travel level, followers/following, **Travelers to Follow** — follow one | "My profile: real stats and travel level from my trips, plus travelers to follow." |
-| 4 | **Discover** | 0:50–1:10 | 20s | Scroll feed, tap a filter chip, type in search, **like** + **save** a post | "Discover is the multi-user feed — search, filter, like, and save, all from Firestore." |
-| 5 | **Post Detail** | 1:10–1:32 | 22s | Open a post; **Follow** author; **like**; type + send a **comment** | "I can follow the author, like the route, and comment — real multi-user interaction." |
-| 6 | **Favorites** | 1:32–1:44 | 12s | Saved post appears; open it / remove one | "Saved routes live on the Favorites tab." |
-| 7 | **Start Trip + Permission** | 1:44–1:52 | 8s | Tap Start Trip → permission rationale → Allow | "Starting a trip asks for location once, with a clear rationale." |
-| 8 | **Active Trip** ⭐ | 1:52–2:26 | 34s | Live **polyline draws** as the Golden Gate Park walk plays; timer/distance/GPS-points tick; recording banner; pull notification shade; Stop Trip | "A Foreground Service logs my GPS path — the route draws live, with a background recording notification." |
-| 9 | **Trip Summary** | 2:26–2:42 | 16s | Unlocked badge, all-time stats, past trips | "The trip and its route save to Firestore, stats update, and contributing unlocks recommendations." |
-| 10 | **Discover (new post)** | 2:42–2:54 | 12s | The just-recorded trip appears at the top of the feed | "And the route I just walked is instantly shared to the feed." |
-| 11 | **Wrap** | 2:54–3:00 | 6s | Back to Home (optionally cut to Firebase console showing the collections) | "Everything is backed by Cloud Firestore. Thanks for watching." |
+### Clip 1 — Account creation + the trip (~95 s)
 
-**Total: 180 s.**
+| # | Scene | Dur | On-screen actions | Voiceover |
+|---|-------|-----|-------------------|-----------|
+| 1 | **Login → Sign Up** | 8s | Show Login, tap **Sign Up** | "Roamly opens on Login; new travelers tap Sign Up." |
+| 2 | **Sign Up** | 18s | Type full name **An Nguyen**, email, password, confirm → **Sign Up** | "Account creation goes through Firebase Authentication." |
+| 3 | **Create Profile** | 16s | Type username `an_nguyen`, home country, pick travel style + frequency, favorite destination → **Get Started** | "We capture a profile and save it to Cloud Firestore." |
+| 4 | **Home** | 10s | Search bar, Recommended Routes, **Start Trip**, bottom nav | "This is the Home hub." |
+| 5 | **Start Trip + Permission** | 7s | Start Trip → permission rationale → Allow | "Starting a trip requests location once." |
+| 6 | **Active Trip** ⭐ | 22s | Live **polyline draws** (Golden Gate Park walk); timer / distance / GPS-points tick; recording banner → **Stop Trip** | "A Foreground Service logs my GPS path — the route draws live in the background." |
+| 7 | **Trip Summary** | 14s | Unlocked badge, all-time stats, past trips | "The trip and its full route save to Firestore, stats update, and contributing unlocks recommendations." |
 
-> Pages shown: Login, Sign Up (peek), Home, Profile, Discover, Post Detail, Favorites, Location
-> Permission, Active Trip, Trip Summary. *(Create Profile is covered in the slides, or add a 20s
-> intro clip that signs up a brand-new account if you want it on video — tell me.)*
+### Clip 2 — Multi-user social (~90 s)
+
+| # | Scene | Dur | On-screen actions | Voiceover |
+|---|-------|-----|-------------------|-----------|
+| 8 | **Discover** | 20s | Feed shows my new post + other travelers'; filter chip; search; **like** + **save** a post | "Discover is the multi-user feed — every traveler's routes, with photos, likes, and saves." |
+| 9 | **Post Detail** | 22s | Open a post; **Follow** author; **like**; type + send a **comment** | "I can follow the author, like the route, and comment — all persisted to Firestore." |
+| 10 | **Favorites** | 12s | Saved post appears; open / remove | "Saved routes live on the Favorites tab." |
+| 11 | **Profile** | 18s | Stats, travel level, followers/following, **Travelers to Follow** (follow one) | "My profile shows real stats and travelers to follow." |
+| 12 | **Wrap** | 10s | Back to Home (optionally cut to Firebase console) | "Everything is backed by Cloud Firestore. Thanks for watching." |
+
+> Pages shown across both clips: Login, Sign Up, Create Profile, Home, Location Permission,
+> Active Trip, Trip Summary, Discover, Post Detail, Favorites, Profile — **all 11**.
 
 ---
 
