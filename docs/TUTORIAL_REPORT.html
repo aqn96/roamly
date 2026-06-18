@@ -236,11 +236,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
 <header id="title-block-header">
 <h1 class="title">Roamly Tutorial Report</h1>
 </header>
-<h1 id="tutorial-background-gps-route-tracking-on-android">Tutorial:
-Background GPS Route Tracking on Android</h1>
-<h3 id="using-fusedlocationproviderclient-with-a-foreground-service-in-jetpack-compose">Using
-FusedLocationProviderClient with a Foreground Service in Jetpack
-Compose</h3>
+<h1 id="tutorial-recording-gps-routes-in-the-background-on-android">Tutorial:
+Recording GPS Routes in the Background on Android</h1>
 <p><strong>CS5520 Final Tutorial Report</strong> <strong>Prepared
 by:</strong> An Nguyen <strong>Course:</strong> CS5520 — Mobile
 Application Development, Northeastern University (Summer 2026)
@@ -260,6 +257,32 @@ logged while the user is in another app (e.g. navigating in Google
 Maps), with a persistent notification telling the user recording is
 active.</li>
 </ol>
+<h3 id="what-is-this-utility-exactly">What is this utility,
+exactly?</h3>
+<p><strong><code>FusedLocationProviderClient</code></strong> is the
+location client from the <strong>Google Play Services Location</strong>
+library (<code>com.google.android.gms:play-services-location</code>). It
+is called <em>fused</em> because it transparently blends GPS, Wi-Fi,
+cell-tower, and motion-sensor signals into a single, smoothed location
+stream, and it lets you trade accuracy against battery through a
+declarative <code>LocationRequest</code> (update interval, priority, and
+minimum distance). It replaces the older
+<code>android.location.LocationManager</code> and is the approach Google
+recommends for almost all apps.</p>
+<p>A <strong>Foreground Service</strong> is a long-running Android
+<code>Service</code> that the operating system keeps alive
+<em>because</em> it continuously shows the user an ongoing notification.
+It is the officially supported way to run user-visible work — such as
+location logging, music playback, or navigation — when your app is not
+on screen.</p>
+<p>Why both are needed <em>together</em>: on its own,
+<code>FusedLocationProviderClient</code> stops delivering updates once
+your app is backgrounded (and modern Android increasingly restricts
+background location). Hosting the location client <strong>inside a
+Foreground Service</strong> is what makes continuous,
+<em>background</em> route recording reliable and policy-compliant. That
+pairing — a fused location stream driven from a foreground service,
+surfaced to Jetpack Compose — is the utility this tutorial teaches.</p>
 <p>This report is a step-by-step tutorial for building exactly that: a
 feature that, on <strong>Start Trip</strong>, begins logging the
 device’s GPS path in the background, draws the route live, and saves it

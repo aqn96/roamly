@@ -1,5 +1,4 @@
-# Tutorial: Background GPS Route Tracking on Android
-### Using FusedLocationProviderClient with a Foreground Service in Jetpack Compose
+# Tutorial: Recording GPS Routes in the Background on Android
 
 **CS5520 Final Tutorial Report**
 **Prepared by:** An Nguyen
@@ -18,6 +17,26 @@ together:
    API for receiving a stream of GPS fixes.
 2. **A Foreground Service** — so location keeps being logged while the user is in another app (e.g.
    navigating in Google Maps), with a persistent notification telling the user recording is active.
+
+### What is this utility, exactly?
+
+**`FusedLocationProviderClient`** is the location client from the **Google Play Services Location**
+library (`com.google.android.gms:play-services-location`). It is called *fused* because it
+transparently blends GPS, Wi-Fi, cell-tower, and motion-sensor signals into a single, smoothed
+location stream, and it lets you trade accuracy against battery through a declarative
+`LocationRequest` (update interval, priority, and minimum distance). It replaces the older
+`android.location.LocationManager` and is the approach Google recommends for almost all apps.
+
+A **Foreground Service** is a long-running Android `Service` that the operating system keeps alive
+*because* it continuously shows the user an ongoing notification. It is the officially supported way
+to run user-visible work — such as location logging, music playback, or navigation — when your app is
+not on screen.
+
+Why both are needed *together*: on its own, `FusedLocationProviderClient` stops delivering updates
+once your app is backgrounded (and modern Android increasingly restricts background location). Hosting
+the location client **inside a Foreground Service** is what makes continuous, *background* route
+recording reliable and policy-compliant. That pairing — a fused location stream driven from a
+foreground service, surfaced to Jetpack Compose — is the utility this tutorial teaches.
 
 This report is a step-by-step tutorial for building exactly that: a feature that, on **Start Trip**,
 begins logging the device's GPS path in the background, draws the route live, and saves it when the
