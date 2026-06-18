@@ -1,3 +1,12 @@
+/**
+ * What: The live trip screen. On appear it starts the GPS Foreground Service via TripViewModel,
+ *       observes the recorded route + distance as StateFlow, draws the path as a Canvas polyline
+ *       inside a contained map card, ticks a live duration timer, and offers a button to hand
+ *       navigation off to Google Maps (per the proposal: "Google Maps handles navigation, route
+ *       logging is Roamly's own").
+ * Who:  An Nguyen
+ * When: Goal 7 — Final project (Jun 2026)
+ */
 package com.roamly.app.ui.screens.trip
 
 import android.content.Intent
@@ -44,6 +53,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,14 +70,6 @@ import com.roamly.app.ui.theme.RoamlyTextLight
 import com.roamly.app.ui.theme.RoamlyTextMuted
 import com.roamly.app.ui.theme.RoamlyTheme
 
-/**
- * What: The live trip screen. On appear it starts the GPS Foreground Service via TripViewModel,
- *       observes the recorded route + distance as StateFlow, draws the path as a Canvas polyline,
- *       ticks a live duration timer, and offers a button to hand navigation off to Google Maps
- *       (per the proposal: "Google Maps handles navigation, route logging is Roamly's own").
- * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
- */
 @Composable
 fun ActiveTripScreen(
     onStopTrip: () -> Unit = {},
@@ -94,38 +96,17 @@ fun ActiveTripScreen(
     val durationText = formatDuration(elapsedMs)
     val avgSpeedKmh = if (elapsedMs > 0) distanceKm / (elapsedMs / 3_600_000.0) else 0.0
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(RoamlyMidnight)
+            .statusBarsPadding()
     ) {
-
-        // ── Live route polyline (Canvas — no Maps API key / billing required) ──────
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(Color(0xFF0D2137), RoamlyMidnight, Color(0xFF0A1628))
-                    )
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            if (routePoints.size < 2) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(text = "Waiting for GPS…", color = RoamlyTextMuted, fontFamily = NunitoFamily, fontSize = 14.sp)
-                    Text(text = "Move around to start drawing your route", color = RoamlyElectric.copy(alpha = 0.5f), fontFamily = NunitoFamily, fontSize = 12.sp)
-                }
-            } else {
-                RoutePolyline(points = routePoints, modifier = Modifier.fillMaxSize().padding(40.dp))
-            }
-        }
 
         // ── Recording indicator — top bar ─────────────────────────────────
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .statusBarsPadding()
                 .padding(horizontal = 20.dp, vertical = 14.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -136,7 +117,7 @@ fun ActiveTripScreen(
                     text = durationText,
                     fontFamily = MontserratFamily,
                     fontWeight = FontWeight.ExtraBold,
-                    fontSize = 28.sp,
+                    fontSize = 26.sp,
                     color = RoamlyTextLight
                 )
             }
@@ -170,36 +151,62 @@ fun ActiveTripScreen(
                     text = "%.2f km".format(distanceKm),
                     fontFamily = MontserratFamily,
                     fontWeight = FontWeight.ExtraBold,
-                    fontSize = 28.sp,
+                    fontSize = 26.sp,
                     color = RoamlyElectric
                 )
             }
         }
 
-        // ── Foreground service banner ─────────────────────────────────────
+        // ── Contained map card with the live route polyline ───────────────
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.TopCenter)
-                .padding(top = 110.dp, start = 16.dp, end = 16.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(RoamlyElectric.copy(alpha = 0.15f))
-                .padding(horizontal = 14.dp, vertical = 8.dp)
+                .weight(1f)
+                .padding(horizontal = 16.dp, vertical = 4.dp)
+                .clip(RoundedCornerShape(20.dp))
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(Color(0xFF0D2137), RoamlyMidnight, Color(0xFF0A1628))
+                    )
+                ),
+            contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = "🛰  Roamly is recording your route in the background",
-                fontFamily = NunitoFamily,
-                fontSize = 12.sp,
-                color = RoamlyElectric
-            )
+            if (routePoints.size < 2) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(text = "Waiting for GPS…", color = RoamlyTextMuted, fontFamily = NunitoFamily, fontSize = 14.sp)
+                    Text(text = "Move to start drawing your route", color = RoamlyElectric.copy(alpha = 0.5f), fontFamily = NunitoFamily, fontSize = 12.sp)
+                }
+            } else {
+                // Canvas is clipped to the card, so the route stays inside the map area.
+                RoutePolyline(points = routePoints, modifier = Modifier.fillMaxSize().padding(28.dp))
+            }
+
+            // Foreground-service banner pinned to the top of the map card.
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .fillMaxWidth()
+                    .padding(10.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(RoamlyMidnight.copy(alpha = 0.6f))
+                    .padding(horizontal = 12.dp, vertical = 8.dp)
+            ) {
+                Text(
+                    text = "🛰  Recording your route in the background",
+                    fontFamily = NunitoFamily,
+                    fontSize = 12.sp,
+                    color = RoamlyElectric,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
         }
 
         // ── Live stats card + actions — bottom ────────────────────────────
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .padding(horizontal = 16.dp, vertical = 16.dp),
+                .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Card(
