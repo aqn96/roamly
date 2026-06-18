@@ -1,6 +1,7 @@
-# Background GPS Route Tracking in Jetpack Compose with FusedLocationProviderClient and a Foreground Service
+# Tutorial: Background GPS Route Tracking on Android
+### Using FusedLocationProviderClient with a Foreground Service in Jetpack Compose
 
-**A CS5520 Final Tutorial Report**
+**CS5520 Final Tutorial Report**
 **Prepared by:** An Nguyen
 **Course:** CS5520 — Mobile Application Development, Northeastern University (Summer 2026)
 **Reference app:** Roamly — <https://github.com/aqn96/roamly>
