@@ -79,16 +79,28 @@ class SocialRepository {
         }
     }
 
-    /** Suggested travelers to follow: other users, excluding self and those already followed. */
+    /**
+     * Suggested travelers to follow: other users, excluding self (by uid AND by username, so
+     * accounts that share your username never appear), and anyone already followed.
+     */
     suspend fun getSuggestedUsers(limit: Int = 10): Result<List<RoamlyUser>> = runCatching {
         val uid = uid()
+        val myUsername = if (uid != null) {
+            db.collection("users").document(uid).get().awaitResult()
+                .toObject(RoamlyUser::class.java)?.username
+        } else null
         val following = if (uid != null) {
             db.collection("users").document(uid).collection("following")
                 .get().awaitResult().documents.map { it.id }.toSet()
         } else emptySet()
-        db.collection("users").limit(limit.toLong() + 5).get().awaitResult()
+        db.collection("users").limit(limit.toLong() + 10).get().awaitResult()
             .toObjects(RoamlyUser::class.java)
-            .filter { it.uid != uid && it.uid !in following && it.username.isNotBlank() }
+            .filter {
+                it.uid != uid &&
+                    it.uid !in following &&
+                    it.username.isNotBlank() &&
+                    !it.username.equals(myUsername, ignoreCase = true)
+            }
             .take(limit)
     }
 }
