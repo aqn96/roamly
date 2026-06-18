@@ -89,6 +89,70 @@
 
 ---
 
+## 🎙️ Full voiceover narration (read this over the merged video)
+
+> Continuous, first-person script timed to the two clips (~3.5 min). `[on screen]` cues tell you
+> where you are; just read the spoken lines. Pause/adjust to match your pacing.
+
+**Intro — title slide / GitHub repo (~12s)**
+> "Hi, I'm An Nguyen, and this is **Roamly** — a passive travel app that rewards you for sharing the
+> routes you actually travel. Contribute a route, and you unlock recommendations from other
+> travelers — think Strava, but for travel. It's built with Kotlin, Jetpack Compose, and Firebase.
+> Here's the GitHub repository; let's walk through it."
+
+**[on screen: Login → Sign Up] (~15s)**
+> "Roamly opens on a login screen. A new traveler taps Sign Up and creates an account with email and
+> password — that's handled by Firebase Authentication. If you've used the app before, your session
+> is remembered, so you skip straight to the home screen."
+
+**[on screen: Create Profile] (~12s)**
+> "Next, you set up a profile — a username, home country, travel style, how often you travel, and a
+> favorite destination. When I tap Get Started, that profile is written to Cloud Firestore."
+
+**[on screen: Home] (~10s)**
+> "This is the home hub: a search bar, a row of recommended routes, and one big button to start
+> recording a trip, with quick navigation along the bottom."
+
+**[on screen: Location Permission → Allow] (~8s)**
+> "Tapping Start Trip asks for location permission once, with a clear explanation of why Roamly needs
+> it and how the data is used."
+
+**[on screen: Active Trip — route drawing] (~22s)**
+> "Now Roamly is recording. A foreground service logs my GPS path in the background — even while I'd
+> normally be navigating in Google Maps — and you can watch the route draw live on the map, with
+> distance, duration, and speed updating in real time. A notification shows recording is active. Just
+> to note: in production this map would be the Google Maps SDK; here it's drawn on a Compose canvas so
+> the app stays on Firebase's free tier — the recorded GPS data is identical either way."
+
+**[on screen: Stop Trip → Trip Summary] (~15s)**
+> "When I stop, the trip and its full GPS route are saved to Firestore, my all-time stats update, and
+> contributing my route unlocks one to two recommendations — that's the give-to-get model. My past
+> trips are read straight back from the cloud."
+
+**[on screen: Discover feed] (~15s)**
+> "Over in Discover is the multi-user feed — every traveler's contributed routes, with photos. One
+> person's recorded trip becomes everyone else's discovery. I can search, filter by For You, Nearby,
+> Trending, or Following, and like or save any route."
+
+**[on screen: Post Detail — like, comment, save] (~18s)**
+> "Opening a post, I can like the route, leave a comment, and bookmark it to save for later. Every one
+> of those actions writes to Cloud Firestore and updates instantly — real multi-user interaction."
+
+**[on screen: Favorites] (~8s)**
+> "The routes I save show up on my Favorites tab, loaded from my favorites collection in Firestore."
+
+**[on screen: Profile + Travelers to Follow + Follow] (~18s)**
+> "My profile shows my real stats and a travel level computed from my trips, along with my follower
+> and following counts. And down here are other travelers to follow — I'll follow one, and from now on
+> their routes feed into my recommendations. That following relationship is the multi-user heart of
+> Roamly."
+
+**Outro — back to Home / Firebase console (~10s)**
+> "Everything you saw — accounts, profiles, trips, posts, comments, likes, favorites, and follows — is
+> stored in and retrieved from Cloud Firestore. Thanks for watching!"
+
+---
+
 ## Rubric coverage checklist
 - [ ] Navigation across all screens (30) — scenes 1–11
 - [ ] Cloud Firestore read+write: users, trips, posts, comments, likes, favorites, follows (60) — 3,4,5,8,9,10
