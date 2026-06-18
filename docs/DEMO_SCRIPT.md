@@ -3,6 +3,12 @@
 > A deterministic, pre-seeded walkthrough that fits the `adb screenrecord` 180-second cap and
 > starts at the **Login** screen. Data is seeded *before* recording; the GPS walk is pre-staged.
 
+> **Recorded so far:** `roamly_demo.mp4` (≈96 s, in the project root, git-ignored) is **Clip 1** —
+> Login → Sign Up (*An Nguyen*) → Create Profile (*username `an_explorer`, United States, Nomad,
+> Frequent, Tokyo Japan*) → Home → Location Permission → Active Trip with the live route in a
+> contained map card → Trip Summary (*1.67 km, "unlocked 2 routes", all-time 1 trip / 2 km / 2
+> unlocked*). **Clip 2 (social) is the next recording to make.** Narrate over it at your own pace.
+
 ---
 
 ## Pre-seed (done off-camera, before recording)
@@ -49,7 +55,7 @@
 |---|-------|-----|-------------------|-----------|
 | 1 | **Login → Sign Up** | 8s | Show Login, tap **Sign Up** | "Roamly opens on Login; new travelers tap Sign Up." |
 | 2 | **Sign Up** | 18s | Type full name **An Nguyen**, email, password, confirm → **Sign Up** | "Account creation goes through Firebase Authentication." |
-| 3 | **Create Profile** | 16s | Type username `an_nguyen`, home country, pick travel style + frequency, favorite destination → **Get Started** | "We capture a profile and save it to Cloud Firestore." |
+| 3 | **Create Profile** | 16s | Type username `an_explorer`, home country (United States), pick travel style (Nomad) + frequency (Frequent), favorite destination (Tokyo, Japan) → **Get Started** | "We capture a profile and save it to Cloud Firestore." |
 | 4 | **Home** | 10s | Search bar, Recommended Routes, **Start Trip**, bottom nav | "This is the Home hub." |
 | 5 | **Start Trip + Permission** | 7s | Start Trip → permission rationale → Allow | "Starting a trip requests location once." |
 | 6 | **Active Trip** ⭐ | 22s | Live **polyline draws** (Golden Gate Park walk); timer / distance / GPS-points tick; recording banner → **Stop Trip** | "A Foreground Service logs my GPS path — the route draws live in the background." |
