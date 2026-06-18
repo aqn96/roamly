@@ -330,6 +330,15 @@ Canvas(modifier = Modifier.fillMaxSize().padding(28.dp)) {
 |---|---|
 | ![Active trip](images/02_active_trip.png) | ![Trip summary](images/03_trip_summary.png) |
 
+> **Note on the map visuals.** The route in these screenshots is rendered on a **Compose `Canvas`**,
+> not on a Google Map. This is a deliberate choice: the Google Maps SDK requires a Google Cloud API
+> key and an attached **billing account** (Maps usage is billed even within its free monthly credit),
+> which this project avoids to stay entirely on free tiers. The tutorial's actual subject — the
+> Foreground Service capturing GPS fixes with `FusedLocationProviderClient` — is unchanged by this
+> choice: it records the **same latitude/longitude points** regardless of how they're displayed. In a
+> production build you would keep all of this code as-is and simply render the recorded points as a
+> **Google Maps `Polyline`** on a real basemap (streets, labels, satellite) instead of the Canvas.
+
 ---
 
 ## 7. Reference code — a fully working app

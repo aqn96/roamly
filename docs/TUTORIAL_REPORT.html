@@ -596,6 +596,22 @@ route + stats are shown.</li>
 </tr>
 </tbody>
 </table>
+<blockquote>
+<p><strong>Note on the map visuals.</strong> The route in these
+screenshots is rendered on a <strong>Compose
+<code>Canvas</code></strong>, not on a Google Map. This is a deliberate
+choice: the Google Maps SDK requires a Google Cloud API key and an
+attached <strong>billing account</strong> (Maps usage is billed even
+within its free monthly credit), which this project avoids to stay
+entirely on free tiers. The tutorial’s actual subject — the Foreground
+Service capturing GPS fixes with
+<code>FusedLocationProviderClient</code> — is unchanged by this choice:
+it records the <strong>same latitude/longitude points</strong>
+regardless of how they’re displayed. In a production build you would
+keep all of this code as-is and simply render the recorded points as a
+<strong>Google Maps <code>Polyline</code></strong> on a real basemap
+(streets, labels, satellite) instead of the Canvas.</p>
+</blockquote>
 <hr />
 <h2 id="reference-code-a-fully-working-app">7. Reference code — a fully
 working app</h2>
