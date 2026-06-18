@@ -82,7 +82,7 @@ class ContentRepository {
                 userLocation = profile?.favoriteDestination ?: "",
                 routeTitle = title,
                 description = "Just logged this route on Roamly. ${distanceLabel} in ${durationLabel}.",
-                tags = listOfNotNull(profile?.travelStyle?.lowercase()?.replace(" ", "")).ifEmpty { listOf("travel") },
+                tags = listOfNotNull(profile?.travelStyle?.lowercase()?.replace(" ", "")?.ifBlank { null }).ifEmpty { listOf("travel") },
                 distanceKm = distanceLabel,
                 durationMin = durationLabel,
                 isUnlocked = true,

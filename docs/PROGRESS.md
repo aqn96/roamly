@@ -173,8 +173,18 @@ Patterns follow course Topic 06/07: ViewModel + StateFlow, one-shot `Channel` ev
 
 ---
 
-## Outstanding / backend setup
+## ✅ End-to-end verified on device (Jun 18, 2026)
 
-- ⚠️ **Cloud Firestore must be enabled** in project `roamly-e7c4d` (create the database in the Firebase
-  console). Auth works; Firestore writes currently fail server-side with `PERMISSION_DENIED` until enabled.
-- Optional polish: Home "Recommended Routes" from Firestore; real photo uploads (would need Firebase Storage / Blaze).
+Cloud Firestore enabled (location `nam5`). Full give-to-get loop confirmed on the emulator against
+the live backend:
+- Sign in (persisted session) → **Start Trip** → simulated GPS walk → live Canvas polyline
+  (0.85 km, 6 points) → **Stop Trip**.
+- **Trip Summary** read back the saved trip + all-time stats (1 trip / 1 km / 1 unlocked) from Firestore.
+- The trip auto-published a **post** that appeared in the **Discover** feed.
+- **Post Detail**: liked the post (count 1) and added a comment (count 1) — both persisted, no
+  `PERMISSION_DENIED`.
+
+## Optional polish (not required by rubric)
+
+- Home "Recommended Routes" still uses placeholder data (could read the Firestore feed).
+- Real photo uploads would need Firebase Storage (Blaze plan); avatars currently use initials.
