@@ -60,6 +60,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.roamly.app.data.TrackPoint
+import com.roamly.app.data.formatElapsed
 import com.roamly.app.ui.theme.MontserratFamily
 import com.roamly.app.ui.theme.NunitoFamily
 import com.roamly.app.ui.theme.RoamlyAurora
@@ -93,7 +94,7 @@ fun ActiveTripScreen(
         }
     }
 
-    val durationText = formatDuration(elapsedMs)
+    val durationText = formatElapsed(elapsedMs)
     val avgSpeedKmh = if (elapsedMs > 0) distanceKm / (elapsedMs / 3_600_000.0) else 0.0
 
     Column(
@@ -323,15 +324,6 @@ private fun LiveStatItem(value: String, label: String, highlight: Boolean = fals
         )
         Text(text = label, fontFamily = NunitoFamily, fontSize = 11.sp, color = RoamlyTextMuted)
     }
-}
-
-/** "HH:MM:SS" from a millisecond duration. */
-private fun formatDuration(ms: Long): String {
-    val totalSeconds = ms / 1000
-    val h = totalSeconds / 3600
-    val m = (totalSeconds % 3600) / 60
-    val s = totalSeconds % 60
-    return "%02d:%02d:%02d".format(h, m, s)
 }
 
 /** Opens the Google Maps app centred on the latest GPS fix (or a neutral point if none yet). */
