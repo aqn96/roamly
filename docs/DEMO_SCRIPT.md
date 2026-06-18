@@ -3,11 +3,24 @@
 > A deterministic, pre-seeded walkthrough that fits the `adb screenrecord` 180-second cap and
 > starts at the **Login** screen. Data is seeded *before* recording; the GPS walk is pre-staged.
 
-> **Recorded so far:** `roamly_demo.mp4` (≈96 s, in the project root, git-ignored) is **Clip 1** —
-> Login → Sign Up (*An Nguyen*) → Create Profile (*username `an_explorer`, United States, Nomad,
-> Frequent, Tokyo Japan*) → Home → Location Permission → Active Trip with the live route in a
-> contained map card → Trip Summary (*1.67 km, "unlocked 2 routes", all-time 1 trip / 2 km / 2
-> unlocked*). **Clip 2 (social) is the next recording to make.** Narrate over it at your own pace.
+> **Recorded clips** (in the project root, git-ignored — keep them locally):
+> - **`roamly_demo_clip1_account_trip.mp4`** (~94 s) — Login → Sign Up (*An Nguyen*) → Create Profile
+>   (*`an_explorer`, United States, Nomad, Frequent, Tokyo Japan*) → Home → Location Permission →
+>   Active Trip (live route in the contained map card) → Trip Summary (*1.67 km, "unlocked 2 routes",
+>   all-time 1 trip / 2 km / 2 unlocked*).
+> - **`roamly_demo_clip2_social.mp4`** (~107 s) — Discover feed → open a post → like → comment → save →
+>   Favorites → Profile (stats, travel level, **Travelers to Follow: @maya_c + @bob_c**) → follow a traveler.
+>
+> **Assembling the final video:** merge Clip 1 then Clip 2 (any editor), add your voiceover using the
+> per-scene lines below, and optionally a title slide with the GitHub link. Quick CLI merge:
+> ```bash
+> printf "file 'roamly_demo_clip1_account_trip.mp4'\nfile 'roamly_demo_clip2_social.mp4'\n" > list.txt
+> ffmpeg -f concat -safe 0 -i list.txt -c copy roamly_demo_full.mp4
+> ```
+>
+> **Minor kinks to polish when you re-shoot/edit (optional):** linger a beat on "Travelers to Follow"
+> *before* tapping Follow (the followed card disappears on the next load), and the in-app comment is
+> demo data. These don't affect functionality.
 
 ---
 
