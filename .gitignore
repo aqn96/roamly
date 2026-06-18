@@ -16,3 +16,6 @@ local.properties
 
 # Demo screen recordings (large binaries; keep local, not in git)
 *.mp4
+
+# Course lecture PDFs (copyrighted course material; kept local only)
+docs/week*
