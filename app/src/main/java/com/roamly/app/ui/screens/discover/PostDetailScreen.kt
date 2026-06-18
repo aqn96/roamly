@@ -49,7 +49,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import coil.compose.AsyncImage
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -167,9 +169,18 @@ fun PostDetailScreen(
                             .background(Brush.verticalGradient(colors = listOf(Color(0xFF0D2137), RoamlyMidnight))),
                         contentAlignment = Alignment.Center
                     ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Icon(Icons.Default.LocationOn, contentDescription = null, tint = RoamlyElectric.copy(alpha = 0.5f), modifier = Modifier.size(40.dp))
-                            Text(text = "Route Map", color = RoamlyTextMuted, fontFamily = NunitoFamily, fontSize = 13.sp)
+                        if (post.mapImageUrl.isNotBlank()) {
+                            AsyncImage(
+                                model = post.mapImageUrl,
+                                contentDescription = post.routeTitle,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        } else {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Icon(Icons.Default.LocationOn, contentDescription = null, tint = RoamlyElectric.copy(alpha = 0.5f), modifier = Modifier.size(40.dp))
+                                Text(text = "Route Map", color = RoamlyTextMuted, fontFamily = NunitoFamily, fontSize = 13.sp)
+                            }
                         }
                         Row(
                             modifier = Modifier.align(Alignment.BottomStart).padding(12.dp)

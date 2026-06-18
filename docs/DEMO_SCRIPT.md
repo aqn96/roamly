@@ -1,107 +1,69 @@
-# Roamly — Demo Video Script & Storyboard
+# Roamly — Demo Video Script (timed, 180 s)
 
-> A scene-by-scene plan for the Goal 7 demonstration video. Each scene lists **what to do on the
-> screen**, a suggested **voiceover line**, and the **rubric criterion** it proves. Target length
-> ~3–4 minutes. Record the emulator screen (Android Studio: **View → Tool Windows → Running Devices →
-> the record icon**, or `adb shell screenrecord`).
-
-**Before recording — seed a clean demo state:**
-- Sign in with an account that has a real username + at least **2 recorded trips** (so the feed,
-  past-trips, and profile stats look populated). Optionally a second account so the feed shows
-  another traveler.
-- Put the emulator in portrait, full brightness, and clear notifications.
+> A deterministic, pre-seeded walkthrough that fits the `adb screenrecord` 180-second cap and
+> starts at the **Login** screen. Data is seeded *before* recording; the GPS walk is pre-staged.
 
 ---
 
-### Scene 0 — Title (5s)
-- **Show:** the GitHub repo page (`github.com/aqn96/roamly`) or the app icon.
-- **Say:** "This is Roamly — a passive travel app that rewards you for sharing the routes you actually
-  travel. Contribute a route, unlock recommendations from other travelers. Here's the repo."
-- **Proves:** GitHub usage (link required by the rubric).
+## Pre-seed (done off-camera, before recording)
 
-### Scene 1 — Authentication (25s)
-- **Show:** Launch the app → **Login** screen. Tap **Sign Up** → fill Full Name, Email, Password,
-  Confirm → **Sign Up** → **Create Profile**: enter username, home country, pick travel style +
-  frequency, favorite destination → **Get Started** → lands on **Home**.
-- **Say:** "New users sign up with email and password through Firebase Authentication, then build a
-  profile that's saved to Cloud Firestore."
-- **Proves:** User Data Management (20), Cloud DB write (users), Navigation.
+1. A **demo account** exists in Firebase Auth with a real profile in Firestore:
+   - username `an_explorer`, home country, travel style, favorite destination filled in.
+2. The account already has **2 recorded trips** → so the **Discover feed** shows 2 posts, the
+   **Profile** shows real stats, and **Favorites** has 1 saved post + 1 liked post.
+3. The app is left on the **Login** screen with the email/password **pre-typed into the fields**
+   (so the first on-camera action is just tapping **Log In** — no risky typing on camera).
 
-### Scene 2 — Session persistence (10s)
-- **Show:** Close the app from recents, reopen it → it goes **straight to Home** (no login).
-- **Say:** "The session persists — reopening the app skips login and restores the user."
-- **Proves:** User Data Management.
+## The trip I'll record on camera
 
-### Scene 3 — Home + navigation (15s)
-- **Show:** Home screen — search bar, the central **Start Trip** button, the Recommended Routes row,
-  and the bottom navigation. Tap the **avatar** (top-left) → Profile → back.
-- **Say:** "The Home screen is the hub: search, recommended routes, and one tap to start recording.
-  Bottom navigation moves between Home, Discover, and Favorites."
-- **Proves:** Multi-Screen & Navigation (30), UI/UX (20).
-
-### Scene 4 — Record a trip (the core sensor flow) (45s) ⭐
-- **Show:** Tap **Start Trip** → **Location Permission** rationale → **Allow** (grant the OS dialog) →
-  **Active Trip** screen. Walk a route (on the emulator, use *Extended controls → Location* to play a
-  route, or set several points). Watch the **blue polyline draw live**, the **timer**, **distance**,
-  and **GPS-points** update, plus the **"recording in background"** banner. Pull down the status bar
-  to show the persistent **Foreground Service notification**. Tap **Stop Trip**.
-- **Say:** "Tapping Start Trip launches a Foreground Service that logs my GPS path with the Fused
-  Location Provider. The route draws in real time on the map, distance and duration update live, and a
-  notification shows recording is active in the background — exactly like Strava, but for travel."
-- **Proves:** Application Functionality (20), the proposal's Sensor + Foreground Service.
-
-### Scene 5 — Trip Summary + give-to-get unlock (20s)
-- **Show:** **Trip Summary** — the latest route, the **"You unlocked N new routes!"** badge,
-  **All-Time Stats** (trips / distance / unlocked), and the **Past Trips** list.
-- **Say:** "When I stop, the trip and its full GPS route are saved to Firestore, my stats update, and
-  contributing unlocks one to two recommendations — the give-to-get model. Past trips are read back
-  from the cloud."
-- **Proves:** Cloud DB (60), Application Functionality.
-
-### Scene 6 — Discover feed (multi-user) (25s)
-- **Show:** Tap **Discover**. Scroll the feed of route posts from travelers. Tap a **filter chip**
-  (e.g. Trending), type in **search**. Tap a post's **save (bookmark)** and **like (heart)** — watch
-  the counts react.
-- **Say:** "Discover is the multi-user feed — every traveler's contributed routes appear here. I can
-  search, filter, like, and save posts, all backed by Firestore."
-- **Proves:** Multi-User (20), Cloud DB (60).
-
-### Scene 7 — Post Detail: comment + follow (25s)
-- **Show:** Tap a post → **Post Detail**. Tap **Follow** on the author. **Like** the post. Type a
-  **comment** and send it → it appears in the comments list and the count increments.
-- **Say:** "Opening a post, I can follow the author, like the route, and leave a comment — real
-  multi-user interaction. Every action writes to Cloud Firestore and updates instantly."
-- **Proves:** Multi-User (20), Cloud DB (60).
-
-### Scene 8 — Favorites (15s)
-- **Show:** Tap **Favorites** → the post I saved earlier appears. Tap a saved post to open it; tap the
-  bookmark to remove one and watch it disappear.
-- **Say:** "Saved routes live on the Favorites tab, loaded from my favorites collection in Firestore."
-- **Proves:** Cloud DB, Navigation.
-
-### Scene 9 — Profile (20s)
-- **Show:** Tap the **avatar** → **Profile**. Show the banner, avatar, **stats** (trips / distance /
-  unlocked), **travel level**, **followers/following** counts, and the **Travelers to Follow** row —
-  tap **Follow** on a suggested traveler. Tap a suggested traveler to view **their** profile.
-- **Say:** "My profile shows my real stats and travel level computed from my trips, my social counts,
-  and suggested travelers to follow — and I can view anyone else's profile too."
-- **Proves:** Multi-User (20), User Data (20), Cloud DB (60).
-
-### Scene 10 — Wrap (10s)
-- **Show:** Back to Home; optionally the Firebase console showing the `users`, `trips`, and `posts`
-  collections with live data.
-- **Say:** "Everything — auth, profiles, trips, posts, comments, likes, favorites, and follows — is
-  stored and retrieved from Cloud Firestore. Thanks for watching."
-- **Proves:** Cloud DB (60) summary.
+- **Route:** *Golden Gate Park Loop — San Francisco* (a walk west→east through the park).
+- **Why:** matches the Golden Gate Park imagery already in your proposal deck.
+- **Simulated GPS points** (`adb emu geo fix <lon> <lat>`, ~3 s apart):
+  ```
+  -122.4862 37.7701   (Conservatory of Flowers)
+  -122.4830 37.7715
+  -122.4795 37.7706
+  -122.4760 37.7690   (de Young Museum / Tea Garden)
+  -122.4725 37.7686
+  -122.4690 37.7695   (Stow Lake)
+  -122.4660 37.7702
+  ```
+- **Photos to gather for slides** (free sources: Unsplash / Wikimedia): Golden Gate Park
+  Conservatory of Flowers, Japanese Tea Garden, de Young Museum, Stow Lake, plus a Golden Gate
+  Bridge / SF skyline shot for the title slide.
 
 ---
 
-## Rubric coverage checklist (tick as you film)
-- [ ] Multi-screen navigation across all 11 screens (30)
-- [ ] Cloud Firestore read + write: users, trips, posts, comments, likes, favorites, follows (60)
-- [ ] User data: sign-up, login, persistent session, profile (20)
-- [ ] Multi-user: feed of others, follow, comment, like (20)
-- [ ] Polished, consistent Material 3 dark UI (20)
-- [ ] App works end-to-end without crashes (20)
-- [ ] GitHub repo link + commit history shown or mentioned (20)
-- [ ] (Mention in slides) What/Who/When comments + @Preview in code (10)
+## Timed shot list (sums to 180 s)
+
+| # | Scene | Window | Dur | On-screen actions | Voiceover |
+|---|-------|--------|-----|-------------------|-----------|
+| 1 | **Login** | 0:00–0:10 | 10s | Show Login; briefly tap **Sign Up** to reveal that page, tap back; tap **Log In** → Home | "Roamly uses Firebase email/password auth. Here's the login and sign-up screens." |
+| 2 | **Home** | 0:10–0:30 | 20s | Search bar, Recommended Routes row, the central **Start Trip**, bottom nav; tap the avatar | "The Home hub: search, recommended routes, and one-tap trip recording." |
+| 3 | **Profile** | 0:30–0:50 | 20s | Stats (trips/distance/unlocked), travel level, followers/following, **Travelers to Follow** — follow one | "My profile: real stats and travel level from my trips, plus travelers to follow." |
+| 4 | **Discover** | 0:50–1:10 | 20s | Scroll feed, tap a filter chip, type in search, **like** + **save** a post | "Discover is the multi-user feed — search, filter, like, and save, all from Firestore." |
+| 5 | **Post Detail** | 1:10–1:32 | 22s | Open a post; **Follow** author; **like**; type + send a **comment** | "I can follow the author, like the route, and comment — real multi-user interaction." |
+| 6 | **Favorites** | 1:32–1:44 | 12s | Saved post appears; open it / remove one | "Saved routes live on the Favorites tab." |
+| 7 | **Start Trip + Permission** | 1:44–1:52 | 8s | Tap Start Trip → permission rationale → Allow | "Starting a trip asks for location once, with a clear rationale." |
+| 8 | **Active Trip** ⭐ | 1:52–2:26 | 34s | Live **polyline draws** as the Golden Gate Park walk plays; timer/distance/GPS-points tick; recording banner; pull notification shade; Stop Trip | "A Foreground Service logs my GPS path — the route draws live, with a background recording notification." |
+| 9 | **Trip Summary** | 2:26–2:42 | 16s | Unlocked badge, all-time stats, past trips | "The trip and its route save to Firestore, stats update, and contributing unlocks recommendations." |
+| 10 | **Discover (new post)** | 2:42–2:54 | 12s | The just-recorded trip appears at the top of the feed | "And the route I just walked is instantly shared to the feed." |
+| 11 | **Wrap** | 2:54–3:00 | 6s | Back to Home (optionally cut to Firebase console showing the collections) | "Everything is backed by Cloud Firestore. Thanks for watching." |
+
+**Total: 180 s.**
+
+> Pages shown: Login, Sign Up (peek), Home, Profile, Discover, Post Detail, Favorites, Location
+> Permission, Active Trip, Trip Summary. *(Create Profile is covered in the slides, or add a 20s
+> intro clip that signs up a brand-new account if you want it on video — tell me.)*
+
+---
+
+## Rubric coverage checklist
+- [ ] Navigation across all screens (30) — scenes 1–11
+- [ ] Cloud Firestore read+write: users, trips, posts, comments, likes, favorites, follows (60) — 3,4,5,8,9,10
+- [ ] User data: login, session, profile (20) — 1,3
+- [ ] Multi-user: feed, follow, comment, like (20) — 4,5
+- [ ] Polished Material 3 dark UI (20) — all
+- [ ] Works end-to-end (20) — all
+- [ ] GitHub link + commit history (20) — title/outro slide
+- [ ] What/Who/When comments + @Preview (10) — slides

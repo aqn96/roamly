@@ -10,6 +10,16 @@ import java.util.Date
 import java.util.Locale
 import kotlin.math.roundToInt
 
+/** Free public travel photos (Unsplash) assigned to auto-created posts so the feed shows real imagery. */
+private val ROUTE_PHOTOS = listOf(
+    "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=70",
+    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=70",
+    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=70",
+    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=70",
+    "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=70",
+    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=70",
+)
+
 /**
  * What: The Firestore gateway for trips and posts — the "Contribute" + "Unlock" data flow.
  *       Saving a finished trip: (1) writes the trip + GPS route under the user, (2) increments the
@@ -85,6 +95,7 @@ class ContentRepository {
                 tags = listOfNotNull(profile?.travelStyle?.lowercase()?.replace(" ", "")?.ifBlank { null }).ifEmpty { listOf("travel") },
                 distanceKm = distanceLabel,
                 durationMin = durationLabel,
+                mapImageUrl = ROUTE_PHOTOS.random(),
                 isUnlocked = true,
                 createdAt = System.currentTimeMillis(),
             )

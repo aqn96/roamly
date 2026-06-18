@@ -38,7 +38,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.foundation.layout.fillMaxSize
+import coil.compose.AsyncImage
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -102,27 +105,34 @@ fun RoutePostCard(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(160.dp)
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(Color(0xFF0D2137), Color(0xFF0F172A))
-                        )
-                    ),
+                    .height(160.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        imageVector = Icons.Default.LocationOn,
-                        contentDescription = null,
-                        tint = RoamlyElectric.copy(alpha = 0.5f),
-                        modifier = Modifier.size(32.dp)
+                if (post.mapImageUrl.isNotBlank()) {
+                    // Real travel photo loaded from a URL stored in Firestore.
+                    AsyncImage(
+                        model = post.mapImageUrl,
+                        contentDescription = post.routeTitle,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
                     )
-                    Text(
-                        text = "Route Map",
-                        color = RoamlyTextMuted,
-                        fontFamily = NunitoFamily,
-                        fontSize = 12.sp
-                    )
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Brush.verticalGradient(colors = listOf(Color(0xFF0D2137), Color(0xFF0F172A)))),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Icon(
+                                imageVector = Icons.Default.LocationOn,
+                                contentDescription = null,
+                                tint = RoamlyElectric.copy(alpha = 0.5f),
+                                modifier = Modifier.size(32.dp)
+                            )
+                            Text(text = "Route Map", color = RoamlyTextMuted, fontFamily = NunitoFamily, fontSize = 12.sp)
+                        }
+                    }
                 }
 
                 // Unlocked badge — only shown on Discover feed, not on Favorites
