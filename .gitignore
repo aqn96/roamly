@@ -19,3 +19,6 @@ local.properties
 
 # Course lecture PDFs (copyrighted course material; kept local only)
 docs/week*
+
+# Office temp/lock files
+~$*
