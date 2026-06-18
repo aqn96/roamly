@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Demo screen recordings (large binaries; keep local, not in git)
+*.mp4
