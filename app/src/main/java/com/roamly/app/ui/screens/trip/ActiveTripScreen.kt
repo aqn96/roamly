@@ -158,6 +158,9 @@ fun ActiveTripScreen(
         }
 
         // ── Contained map card with the live route polyline ───────────────
+        // DEMO BUILD: the route is rendered on a Compose Canvas over a gradient to keep the app on
+        // Firebase's free tier (no Google Maps API key / billing). In production this card would host
+        // a Google Maps SDK MapView with a Polyline overlay following the same recorded GPS points.
         Box(
             modifier = Modifier
                 .fillMaxWidth()

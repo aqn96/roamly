@@ -14,20 +14,27 @@
 3. The app is left on the **Login** screen with the email/password **pre-typed into the fields**
    (so the first on-camera action is just tapping **Log In** — no risky typing on camera).
 
+## Notes to mention while narrating
+
+- The in-app **route map is a Compose Canvas** rendering the recorded GPS points, used to keep the app
+  on Firebase's free tier (no Google Maps billing). **In production this would be a Google Maps SDK
+  map with a Polyline overlay** — the recorded data is identical either way.
+- The GPS walk is **simulated** on the emulator (`adb emu geo fix` / Extended Controls → Location);
+  on a real device the Foreground Service logs actual movement.
+
 ## The trip I'll record on camera
 
 - **Route:** *Golden Gate Park Loop — San Francisco* (a walk west→east through the park).
 - **Why:** matches the Golden Gate Park imagery already in your proposal deck.
-- **Simulated GPS points** (`adb emu geo fix <lon> <lat>`, ~3 s apart):
+- **Simulated GPS points** — a smooth ~18-point curve (NOT a zig-zag) traced west→east through the
+  park (`adb emu geo fix <lon> <lat>`, ~2 s apart). Longitude increases steadily; latitude rises and
+  falls in a gentle arc so the polyline looks like a real winding path:
   ```
-  -122.4862 37.7701   (Conservatory of Flowers)
-  -122.4830 37.7715
-  -122.4795 37.7706
-  -122.4760 37.7690   (de Young Museum / Tea Garden)
-  -122.4725 37.7686
-  -122.4690 37.7695   (Stow Lake)
-  -122.4660 37.7702
+  -122.4880 37.7700   -122.4846 37.7721   -122.4816 37.7733   -122.4789 37.7737
+  -122.4766 37.7736   -122.4743 37.7736   -122.4718 37.7736   -122.4690 37.7733
+  -122.4657 37.7721   -122.4640 37.7700
   ```
+  *(Generated from `lon = -122.488 + t·0.024`, `lat = 37.770 + 0.0042·sin(πt)` for a natural curve.)*
 - **Photos to gather for slides** (free sources: Unsplash / Wikimedia): Golden Gate Park
   Conservatory of Flowers, Japanese Tea Garden, de Young Museum, Stow Lake, plus a Golden Gate
   Bridge / SF skyline shot for the title slide.
