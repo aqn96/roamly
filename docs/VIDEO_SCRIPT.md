@@ -11,10 +11,11 @@ finished app so the audience can see how the project evolved.
 Firestore, and background GPS route recording.
 
 **What to say:** "Hi everyone, I’m An Nguyen, and this is Roamly. The idea started as a travel app
-that would reward people for sharing the routes they actually walk or drive, and by the end I turned
-that idea into a working Android app with login, cloud data, live trip recording, and a social feed.
-The main thing I wanted to prove was that the concept could move from a sketch into a real app with a
-clean structure behind it."
+that would reward people for sharing the routes they actually walk or drive, but also I wanted to
+implement social aspcet and "gamified" the experience. Think of the app like Strava for travelers
+instead of fitness focus. By the end, I turned that idea into a working Android app with login, 
+cloud data, live trip recording, and a social feed. The main thing I wanted to prove was that 
+the concept could move from a sketch into a real app with a clean structure behind it."
 
 **Suggested time:** 15 to 20 seconds
 
