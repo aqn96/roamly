@@ -16,7 +16,13 @@ A passive travel route-logging Android app that rewards you for sharing the rout
 
 ## 🧪 For Graders / Testers
 
-**1. Run the app** — see [Getting Started](#getting-started) below (open in Android Studio → **Run ▶** on an emulator or device, API 28+). The Firebase config is already included, so no setup is needed.
+**1. Run the app** — see [Getting Started](#getting-started) below (open in Android Studio → **Run ▶** on an emulator or device, API 28+). The Firebase config is already included, so **no setup is needed**.
+
+> **📁 Firebase config / secrets location (for graders):** the Google services file is committed in the repo at:
+> ```
+> app/google-services.json
+> ```
+> It contains the Firebase **project ID** (`roamly-e7c4d`), **API key**, app ID, and the **Storage bucket** — everything the app needs to reach Auth, Cloud Firestore, and Cloud Storage. It is **not** git-ignored, so it's present after a fresh `git clone`. You do **not** need to create your own Firebase project or add any keys.
 
 > **✅ Verified on:** **Pixel 8** emulator — **Android 16 (API 36)**, `arm64-v8a`, 1080×2400 @ 420 dpi. The full flow (sign-up, login, GPS trip, posts, profile photo upload, log out) was tested here. Any emulator or physical device on **API 28+** works.
 
