@@ -71,4 +71,7 @@ class ProfileViewModel : ViewModel() {
             _uiState.value = _uiState.value.copy(followedUserIds = ids)
         }
     }
+
+    /** Signs the user out of Firebase; the screen then navigates back to Login. */
+    fun signOut() = authRepo.signOut()
 }

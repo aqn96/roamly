@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.Flag
@@ -80,6 +81,7 @@ import com.roamly.app.ui.theme.RoamlyTheme
 fun ProfileScreen(
     userId: String = "",
     onEditProfile: () -> Unit = {},
+    onLogout: () -> Unit = {},
     onSuggestedUserClicked: (String) -> Unit = {},
     onNavigateToHome: () -> Unit = {},
     onNavigateToDiscover: () -> Unit = {},
@@ -166,14 +168,31 @@ fun ProfileScreen(
                         Text(text = "@${profile.username}", fontFamily = NunitoFamily, fontSize = 13.sp, color = RoamlyTextMuted)
                     }
                     if (state.isOwnProfile) {
-                        OutlinedButton(
-                            onClick = onEditProfile,
-                            shape = RoundedCornerShape(20.dp),
-                            border = androidx.compose.foundation.BorderStroke(1.dp, RoamlyElectric)
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Icon(Icons.Default.Edit, contentDescription = null, tint = RoamlyElectric, modifier = Modifier.size(14.dp))
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(text = "Edit", color = RoamlyElectric, fontFamily = NunitoFamily, fontSize = 13.sp)
+                            OutlinedButton(
+                                onClick = onEditProfile,
+                                shape = RoundedCornerShape(20.dp),
+                                border = androidx.compose.foundation.BorderStroke(1.dp, RoamlyElectric)
+                            ) {
+                                Icon(Icons.Default.Edit, contentDescription = null, tint = RoamlyElectric, modifier = Modifier.size(14.dp))
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text(text = "Edit", color = RoamlyElectric, fontFamily = NunitoFamily, fontSize = 13.sp)
+                            }
+                            OutlinedButton(
+                                onClick = {
+                                    profileViewModel.signOut()
+                                    onLogout()
+                                },
+                                shape = RoundedCornerShape(20.dp),
+                                border = androidx.compose.foundation.BorderStroke(1.dp, RoamlyTextMuted)
+                            ) {
+                                Icon(Icons.AutoMirrored.Filled.Logout, contentDescription = null, tint = RoamlyTextMuted, modifier = Modifier.size(14.dp))
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text(text = "Log Out", color = RoamlyTextMuted, fontFamily = NunitoFamily, fontSize = 13.sp)
+                            }
                         }
                     } else {
                         Button(

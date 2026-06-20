@@ -126,6 +126,9 @@ fun RoamlyNavGraph(
             ProfileScreen(
                 userId = route.userId,
                 onEditProfile = { navController.navigate(CreateProfile) },
+                onLogout = {
+                    navController.navigate(Login) { popUpTo(0) { inclusive = true } }
+                },
                 onSuggestedUserClicked = { userId -> navController.navigate(Profile(userId)) },
                 onNavigateToHome = { navController.navigateTab(Home) },
                 onNavigateToDiscover = { navController.navigateTab(Discover) },

@@ -87,6 +87,8 @@ Patterns follow course Topic 06/07: ViewModel + StateFlow, one-shot `Channel` ev
   errors, loading button text, and navigation only on success.
 - `FirebaseExt.awaitResult()`: coroutine bridge for Firebase `Task<T>`.
 - The app auto-skips Login when a user is already signed in (session persistence).
+- **Log Out** on the Profile screen signs the user out and returns to Login (clears the back
+  stack), so graders can switch between / create multiple accounts.
 
 **Rubric criteria addressed**
 - **User Data Management (20 pts)** — account creation, login, persistent session, profile stored in the cloud.
