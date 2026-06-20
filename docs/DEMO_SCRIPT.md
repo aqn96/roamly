@@ -32,6 +32,8 @@
    **Profile** shows real stats, and **Favorites** has 1 saved post + 1 liked post.
 3. The app is left on the **Login** screen with the email/password **pre-typed into the fields**
    (so the first on-camera action is just tapping **Log In** — no risky typing on camera).
+   If Firebase still has a signed-in session on the emulator, sign out or clear app data first so the
+   app does not auto-open on Home.
 
 ## Notes to mention while narrating
 
@@ -78,7 +80,7 @@
 
 | # | Scene | Dur | On-screen actions | Voiceover |
 |---|-------|-----|-------------------|-----------|
-| 8 | **Discover** | 20s | Feed shows my new post + other travelers'; filter chip; search; **like** + **save** a post | "Discover is the multi-user feed — every traveler's routes, with photos, likes, and saves." |
+| 8 | **Discover** | 20s | Feed shows my new post + other travelers'; search; feed chips; **like** + **save** a post | "Discover is the multi-user feed — every traveler's routes, with photos, likes, and saves." |
 | 9 | **Post Detail** | 22s | Open a post; **Follow** author; **like**; type + send a **comment** | "I can follow the author, like the route, and comment — all persisted to Firestore." |
 | 10 | **Favorites** | 12s | Saved post appears; open / remove | "Saved routes live on the Favorites tab." |
 | 11 | **Profile** | 18s | Stats, travel level, followers/following, **Travelers to Follow** (follow one) | "My profile shows real stats and travelers to follow." |
@@ -131,8 +133,8 @@
 
 **[on screen: Discover feed] (~15s)**
 > "Over in Discover is the multi-user feed — every traveler's contributed routes, with photos. One
-> person's recorded trip becomes everyone else's discovery. I can search, filter by For You, Nearby,
-> Trending, or Following, and like or save any route."
+> person's recorded trip becomes everyone else's discovery. I can search the feed, use the chips
+> across the top, and Trending currently reorders the list, while I can still like or save any route."
 
 **[on screen: Post Detail — like, comment, save] (~18s)**
 > "Opening a post, I can like the route, leave a comment, and bookmark it to save for later. Every one
@@ -143,9 +145,9 @@
 
 **[on screen: Profile + Travelers to Follow + Follow] (~18s)**
 > "My profile shows my real stats and a travel level computed from my trips, along with my follower
-> and following counts. And down here are other travelers to follow — I'll follow one, and from now on
-> their routes feed into my recommendations. That following relationship is the multi-user heart of
-> Roamly."
+> and following counts. And down here are other travelers to follow — I'll follow one, and that action
+> updates my following list and removes them from the suggestions below. That following relationship is
+> the multi-user heart of Roamly."
 
 **Outro — back to Home / Firebase console (~10s)**
 > "Everything you saw — accounts, profiles, trips, posts, comments, likes, favorites, and follows — is
