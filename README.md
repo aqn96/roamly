@@ -14,6 +14,29 @@ A passive travel route-logging Android app that rewards you for sharing the rout
 
 ---
 
+## 🧪 For Graders / Testers
+
+**1. Run the app** — see [Getting Started](#getting-started) below (open in Android Studio → **Run ▶** on an emulator or device, API 28+). The Firebase config is already included, so no setup is needed.
+
+> **✅ Verified on:** **Pixel 8** emulator — **Android 16 (API 36)**, `arm64-v8a`, 1080×2400 @ 420 dpi. The full flow (sign-up, login, GPS trip, posts, profile photo upload, log out) was tested here. Any emulator or physical device on **API 28+** works.
+
+**2. Log in with the ready-made demo account** (or tap **Sign Up** to make your own — any email works, no verification needed):
+
+| Email | Password |
+|---|---|
+| `grader@roamly.app` | `RoamlyDemo1` |
+
+**3. What to try:**
+1. **Log In** with the account above → lands on **Home**.
+2. **Start Trip** → allow location → simulate a GPS route in the emulator (Extended Controls ⋮ → **Location** → set points / play a route) → **Stop** → see the trip summary; it auto-publishes a post to **Discover**.
+3. **Discover** tab → open a post → **like**, **comment**, **follow** the author.
+4. **Profile** (top-left avatar) → view stats & travel level → **Edit** to update, or **Log Out** to switch accounts.
+5. **Profile photo:** **Sign Up** → Create Profile → tap the avatar circle → pick a photo. It uploads to Firebase Storage and appears on Home + Profile.
+
+> The demo account is a normal user — feel free to **Log Out** and **Sign Up** with your own to exercise the multi-user features (following others, viewing other profiles).
+
+---
+
 ## Tech Stack
 
 | Layer | Technology |
