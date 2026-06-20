@@ -33,9 +33,14 @@ A passive travel route-logging Android app that rewards you for sharing the rout
 
 ## ⚠️ Firebase Secrets Management
 
-**For CS5520 final project submission (until June 23rd):** Keep `google-services.json` in your local repo and push it to GitHub. After June 23rd, remove this file and add it to `.gitignore` before publishing.
+**For CS5520 final project submission (until June 23rd):** The Firebase configuration file `google-services.json` is included in this repo per Professor Miazi's instructions.
 
-> **Important:** This is a **private repository**. The professor has explicitly approved keeping API keys in the repo for submission. Never commit secrets to public repositories.
+**Graders:** The Firebase secrets file is located at:
+```
+app/google-services.json
+```
+
+After June 23rd, this file will be removed and added to `.gitignore` before publishing the code publicly.
 
 ---
 
