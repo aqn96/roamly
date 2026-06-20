@@ -140,32 +140,35 @@ shared data that all the other screens write."
 ## Slide 10 - Backend
 **Original idea:** Firebase Authentication, Firestore, Storage, and unlock logic.
 
-**Current implementation:** The app uses Firebase Auth and Firestore for users, trips, posts,
-comments, likes, favorites, and follows. It stays on the free tier by drawing the route in a Compose
-canvas instead of embedding Google Maps.
+**Current implementation:** The core plan stayed the same: Firebase Auth and Firestore still power
+users, trips, posts, comments, likes, favorites, and follows. The main implementation difference is
+that the live route is drawn in a Compose canvas instead of embedding the Google Maps SDK.
 
 **What to say:** "My original backend diagram included Firebase Authentication, Firestore, Storage,
-and some unlock logic. The final app uses the important parts of that plan: Firebase Auth and
-Firestore for the user data, trip data, and social interactions. I kept the project on the free tier
-by drawing the route on a Compose canvas instead of using the Google Maps SDK directly, which let me
-avoid API key and billing setup while still showing the exact GPS route. The architecture is pretty
-clean here: the UI talks to ViewModels, the ViewModels talk to repositories, and the repositories are
-the only layer that knows about Firebase."
+and some unlock logic. The final app still follows that same backend idea: Firebase Auth and
+Firestore handle the user data, trip data, and social interactions. The main simplification is just
+the map display — I draw the live route on a Compose canvas instead of embedding the Google Maps SDK,
+which avoids API key and billing setup while still showing the exact GPS route. The architecture is
+still clean: the UI talks to ViewModels, the ViewModels talk to repositories, and the repositories
+are the only layer that knows about Firebase."
 
 **Suggested time:** 25 to 30 seconds
 
 ## Slide 11 - Sensor
 **Original idea:** Use the phone’s location sensor to track movement.
 
-**Current implementation:** Roamly uses FusedLocationProviderClient with a foreground service to keep
-recording route points while the app is in the background.
+**Current implementation:** Roamly still follows the same sensor/location idea, using
+FusedLocationProviderClient with a foreground service to keep recording route points while the app is
+in the background.
 
 **What to say:** "This slide was always about the technical core of the app. I used
 FusedLocationProviderClient with a foreground service so Roamly can keep recording route points while
-the user is doing something else. That part taught me the most about Android permissions, background
-execution, and keeping the UI and service in sync. It also forced me to separate responsibilities
-carefully: the service collects points, a shared session object stores them, and the Compose UI just
-observes that state."
+the user is doing something else. So the idea didn't change much from the proposal — it’s still the
+phone tracking movement in the background — but the implementation needed the foreground service so
+Android would keep it alive. That part taught me the most about permissions, background execution,
+and keeping the UI and service in sync. It also forced me to separate responsibilities carefully: the
+service collects points, a shared session object stores them, and the Compose UI just observes that
+state."
 
 **Suggested time:** 20 to 25 seconds
 
