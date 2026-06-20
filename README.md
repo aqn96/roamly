@@ -31,6 +31,14 @@ A passive travel route-logging Android app that rewards you for sharing the rout
 
 ---
 
+## ⚠️ Firebase Secrets Management
+
+**For CS5520 final project submission (until June 23rd):** Keep `google-services.json` in your local repo and push it to GitHub. After June 23rd, remove this file and add it to `.gitignore` before publishing.
+
+> **Important:** This is a **private repository**. The professor has explicitly approved keeping API keys in the repo for submission. Never commit secrets to public repositories.
+
+---
+
 ## Getting Started
 
 ### Prerequisites
@@ -51,8 +59,7 @@ git clone https://github.com/aqn96/roamly.git
 
 ### Firebase setup (required for auth + cloud data)
 
-The app talks to Firebase, so each developer supplies their own config (`google-services.json` is
-git-ignored on purpose — it holds project keys).
+The app talks to Firebase, so each developer supplies their own config. **For CS5520 final project:** the professor has approved keeping `google-services.json` in the repo through June 23rd for submission purposes.
 
 1. Create a project at [console.firebase.google.com](https://console.firebase.google.com).
 2. **Add an Android app** with package name **`com.roamly.app`**, download **`google-services.json`**,
@@ -64,6 +71,8 @@ git-ignored on purpose — it holds project keys).
 
 No Google Cloud billing, Maps API key, or Firebase Storage is needed — the app stays on the free
 Spark tier (route maps are drawn on a Compose Canvas; navigation hands off to the Google Maps app).
+
+> **Post-submission reminder:** After June 23rd, remove `google-services.json` and add it to `.gitignore` before making the repo public.
 
 ---
 
