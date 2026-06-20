@@ -22,3 +22,7 @@ docs/week*
 
 # Office temp/lock files
 ~$*
+
+# Firebase config (temporarily tracked for CS5520 submission through June 23rd)
+# TODO: Uncomment this line and remove google-services.json from git after June 23rd
+# app/google-services.json
