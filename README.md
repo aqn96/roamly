@@ -21,10 +21,10 @@ A passive travel route-logging Android app that rewards you for sharing the rout
 | Language | Kotlin |
 | UI | Jetpack Compose + Material 3 |
 | Navigation | Navigation Compose (type-safe `@Serializable` routes) |
-| Backend | Firebase Auth (Email/Password) + Cloud Firestore |
+| Backend | Firebase Auth (Email/Password) + Cloud Firestore + Cloud Storage |
 | Architecture | ViewModel + StateFlow (UDF), `collectAsStateWithLifecycle` |
 | Location | FusedLocationProviderClient + Foreground Service |
-| Images | Coil (loads photo URLs stored in Firestore) |
+| Images | Coil (`AsyncImage`) — loads profile photos from Firebase Storage download URLs |
 | Fonts | Montserrat (headings) + Nunito (body) |
 | Min SDK | API 28 (Android 9.0) |
 | Target SDK | API 37 |
@@ -73,9 +73,28 @@ The app talks to Firebase, so each developer supplies their own config. **For CS
 4. **Firestore Database → Create database →** choose a location → **Start in test mode**.
    *(Creating the database also enables the Cloud Firestore API. If writes fail with
    `PERMISSION_DENIED`, enable the [Cloud Firestore API](https://console.cloud.google.com/apis/library/firestore.googleapis.com) and wait ~1 min.)*
+5. **Storage → Get started →** **Start in test mode** → pick the same location (e.g. `nam5` / `US`).
+   This creates the default bucket (`gs://<project>.firebasestorage.app`) used for profile photos
+   at `profile_photos/{uid}/…`. Profile photo upload is the only feature that needs Storage; the
+   rest of the app works without it.
+   - **Heads-up:** newer Firebase projects must be on the **Blaze (pay-as-you-go)** plan to enable
+     Storage — the console upgrades you when you click *Get started*. Blaze includes the same free
+     Spark quota (≈5 GB stored, 1 GB/day downloaded), so avatar-scale usage stays at **$0**. Set a
+     Google Cloud budget alert if you want a safety net.
+   - **Before sharing the project,** tighten **Storage → Rules** from test mode to authenticated
+     access so the bucket isn't world-readable:
+     ```
+     rules_version = '2';
+     service firebase.storage {
+       match /b/{bucket}/o {
+         match /{allPaths=**} { allow read, write: if request.auth != null; }
+       }
+     }
+     ```
 
-No Google Cloud billing, Maps API key, or Firebase Storage is needed — the app stays on the free
-Spark tier (route maps are drawn on a Compose Canvas; navigation hands off to the Google Maps app).
+No Maps API key is needed — route maps are drawn on a Compose Canvas and navigation hands off to the
+Google Maps app. Auth and Firestore stay within the free tier; Cloud Storage requires the Blaze plan
+but stays at no cost for this app's usage.
 
 > **Post-submission reminder:** After June 23rd, remove `google-services.json` and add it to `.gitignore` before making the repo public.
 

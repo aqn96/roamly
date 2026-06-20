@@ -5,7 +5,7 @@
 > criteria it satisfies**, and **how to demo it**.
 
 **App:** Roamly — *Explore, Contribute, Unlock* · **Student:** An Nguyen · **Course:** CS5520 (Summer 2026)
-**Firebase project:** `roamly-e7c4d` (Auth: Email/Password · Cloud Firestore)
+**Firebase project:** `roamly-e7c4d` (Auth: Email/Password · Cloud Firestore · Cloud Storage)
 
 ---
 
@@ -16,7 +16,7 @@ UI (Jetpack Compose, Material 3)         ← screens observe state, emit events
    │  collectAsStateWithLifecycle / callbacks
 ViewModels (StateFlow + Channel events)  ← single source of truth, survive rotation
    │
-Repositories  ──────────────►  Firebase (Auth + Cloud Firestore)
+Repositories  ──────────────►  Firebase (Auth + Cloud Firestore + Cloud Storage)
 Location: TripSession ◄── TripLocationService (Foreground Service, FusedLocationProvider)
 Navigation: type-safe @Serializable routes + single RoamlyNavGraph NavHost
 ```
@@ -171,6 +171,29 @@ Patterns follow course Topic 06/07: ViewModel + StateFlow, one-shot `Channel` ev
 **Rubric criteria addressed**
 - **Code Documentation and Previews (10 pts)** — What/Who/When comments + @Preview throughout.
 
+## Stage 9 — Firebase Storage profile photos ✅
+
+**What was built**
+- `StorageRepository`: uploads a chosen image to Cloud Storage at `profile_photos/{uid}/{ts}.jpg`
+  and returns its download URL (suspend + `Result`, matching the other repositories).
+- `CreateProfileScreen`: real photo picker via `rememberLauncherForActivityResult(GetContent())`;
+  the picked image previews in the avatar circle before sign-up.
+- `AuthViewModel.createProfile`: uploads the photo first, then stores the resulting URL on the
+  `RoamlyUser.avatarUrl` field saved to Firestore.
+- `AvatarSurface`: one reusable circular avatar (Coil `AsyncImage` + initials/icon fallback) now
+  used by both **Home** (top-left) and **Profile** (header), so a real photo shows everywhere.
+
+**Rubric criteria addressed**
+- **Cloud Database Integration (60 pts)** — adds Cloud Storage alongside Firestore; the photo URL
+  is persisted on the user document.
+- **User Data Management (20 pts)** — the profile photo is part of the user's persisted profile.
+
+**Demo steps**
+1. Sign Up → Create Profile → tap the avatar circle → pick a photo → it previews in the circle.
+2. Get Started → Home top-left avatar and the Profile header both show the uploaded photo.
+3. Confirm the file in Firebase console → Storage → `profile_photos/{uid}/…` and the `avatarUrl`
+   field on the user's Firestore document.
+
 ---
 
 ## ✅ End-to-end verified on device (Jun 18, 2026)
@@ -187,4 +210,5 @@ the live backend:
 ## Optional polish (not required by rubric)
 
 - Home "Recommended Routes" still uses placeholder data (could read the Firestore feed).
-- Real photo uploads would need Firebase Storage (Blaze plan); avatars currently use initials.
+- Profile photos now upload to Firebase Storage (Stage 9); initials/icon remain the fallback when a
+  user hasn't set a photo.
