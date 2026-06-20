@@ -33,7 +33,6 @@ fun SocialSignInButton(
         shape = RoundedCornerShape(12.dp),
         border = BorderStroke(1.dp, Color.LightGray)
     ) {
-        // TODO: Add provider icon here (e.g. painterResource for Apple/Google/Facebook logo)
         Text("Sign in with $provider")
     }
 }

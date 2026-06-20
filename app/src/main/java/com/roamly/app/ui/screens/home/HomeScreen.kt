@@ -39,6 +39,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,6 +54,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.roamly.app.data.AuthRepository
+import com.roamly.app.data.RoamlyUser
+import com.roamly.app.ui.components.AvatarSurface
 import com.roamly.app.ui.components.BottomNavTab
 import com.roamly.app.ui.components.RoamlyBottomNavBar
 import com.roamly.app.ui.theme.MontserratFamily
@@ -88,6 +92,10 @@ fun HomeScreen(
     onNavigateToFavorites: () -> Unit = {}
 ) {
     var searchQuery by remember { mutableStateOf("") }
+    val authRepository = remember { AuthRepository() }
+    val currentProfile by produceState<RoamlyUser?>(initialValue = null) {
+        value = authRepository.loadCurrentProfile().getOrNull()
+    }
 
     Scaffold(
         containerColor = RoamlyMidnight,
@@ -111,9 +119,6 @@ fun HomeScreen(
         ) {
 
             // ── Map placeholder ───────────────────────────────────────────
-            // TODO: Replace with actual Google Maps Composable:
-            //   val cameraPositionState = rememberCameraPositionState()
-            //   GoogleMap(modifier = Modifier.fillMaxSize(), cameraPositionState = cameraPositionState)
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -141,24 +146,25 @@ fun HomeScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     // Avatar → profile
-                    Box(
+                    AvatarSurface(
+                        imageUrl = currentProfile?.avatarUrl,
                         modifier = Modifier
                             .size(52.dp)
                             .shadow(6.dp, CircleShape)
-                            .clip(CircleShape)
-                            .background(RoamlySlate)
-                            .border(2.dp, RoamlyElectric, CircleShape)
                             .clickable { onNavigateToProfile() },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        // TODO: Replace with actual user profile photo from Firebase Storage
-                        Icon(
-                            imageVector = Icons.Default.Person,
-                            contentDescription = "Profile",
-                            tint = RoamlyElectric,
-                            modifier = Modifier.size(28.dp)
-                        )
-                    }
+                        borderColor = RoamlyElectric,
+                        backgroundColor = RoamlySlate,
+                        fallback = {
+                            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                Icon(
+                                    imageVector = Icons.Default.Person,
+                                    contentDescription = "Profile",
+                                    tint = RoamlyElectric,
+                                    modifier = Modifier.size(28.dp)
+                                )
+                            }
+                        }
+                    )
 
                     Text(
                         text = "Roamly",
@@ -248,7 +254,6 @@ fun HomeScreen(
                         color = RoamlyTextLight,
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
-                    // TODO: Query Firestore for top-rated nearby routes based on user's location
                     LazyRow(
                         contentPadding = PaddingValues(horizontal = 16.dp),
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -272,7 +277,6 @@ private fun RecommendedRouteCard(route: RecommendedRoute) {
     ) {
         Column {
             // Map thumbnail placeholder
-            // TODO: Replace with route map snapshot
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

@@ -141,8 +141,9 @@ shared data that all the other screens write."
 **Original idea:** Firebase Authentication, Firestore, Storage, and unlock logic.
 
 **Current implementation:** The core plan stayed the same: Firebase Auth and Firestore still power
-users, trips, posts, comments, likes, favorites, and follows. The main implementation difference is
-that the live route is drawn in a Compose canvas instead of embedding the Google Maps SDK.
+users, trips, posts, comments, likes, favorites, and follows, and Firebase Storage now handles
+profile photo uploads. The main implementation difference is that the live route is drawn in a
+Compose canvas instead of embedding the Google Maps SDK.
 
 **What to say:** "My original backend diagram included Firebase Authentication, Firestore, Storage,
 and some unlock logic. The final app still follows that same backend idea: Firebase Auth and
@@ -205,13 +206,13 @@ architecture doing its job."
 **Original idea:** Use Firebase Storage and an embedded Google Maps screen for richer visuals.
 
 **Current implementation:** I kept the app on the free tier, so I used a Compose canvas for the live
-route and public image URLs instead of a storage upload flow.
+route and Firebase Storage for profile photos, while route imagery still uses public image URLs.
 
 **What to say:** "There are a couple of things I would still improve if I had more time. The biggest
-one is a real Google Maps view inside the app, plus richer photo upload support. I intentionally kept
-the current version on the free tier, which is why the live route is drawn on a canvas and the photos
-come from URLs instead of a storage upload flow. If I kept going, I would add a true map base layer,
-real image uploads, more advanced recommendation ranking, and a more gamified experience with streaks,
+one is a real Google Maps view inside the app, plus richer route photo uploads. I intentionally kept
+the current version on the free tier, which is why the live route is drawn on a canvas and route
+images still come from URLs. If I kept going, I would add a true map base layer, fuller image uploads
+for trip posts, more advanced recommendation ranking, and a more gamified experience with streaks,
 badges, or challenges so the app feels more like a social travel game. So the future plan is less
 about rewriting the app and more about upgrading the parts that are intentionally simplified right now."
 

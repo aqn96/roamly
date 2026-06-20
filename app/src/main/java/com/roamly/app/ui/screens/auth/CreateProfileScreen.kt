@@ -6,6 +6,7 @@
  */
 package com.roamly.app.ui.screens.auth
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -37,6 +38,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.Alignment
@@ -44,10 +47,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.roamly.app.ui.components.RoamlyButton
 import com.roamly.app.ui.components.RoamlyTextField
 import com.roamly.app.ui.theme.MontserratFamily
@@ -73,7 +78,12 @@ fun CreateProfileScreen(
     var favoriteLocation by rememberSaveable { mutableStateOf("") }
     var selectedStyle by rememberSaveable { mutableStateOf("Solo Trip") }
     var selectedFrequency by rememberSaveable { mutableStateOf("Regular") }
+    var selectedAvatarUri by rememberSaveable { mutableStateOf<String?>(null) }
     val uiState by authViewModel.uiState.collectAsStateWithLifecycle()
+    val photoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri: Uri? -> selectedAvatarUri = uri?.toString() }
+    )
 
     // Once the profile is written to Firestore, enter the app.
     LaunchedEffect(uiState) {
@@ -86,8 +96,6 @@ fun CreateProfileScreen(
     Box(modifier = Modifier.fillMaxSize().background(RoamlyMidnight)) {
 
         // ── Hero section ─────────────────────────────────────────────────
-        // TODO: Replace gradient with a real travel photo using:
-        //   Image(painter = painterResource(R.drawable.hero_travel), contentScale = ContentScale.Crop)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -100,8 +108,6 @@ fun CreateProfileScreen(
             contentAlignment = Alignment.Center
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                // TODO: Replace with actual Roamly logo image using:
-                //   Image(painter = painterResource(R.drawable.roamly_logo), ...)
                 Text(
                     text = "Roamly",
                     color = RoamlyElectric,
@@ -160,23 +166,25 @@ fun CreateProfileScreen(
                             .background(RoamlyMidnight)
                             .border(2.dp, RoamlyElectric, CircleShape)
                             .clickable {
-                                // TODO: Launch image picker here using:
-                                //   val launcher = rememberLauncherForActivityResult(
-                                //       ActivityResultContracts.GetContent()
-                                //   ) { uri -> /* handle selected image uri */ }
-                                //   launcher.launch("image/*")
+                                photoPickerLauncher.launch("image/*")
                             },
                         contentAlignment = Alignment.Center
                     ) {
-                        // TODO: Once image is selected, replace Icon with:
-                        //   Image(bitmap = selectedBitmap, contentScale = ContentScale.Crop,
-                        //         modifier = Modifier.fillMaxSize().clip(CircleShape))
-                        Icon(
-                            imageVector = Icons.Default.CameraAlt,
-                            contentDescription = "Add profile photo",
-                            tint = RoamlyElectric,
-                            modifier = Modifier.size(32.dp)
-                        )
+                        if (selectedAvatarUri != null) {
+                            AsyncImage(
+                                model = selectedAvatarUri,
+                                contentDescription = "Selected profile photo",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        } else {
+                            Icon(
+                                imageVector = Icons.Default.CameraAlt,
+                                contentDescription = "Add profile photo",
+                                tint = RoamlyElectric,
+                                modifier = Modifier.size(32.dp)
+                            )
+                        }
                     }
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(text = "Tap to add photo", color = RoamlyTextMuted, fontFamily = NunitoFamily, fontSize = 12.sp)
@@ -210,6 +218,7 @@ fun CreateProfileScreen(
                             favoriteDestination = favoriteLocation,
                             travelStyle = selectedStyle,
                             travelFrequency = selectedFrequency,
+                            avatarUri = selectedAvatarUri?.let(Uri::parse),
                         )
                     }
                 )

@@ -1,9 +1,11 @@
 package com.roamly.app.ui.screens.auth
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.roamly.app.data.AuthRepository
 import com.roamly.app.data.RoamlyUser
+import com.roamly.app.data.StorageRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,6 +29,7 @@ sealed interface AuthUiState {
 class AuthViewModel : ViewModel() {
 
     private val repo = AuthRepository()
+    private val storage = StorageRepository()
 
     private val _uiState = MutableStateFlow<AuthUiState>(AuthUiState.Idle)
     val uiState: StateFlow<AuthUiState> = _uiState.asStateFlow()
@@ -63,18 +66,30 @@ class AuthViewModel : ViewModel() {
         favoriteDestination: String,
         travelStyle: String,
         travelFrequency: String,
+        avatarUri: Uri? = null,
     ) = viewModelScope.launch {
         if (username.isBlank()) {
             _uiState.value = AuthUiState.Error("Please choose a username")
             return@launch
         }
         _uiState.value = AuthUiState.Loading
+        val avatarUrl = if (avatarUri != null) {
+            val result = storage.uploadProfilePhoto(avatarUri)
+            if (result.isFailure) {
+                _uiState.value = AuthUiState.Error(result.exceptionOrNull()?.message ?: "Could not upload profile photo")
+                return@launch
+            }
+            result.getOrThrow()
+        } else {
+            ""
+        }
         val profile = RoamlyUser(
             username = username.trim(),
             homeCountry = homeCountry.trim(),
             favoriteDestination = favoriteDestination.trim(),
             travelStyle = travelStyle,
             travelFrequency = travelFrequency,
+            avatarUrl = avatarUrl,
         )
         repo.saveProfile(profile)
             .onSuccess { _uiState.value = AuthUiState.Success }

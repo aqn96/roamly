@@ -99,9 +99,6 @@ fun RoutePostCard(
         Column {
 
             // ── Map thumbnail placeholder ─────────────────────────────────
-            // TODO: Replace with real route map snapshot:
-            //   Image(bitmap = routeMapBitmap, contentScale = ContentScale.Crop,
-            //         modifier = Modifier.fillMaxWidth().height(160.dp))
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -178,7 +175,6 @@ fun RoutePostCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    // TODO: Replace with actual user avatar image
                     Box(
                         modifier = Modifier
                             .size(36.dp)

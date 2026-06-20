@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.roamly.app.data.RoamlyUser
+import com.roamly.app.ui.components.AvatarSurface
 import com.roamly.app.ui.components.BottomNavTab
 import com.roamly.app.ui.components.RoamlyBottomNavBar
 import com.roamly.app.ui.theme.MontserratFamily
@@ -129,15 +130,23 @@ fun ProfileScreen(
                     Box(
                         modifier = Modifier.align(Alignment.BottomStart).offset(x = 20.dp, y = 44.dp)
                     ) {
-                        Box(
-                            modifier = Modifier.size(88.dp).clip(CircleShape).background(RoamlySlate).border(3.dp, RoamlyElectric, CircleShape),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = profile.username.firstOrNull()?.uppercaseChar()?.toString() ?: "?",
-                                color = RoamlyElectric, fontFamily = MontserratFamily, fontWeight = FontWeight.ExtraBold, fontSize = 32.sp
-                            )
-                        }
+                        AvatarSurface(
+                            imageUrl = profile.avatarUrl,
+                            modifier = Modifier.size(88.dp),
+                            borderColor = RoamlyElectric,
+                            backgroundColor = RoamlySlate,
+                            fallback = {
+                                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                    Text(
+                                        text = profile.username.firstOrNull()?.uppercaseChar()?.toString() ?: "?",
+                                        color = RoamlyElectric,
+                                        fontFamily = MontserratFamily,
+                                        fontWeight = FontWeight.ExtraBold,
+                                        fontSize = 32.sp
+                                    )
+                                }
+                            }
+                        )
                     }
                 }
             }

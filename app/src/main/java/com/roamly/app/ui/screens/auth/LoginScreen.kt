@@ -75,8 +75,6 @@ fun LoginScreen(
     Box(modifier = Modifier.fillMaxSize().background(RoamlyMidnight)) {
 
         // ── Hero section ─────────────────────────────────────────────────
-        // TODO: Replace gradient with a real travel photo using:
-        //   Image(painter = painterResource(R.drawable.hero_travel), contentScale = ContentScale.Crop)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -96,8 +94,6 @@ fun LoginScreen(
                     fontSize = 14.sp
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                // TODO: Replace with actual Roamly logo image using:
-                //   Image(painter = painterResource(R.drawable.roamly_logo), ...)
                 Text(
                     text = "Roamly",
                     color = RoamlyElectric,

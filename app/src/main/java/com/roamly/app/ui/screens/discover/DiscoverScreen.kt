@@ -61,11 +61,7 @@ import com.roamly.app.ui.theme.RoamlyTextLight
 import com.roamly.app.ui.theme.RoamlyTextMuted
 import com.roamly.app.ui.theme.RoamlyTheme
 
-// TODO: Feed algorithm — sort posts by:
-//   1. Nearby users (Firestore geoquery using GeoFlutterFire or manual lat/lng bounding box)
-//   2. Recency (createdAt timestamp descending)
-//   3. Engagement score (likes + comments weight)
-//   Similar to Instagram's interest graph + LinkedIn's proximity feed
+// Future feed ranking could sort by nearby routes, recency, and engagement.
 
 private val feedFilters = listOf("For You", "Nearby", "Trending", "Following")
 
@@ -150,11 +146,6 @@ fun DiscoverScreen(
                 )
 
                 // Filter chips
-                // TODO: Each filter triggers a different Firestore query:
-                //   "For You"   → algo-ranked feed (engagement + proximity)
-                //   "Nearby"    → geoquery sorted by distance from user's current location
-                //   "Trending"  → top likeCount + commentCount in last 7 days
-                //   "Following" → posts from users in the current user's "following" subcollection
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     items(feedFilters) { filter ->
                         val isSelected = selectedFilter == filter
