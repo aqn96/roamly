@@ -24,7 +24,7 @@ import com.roamly.app.ui.screens.trip.TripSummaryScreen
  * What: The single NavHost that wires every Roamly screen together and owns all
  *       navigation transitions (auth flow, trip flow, bottom-nav tabs, detail screens).
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  *
  * State flows down into each screen; navigation events flow up via the screens' callbacks
  * (onLoginSuccess, onStartTrip, onPostClicked, ...) which this graph maps to NavController calls.
@@ -40,7 +40,7 @@ fun RoamlyNavGraph(
         navController = navController,
         startDestination = startDestination,
     ) {
-        // ── Auth flow ─────────────────────────────────────────────────────────
+        // Auth flow
         composable<Login> {
             LoginScreen(
                 onNavigateToSignUp = { navController.navigate(SignUp) },
@@ -64,7 +64,7 @@ fun RoamlyNavGraph(
             )
         }
 
-        // ── Main app (bottom-nav tabs) ─────────────────────────────────────────
+        // Main app (bottom-nav tabs)
         composable<Home> {
             HomeScreen(
                 onStartTrip = { navController.navigate(LocationPermission) },
@@ -88,7 +88,7 @@ fun RoamlyNavGraph(
             )
         }
 
-        // ── Trip flow ──────────────────────────────────────────────────────────
+        // Trip flow
         composable<LocationPermission> {
             LocationPermissionScreen(
                 onAllowClicked = {
@@ -112,7 +112,7 @@ fun RoamlyNavGraph(
             )
         }
 
-        // ── Detail screens ──────────────────────────────────────────────────────
+        // Detail screens
         composable<PostDetail> { entry ->
             val route = entry.toRoute<PostDetail>()
             PostDetailScreen(
@@ -138,11 +138,9 @@ fun RoamlyNavGraph(
     }
 }
 
-/**
- * Switches between the three bottom-nav tabs the way users expect: a single instance per tab,
- * popping back to Home so the back stack never piles up duplicate tabs, while preserving each
- * tab's scroll/state via saveState/restoreState.
- */
+// Switches between the three bottom-nav tabs the way users expect: a single instance per tab,
+// popping back to Home so the back stack never piles up duplicate tabs, while preserving each
+// tab's scroll/state via saveState/restoreState.
 private fun NavController.navigateTab(route: Any) {
     navigate(route) {
         popUpTo(Home) { saveState = true }

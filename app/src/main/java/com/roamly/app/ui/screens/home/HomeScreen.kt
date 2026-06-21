@@ -1,8 +1,8 @@
 /**
- * What: The Home screen — map placeholder, destination search, the central Start Trip button,
+ * What: The Home screen - map placeholder, destination search, the central Start Trip button,
  *       a recommended-routes row, and bottom navigation.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 package com.roamly.app.ui.screens.home
 
@@ -118,7 +118,7 @@ fun HomeScreen(
                 .padding(innerPadding)
         ) {
 
-            // ── Map placeholder ───────────────────────────────────────────
+            // Map placeholder
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -132,7 +132,7 @@ fun HomeScreen(
                 Text(text = "Map View", color = RoamlyTextMuted, fontFamily = NunitoFamily, fontSize = 14.sp)
             }
 
-            // ── Top bar ───────────────────────────────────────────────────
+            // Top bar
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -145,7 +145,7 @@ fun HomeScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Avatar → profile
+                    // Tapping the avatar opens the profile
                     AvatarSurface(
                         imageUrl = currentProfile?.avatarUrl,
                         modifier = Modifier
@@ -206,7 +206,7 @@ fun HomeScreen(
                 )
             }
 
-            // ── Start Trip button — center ────────────────────────────────
+            // Start Trip button - center
             Box(
                 modifier = Modifier
                     .size(130.dp)
@@ -235,7 +235,7 @@ fun HomeScreen(
                 }
             }
 
-            // ── Recommended routes — bottom card ──────────────────────────
+            // Recommended routes - bottom card
             Card(
                 modifier = Modifier
                     .fillMaxWidth()

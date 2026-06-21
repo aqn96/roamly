@@ -2,15 +2,15 @@
 
 **CS5520 Final Tutorial Report**
 **Prepared by:** An Nguyen
-**Course:** CS5520 — Mobile Application Development, Northeastern University (Summer 2026)
-**Reference app:** Roamly — <https://github.com/aqn96/roamly>
+**Course:** CS5520 - Mobile Application Development, Northeastern University (Summer 2026)
+**Reference app:** Roamly - <https://github.com/aqn96/roamly>
 
 ---
 
 ## 1. Introduction
 
 A lot of apps really just need to answer one question: where did the user actually go? Fitness
-trackers, food-delivery apps, navigation, travel apps — they all record a GPS trail. I ran into this
+trackers, food-delivery apps, navigation, travel apps - they all record a GPS trail. I ran into this
 building Roamly, a travel app where you "contribute" the routes you walk to unlock recommendations
 from other travelers. Recording an accurate path is basically the whole point of the app, so I had to
 figure out how to do it properly.
@@ -19,8 +19,8 @@ And it's trickier than it sounds. Grabbing the phone's location once is easy; *c
 while the user is off doing something else is the hard part. You really need two things working
 together:
 
-1. `FusedLocationProviderClient` — the thing that gives you a steady stream of GPS fixes.
-2. A foreground service — so the phone keeps logging even after the user leaves your app (in
+1. `FusedLocationProviderClient` - the thing that gives you a steady stream of GPS fixes.
+2. A foreground service - so the phone keeps logging even after the user leaves your app (in
    Roamly they're usually navigating in Google Maps while we quietly record in the background).
 
 ### So what's the actual tool here?
@@ -28,18 +28,18 @@ together:
 `FusedLocationProviderClient` lives in Google Play Services Location
 (`com.google.android.gms:play-services-location`). The "fused" bit just means it blends GPS, Wi-Fi,
 cell towers, and the motion sensors into one clean location stream, and it lets you decide how
-aggressive to be — how often it updates, how accurate, how far you have to move before it bothers you —
+aggressive to be - how often it updates, how accurate, how far you have to move before it bothers you -
 through a `LocationRequest`. It's what Google points you to these days instead of the old
 `LocationManager`.
 
 A foreground service is just an Android `Service` that the system promises not to kill, as long as
 it keeps a notification on screen so the user knows something is running. That's the sanctioned way to
-keep doing work — location, music, navigation — when your app isn't in front.
+keep doing work - location, music, navigation - when your app isn't in front.
 
 Here's the catch, and the reason you need both: on its own, `FusedLocationProviderClient` quietly stops
 sending updates the second your app goes to the background (and newer Android versions keep tightening
-this). Drop it inside a Foreground Service and it just keeps going. That combo — a fused location
-stream running out of a foreground service, piped up into Jetpack Compose — is what this tutorial is
+this). Drop it inside a Foreground Service and it just keeps going. That combo - a fused location
+stream running out of a foreground service, piped up into Jetpack Compose - is what this tutorial is
 about.
 
 What we're building: tap "Start Trip" and the app starts logging your GPS path in the background and
@@ -61,12 +61,12 @@ up anywhere in the course.
 
 | Course Week | Topic | Related but *different* |
 |---|---|---|
-| Week 6 | ViewModel, StateFlow, Notifications, runtime permissions, BroadcastReceiver | Teaches `NotificationChannel` and `ActivityResultContracts.RequestPermission` — but only for status-bar alerts, never tied to a Service or to location |
+| Week 6 | ViewModel, StateFlow, Notifications, runtime permissions, BroadcastReceiver | Teaches `NotificationChannel` and `ActivityResultContracts.RequestPermission` - but only for status-bar alerts, never tied to a Service or to location |
 | Week 8 | Retrofit networking | Background work via coroutines, but no `Service` and no location |
 
 So yes, this tutorial leans on two things the course did teach (asking for a runtime permission and
-making a notification channel), but the actual meat of it — pulling GPS updates from
-`FusedLocationProviderClient` inside a `Service` that runs in the foreground — is all new ground.
+making a notification channel), but the actual meat of it - pulling GPS updates from
+`FusedLocationProviderClient` inside a `Service` that runs in the foreground - is all new ground.
 
 ---
 
@@ -79,7 +79,7 @@ distance) and receive results through a `LocationCallback`. It lives in the
 
 A foreground service is an Android `Service` promoted to "foreground" with `startForeground(...)`,
 which requires an ongoing notification. The OS treats it as user-visible work and won't casually kill
-it — which is exactly what you want for logging location while the user is off in another app.
+it - which is exactly what you want for logging location while the user is off in another app.
 
 The challenge that ties them together: a `Service` and the Compose UI are separate lifecycles, so we
 need a way to share the growing list of GPS points between them. We solve that with a process-wide
@@ -107,7 +107,7 @@ In the version catalog (`gradle/libs.versions.toml`) and the app `build.gradle.k
 playServicesLocation = "21.3.0"
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 
-// app/build.gradle.kts — dependencies { }
+// app/build.gradle.kts - dependencies { }
 implementation(libs.play.services.location)
 ```
 
@@ -137,7 +137,7 @@ implementation(libs.play.services.location)
 ### 5.3 Model a single GPS sample
 
 ```kotlin
-// data/TrackPoint.kt — one recorded GPS sample; a trip is an ordered list of these.
+// data/TrackPoint.kt - one recorded GPS sample; a trip is an ordered list of these.
 data class TrackPoint(
     val latitude: Double,
     val longitude: Double,
@@ -180,7 +180,7 @@ object TripSession {
 
 ### 5.5 The Foreground Service
 
-This is the heart of the tutorial — a `Service` that requests location updates and feeds each fix into
+This is the heart of the tutorial - a `Service` that requests location updates and feeds each fix into
 `TripSession`, while showing a persistent notification:
 
 ```kotlin
@@ -292,7 +292,7 @@ class TripViewModel : ViewModel() {
 
 The screen observes the ViewModel with `collectAsStateWithLifecycle()`, starts the service on first
 composition, and draws the points as a polyline. (Drawing on a `Canvas` keeps the app on Firebase's
-free tier — in production this would be a Google Maps `Polyline`; the recorded data is identical.)
+free tier - in production this would be a Google Maps `Polyline`; the recorded data is identical.)
 
 ```kotlin
 @Composable
@@ -334,7 +334,7 @@ Canvas(modifier = Modifier.fillMaxSize().padding(28.dp)) {
 
 > A quick heads-up on the map: the route in these screenshots is drawn on a Compose `Canvas`, not an
 > actual Google Map. That's on purpose. The Google Maps SDK needs a Google Cloud API key and a billing
-> account — Maps gets billed even inside its free monthly credit — and I wanted to keep the whole
+> account - Maps gets billed even inside its free monthly credit - and I wanted to keep the whole
 > project on free tiers. It doesn't change what the tutorial is really about: the foreground service is
 > still pulling real GPS fixes from `FusedLocationProviderClient` and recording the same lat/lng points,
 > they're just getting drawn by hand. In a real release you'd keep all of this code and swap the Canvas
@@ -342,7 +342,7 @@ Canvas(modifier = Modifier.fillMaxSize().padding(28.dp)) {
 
 ---
 
-## 7. Reference code — a fully working app
+## 7. Reference code - a fully working app
 
 The complete, runnable implementation is in Roamly: <https://github.com/aqn96/roamly>
 
@@ -366,10 +366,10 @@ on an API 28+ device/emulator (see the repo `README.md`).
 ## 8. Conclusion
 
 So that's the whole thing: recording a GPS route in the background by pairing two pieces the course
-never touched — `FusedLocationProviderClient` for a battery-friendly location stream, and a foreground
+never touched - `FusedLocationProviderClient` for a battery-friendly location stream, and a foreground
 service to keep it running when the app isn't on screen. If there's one idea worth taking away, it's
 the decoupling: the service and the UI never talk to each other directly. They both go through one
 process-wide `StateFlow` (`TripSession`), and that's what lets the route flow cleanly into a ViewModel
 and onto the screen. It's the sensing backbone of Roamly's whole "contribute a trip to unlock
-recommendations" idea, and the same setup works for pretty much any app — fitness, delivery,
-navigation — that needs to answer "where did the user actually go?"
+recommendations" idea, and the same setup works for pretty much any app - fitness, delivery,
+navigation - that needs to answer "where did the user actually go?"

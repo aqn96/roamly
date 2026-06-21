@@ -1,13 +1,13 @@
 /**
  * What: The "Midnight Nomad" color palette tokens (dark-first scheme) used across the app.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 package com.roamly.app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Roamly — Midnight Nomad color system
+// Roamly - Midnight Nomad color system
 val RoamlyMidnight   = Color(0xFF0F172A)   // main background
 val RoamlySlate      = Color(0xFF1E293B)   // card / elevated surfaces
 val RoamlySlateLight = Color(0xFF334155)   // borders, dividers

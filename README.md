@@ -1,14 +1,14 @@
 # Roamly
 
-A passive travel route-logging Android app that rewards you for sharing the routes you actually travel. Contribute your own routes to unlock community recommendations — like Strava, but for travel discovery.
+A passive travel route-logging Android app that rewards you for sharing the routes you actually travel. Contribute your own routes to unlock community recommendations - like Strava, but for travel discovery.
 
-> Built for CS5520 Mobile App Development — Northeastern University (Summer 2026)
+> Built for CS5520 Mobile App Development - Northeastern University (Summer 2026)
 
 ---
 
 ## What is Roamly?
 
-1. Tap **Start Trip** — Roamly launches Google Maps for navigation while recording your GPS route in the background via a Foreground Service.
+1. Tap **Start Trip** - Roamly launches Google Maps for navigation while recording your GPS route in the background via a Foreground Service.
 2. After exploring for at least one day, your contributed route **unlocks 1–2 travel recommendations** from other users.
 3. Browse a social feed of routes shared by nearby travelers, save favorites, and follow other explorers.
 
@@ -16,17 +16,17 @@ A passive travel route-logging Android app that rewards you for sharing the rout
 
 ## 🧪 For Graders / Testers
 
-**1. Run the app** — see [Getting Started](#getting-started) below (open in Android Studio → **Run ▶** on an emulator or device, API 28+). The Firebase config is already included, so **no setup is needed**.
+**1. Run the app** - see [Getting Started](#getting-started) below (open in Android Studio → **Run ▶** on an emulator or device, API 28+). The Firebase config is already included, so **no setup is needed**.
 
 > **📁 Firebase config / secrets location (for graders):** the Google services file is committed in the repo at:
 > ```
 > app/google-services.json
 > ```
-> It contains the Firebase **project ID** (`roamly-e7c4d`), **API key**, app ID, and the **Storage bucket** — everything the app needs to reach Auth, Cloud Firestore, and Cloud Storage. It is **not** git-ignored, so it's present after a fresh `git clone`. You do **not** need to create your own Firebase project or add any keys.
+> It contains the Firebase **project ID** (`roamly-e7c4d`), **API key**, app ID, and the **Storage bucket** - everything the app needs to reach Auth, Cloud Firestore, and Cloud Storage. It is **not** git-ignored, so it's present after a fresh `git clone`. You do **not** need to create your own Firebase project or add any keys.
 
-> **✅ Verified on:** **Pixel 8** emulator — **Android 16 (API 36)**, `arm64-v8a`, 1080×2400 @ 420 dpi. The full flow (sign-up, login, GPS trip, posts, profile photo upload, log out) was tested here. Any emulator or physical device on **API 28+** works.
+> **✅ Verified on:** **Pixel 8** emulator - **Android 16 (API 36)**, `arm64-v8a`, 1080×2400 @ 420 dpi. The full flow (sign-up, login, GPS trip, posts, profile photo upload, log out) was tested here. Any emulator or physical device on **API 28+** works.
 
-**2. Log in with the ready-made demo account** (or tap **Sign Up** to make your own — any email works, no verification needed):
+**2. Log in with the ready-made demo account** (or tap **Sign Up** to make your own - any email works, no verification needed):
 
 | Email | Password |
 |---|---|
@@ -39,7 +39,7 @@ A passive travel route-logging Android app that rewards you for sharing the rout
 4. **Profile** (top-left avatar) → view stats & travel level → **Edit** to update, or **Log Out** to switch accounts.
 5. **Profile photo:** **Sign Up** → Create Profile → tap the avatar circle → pick a photo. It uploads to Firebase Storage and appears on Home + Profile.
 
-> The demo account is a normal user — feel free to **Log Out** and **Sign Up** with your own to exercise the multi-user features (following others, viewing other profiles).
+> The demo account is a normal user - feel free to **Log Out** and **Sign Up** with your own to exercise the multi-user features (following others, viewing other profiles).
 
 ---
 
@@ -53,7 +53,7 @@ A passive travel route-logging Android app that rewards you for sharing the rout
 | Backend | Firebase Auth (Email/Password) + Cloud Firestore + Cloud Storage |
 | Architecture | ViewModel + StateFlow (UDF), `collectAsStateWithLifecycle` |
 | Location | FusedLocationProviderClient + Foreground Service |
-| Images | Coil (`AsyncImage`) — loads profile photos from Firebase Storage download URLs |
+| Images | Coil (`AsyncImage`) - loads profile photos from Firebase Storage download URLs |
 | Fonts | Montserrat (headings) + Nunito (body) |
 | Min SDK | API 28 (Android 9.0) |
 | Target SDK | API 37 |
@@ -89,7 +89,7 @@ git clone https://github.com/aqn96/roamly.git
 3. Wait for Gradle sync to complete (Android Studio auto-generates `local.properties`)
 4. Run on an emulator or physical device (API 28+)
 
-> `local.properties` is excluded from version control intentionally — it contains your local SDK path and is auto-generated by Android Studio on first open.
+> `local.properties` is excluded from version control intentionally - it contains your local SDK path and is auto-generated by Android Studio on first open.
 
 ### Firebase setup (required for auth + cloud data)
 
@@ -107,7 +107,7 @@ The app talks to Firebase, so each developer supplies their own config. **For CS
    at `profile_photos/{uid}/…`. Profile photo upload is the only feature that needs Storage; the
    rest of the app works without it.
    - **Heads-up:** newer Firebase projects must be on the **Blaze (pay-as-you-go)** plan to enable
-     Storage — the console upgrades you when you click *Get started*. Blaze includes the same free
+     Storage - the console upgrades you when you click *Get started*. Blaze includes the same free
      Spark quota (≈5 GB stored, 1 GB/day downloaded), so avatar-scale usage stays at **$0**. Set a
      Google Cloud budget alert if you want a safety net.
    - **Before sharing the project,** tighten **Storage → Rules** from test mode to authenticated
@@ -121,7 +121,7 @@ The app talks to Firebase, so each developer supplies their own config. **For CS
      }
      ```
 
-No Maps API key is needed — route maps are drawn on a Compose Canvas and navigation hands off to the
+No Maps API key is needed - route maps are drawn on a Compose Canvas and navigation hands off to the
 Google Maps app. Auth and Firestore stay within the free tier; Cloud Storage requires the Blaze plan
 but stays at no cost for this app's usage.
 
@@ -191,7 +191,7 @@ docs/
 
 ---
 
-## Design System — Midnight Nomad
+## Design System - Midnight Nomad
 
 Dark-first theme optimized for battery efficiency during passive background recording.
 
@@ -228,7 +228,7 @@ Dark-first theme optimized for battery efficiency during passive background reco
 ## Course Info
 
 **CS5520 Mobile App Development**
-Northeastern University — Summer 2026 Session A
+Northeastern University - Summer 2026 Session A
 
 **Student:** An Nguyen
 **GitHub:** [@aqn96](https://github.com/aqn96)

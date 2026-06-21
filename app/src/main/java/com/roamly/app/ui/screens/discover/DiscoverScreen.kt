@@ -1,8 +1,8 @@
 /**
- * What: The Discover feed — browses every traveler's route posts from Firestore (via
+ * What: The Discover feed - browses every traveler's route posts from Firestore (via
  *       DiscoverViewModel) with like / save / search / Trending sort, and opens Post Detail on tap.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 package com.roamly.app.ui.screens.discover
 
@@ -109,7 +109,7 @@ fun DiscoverScreen(
                 .padding(innerPadding)
         ) {
 
-            // ── Top bar ───────────────────────────────────────────────────
+            // Top bar
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -169,7 +169,7 @@ fun DiscoverScreen(
                 }
             }
 
-            // ── Feed ──────────────────────────────────────────────────────
+            // Feed
             when {
                 uiState.isLoading -> {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

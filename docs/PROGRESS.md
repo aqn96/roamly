@@ -1,10 +1,10 @@
-# Roamly — Build Progress Log
+# Roamly - Build Progress Log
 
 > Per-stage record of the Goal 7 implementation, written to double as source material for the
 > final presentation slides + video demo. Each stage lists **what was built**, the **rubric
 > criteria it satisfies**, and **how to demo it**.
 
-**App:** Roamly — *Explore, Contribute, Unlock* · **Student:** An Nguyen · **Course:** CS5520 (Summer 2026)
+**App:** Roamly - *Explore, Contribute, Unlock* · **Student:** An Nguyen · **Course:** CS5520 (Summer 2026)
 **Firebase project:** `roamly-e7c4d` (Auth: Email/Password · Cloud Firestore · Cloud Storage)
 
 ---
@@ -25,7 +25,7 @@ Patterns follow course Topic 06/07: ViewModel + StateFlow, one-shot `Channel` ev
 
 ---
 
-## Stage 1 — Multi-screen navigation ✅
+## Stage 1 - Multi-screen navigation ✅
 
 **What was built**
 - Type-safe navigation: every screen is a `@Serializable` destination (`RoamlyDestinations.kt`).
@@ -34,7 +34,7 @@ Patterns follow course Topic 06/07: ViewModel + StateFlow, one-shot `Channel` ev
 - `MainActivity` now hosts the graph instead of a single hard-coded screen.
 
 **Rubric criteria addressed**
-- **Multi-Screen Application & Navigation (30 pts)** — all navigation flows functional.
+- **Multi-Screen Application & Navigation (30 pts)** - all navigation flows functional.
 
 **Demo steps**
 1. Launch → Login → tap **Sign Up** → **Create Profile** → **Get Started** lands on Home.
@@ -43,7 +43,7 @@ Patterns follow course Topic 06/07: ViewModel + StateFlow, one-shot `Channel` ev
 
 ---
 
-## Stage 2 — GPS trip recording (sensor + Foreground Service) ✅
+## Stage 2 - GPS trip recording (sensor + Foreground Service) ✅
 
 **What was built**
 - `TripLocationService`: a **Foreground Service** using `FusedLocationProviderClient` that logs the
@@ -55,11 +55,11 @@ Patterns follow course Topic 06/07: ViewModel + StateFlow, one-shot `Channel` ev
 - `LocationPermissionScreen`: requests location + (Android 13+) notification permission at runtime.
 
 > Design choice: the route is drawn on a Compose **Canvas** and navigation is handed to the Google Maps
-> app via Intent — so the app needs **no Maps API key and no billing**, while still demonstrating the
+> app via Intent - so the app needs **no Maps API key and no billing**, while still demonstrating the
 > GPS logging that is the app's core sensor (proposal "Sensor" + "Foreground Service" slides).
 
 **Rubric criteria addressed**
-- **Application Functionality (20 pts)** — core trip-recording flow works end to end.
+- **Application Functionality (20 pts)** - core trip-recording flow works end to end.
 - Supports the proposal's committed Sensor + Foreground Service features.
 
 **Demo steps**
@@ -70,12 +70,12 @@ Patterns follow course Topic 06/07: ViewModel + StateFlow, one-shot `Channel` ev
 
 ---
 
-## Stage 3 — Firebase backend wired ✅
+## Stage 3 - Firebase backend wired ✅
 
 - Added the `google-services` plugin (4.4.4) + Firebase BoM (34.14.1) with **Auth** and **Cloud Firestore**.
 - Project builds and packages against the real Firebase project `roamly-e7c4d`.
 
-## Stage 4 — Authentication + profile persistence ✅
+## Stage 4 - Authentication + profile persistence ✅
 
 **What was built**
 - `AuthRepository`: the gateway to Firebase Auth + the Firestore `users` collection (sign-up,
@@ -91,8 +91,8 @@ Patterns follow course Topic 06/07: ViewModel + StateFlow, one-shot `Channel` ev
   stack), so graders can switch between / create multiple accounts.
 
 **Rubric criteria addressed**
-- **User Data Management (20 pts)** — account creation, login, persistent session, profile stored in the cloud.
-- Contributes to **Cloud Database Integration (60 pts)** — the `users` collection (create + read).
+- **User Data Management (20 pts)** - account creation, login, persistent session, profile stored in the cloud.
+- Contributes to **Cloud Database Integration (60 pts)** - the `users` collection (create + read).
 
 **Demo steps**
 1. **Sign Up** with name/email/password → account is created in Firebase Auth.
@@ -101,13 +101,13 @@ Patterns follow course Topic 06/07: ViewModel + StateFlow, one-shot `Channel` ev
 3. Kill and relaunch the app → it opens straight to Home (session persisted).
 4. Sign out, then **Log In** with the same credentials → back in.
 
-## Stage 5 — Trips → Firestore + "Contribute" post creation ✅
+## Stage 5 - Trips → Firestore + "Contribute" post creation ✅
 
 **What was built**
 - `ContentRepository.saveTrip()`: on Stop Trip it (1) writes the trip with its full GPS route to
   `users/{uid}/trips/{tripId}`, (2) increments the user's aggregate stats with `FieldValue.increment`,
   and (3) publishes a public **post** to `posts/{id}` so the route shows up in other travelers' feeds.
-  This is the give-to-get "Contribute" step — a real recorded trip unlocks 1–2 recommendations.
+  This is the give-to-get "Contribute" step - a real recorded trip unlocks 1–2 recommendations.
 - `Trip` model (route stored as an array of GPS coordinates, per the proposal).
 - `RoutePost` extended into the Firestore `posts` document model (id, authorUid, defaults).
 - `TripSummaryViewModel`: persists the finished trip exactly once (via a `TripSession` pending-save
@@ -115,8 +115,8 @@ Patterns follow course Topic 06/07: ViewModel + StateFlow, one-shot `Channel` ev
 - `TripSummaryScreen` now shows **real** latest trip, unlocked badge, all-time stats, and past trips.
 
 **Rubric criteria addressed**
-- **Cloud Database Integration (60 pts)** — writes trips + posts + stat updates; reads trip history.
-- **Multi-User Features (20 pts)** — a user's trip becomes a public post for others to discover.
+- **Cloud Database Integration (60 pts)** - writes trips + posts + stat updates; reads trip history.
+- **Multi-User Features (20 pts)** - a user's trip becomes a public post for others to discover.
 
 **Demo steps**
 1. Home → Start Trip → record a route → Stop Trip.
@@ -124,7 +124,7 @@ Patterns follow course Topic 06/07: ViewModel + StateFlow, one-shot `Channel` ev
 3. In Firebase console: `users/{uid}/trips` has the trip (with `path`), `users/{uid}` stats incremented,
    and `posts` has a new public post.
 
-## Stage 6 — Discover feed + likes + Post Detail + comments ✅
+## Stage 6 - Discover feed + likes + Post Detail + comments ✅
 
 **What was built**
 - `ContentRepository` feed/post methods: `getFeed()` (all travelers' posts, newest first), `getPost()`,
@@ -135,18 +135,18 @@ Patterns follow course Topic 06/07: ViewModel + StateFlow, one-shot `Channel` ev
 - `DiscoverViewModel`: loads the live multi-user feed, tracks liked/saved sets, like + save actions;
   `DiscoverScreen` renders real posts with working like/save, search, Trending sort, and card → detail.
 - `PostDetailViewModel` + rewritten `PostDetailScreen`: real post + comments, like, follow author,
-  and post a comment — all persisted to Firestore.
+  and post a comment - all persisted to Firestore.
 - `RoutePostCard` gained click + liked/saved icon states.
 
 **Rubric criteria addressed**
-- **Cloud Database Integration (60 pts)** — feed/post/comment/like reads + writes across collections.
-- **Multi-User Features (20 pts)** — see others' posts, like, comment, follow.
+- **Cloud Database Integration (60 pts)** - feed/post/comment/like reads + writes across collections.
+- **Multi-User Features (20 pts)** - see others' posts, like, comment, follow.
 
 **Demo steps**
 1. From two accounts: record a trip on account A → switch to account B → Discover shows A's post.
 2. Tap a post → like it, follow the author, add a comment → all reflected in Firebase console.
 
-## Stage 7 — Favorites + Profile (own/other) + follow ✅
+## Stage 7 - Favorites + Profile (own/other) + follow ✅
 
 **What was built**
 - `FavoritesViewModel` + `FavoritesScreen`: loads the user's bookmarked posts from
@@ -154,26 +154,26 @@ Patterns follow course Topic 06/07: ViewModel + StateFlow, one-shot `Channel` ev
 - `ProfileViewModel` + rewritten `ProfileScreen`: loads the signed-in user's **own** profile or
   **another** traveler's (by uid) from Firestore, shows real stats / social counts / travel level,
   Edit on own profile vs Follow/Following on others, and a "Travelers to Follow" row that follows
-  suggested users — all persisted, with follower/following counters kept in sync.
+  suggested users - all persisted, with follower/following counters kept in sync.
 
 **Rubric criteria addressed**
-- **Cloud Database Integration (60 pts)** — favorites + profile reads/writes; follow graph.
-- **Multi-User Features (20 pts)** — view others' profiles, follow/unfollow, suggested travelers.
+- **Cloud Database Integration (60 pts)** - favorites + profile reads/writes; follow graph.
+- **Multi-User Features (20 pts)** - view others' profiles, follow/unfollow, suggested travelers.
 
 **Demo steps**
 1. Save a post on Discover → it appears on the Favorites tab; un-save removes it.
 2. Open a post → tap the author → their profile loads; tap Follow → counts update in the console.
 3. Your own profile shows your real stats and travel level computed from your trips.
 
-## Stage 8 — Code documentation pass ✅
+## Stage 8 - Code documentation pass ✅
 
 - Added **What / Who / When** header comments to every Kotlin source file.
 - Verified **`@Preview`** exists for every Composable (screens + components).
 
 **Rubric criteria addressed**
-- **Code Documentation and Previews (10 pts)** — What/Who/When comments + @Preview throughout.
+- **Code Documentation and Previews (10 pts)** - What/Who/When comments + @Preview throughout.
 
-## Stage 9 — Firebase Storage profile photos ✅
+## Stage 9 - Firebase Storage profile photos ✅
 
 **What was built**
 - `StorageRepository`: uploads a chosen image to Cloud Storage at `profile_photos/{uid}/{ts}.jpg`
@@ -186,9 +186,9 @@ Patterns follow course Topic 06/07: ViewModel + StateFlow, one-shot `Channel` ev
   used by both **Home** (top-left) and **Profile** (header), so a real photo shows everywhere.
 
 **Rubric criteria addressed**
-- **Cloud Database Integration (60 pts)** — adds Cloud Storage alongside Firestore; the photo URL
+- **Cloud Database Integration (60 pts)** - adds Cloud Storage alongside Firestore; the photo URL
   is persisted on the user document.
-- **User Data Management (20 pts)** — the profile photo is part of the user's persisted profile.
+- **User Data Management (20 pts)** - the profile photo is part of the user's persisted profile.
 
 **Demo steps**
 1. Sign Up → Create Profile → tap the avatar circle → pick a photo → it previews in the circle.
@@ -206,7 +206,7 @@ the live backend:
   (0.85 km, 6 points) → **Stop Trip**.
 - **Trip Summary** read back the saved trip + all-time stats (1 trip / 1 km / 1 unlocked) from Firestore.
 - The trip auto-published a **post** that appeared in the **Discover** feed.
-- **Post Detail**: liked the post (count 1) and added a comment (count 1) — both persisted, no
+- **Post Detail**: liked the post (count 1) and added a comment (count 1) - both persisted, no
   `PERMISSION_DENIED`.
 
 ## Optional polish (not required by rubric)

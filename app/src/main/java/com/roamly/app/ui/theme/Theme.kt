@@ -1,7 +1,7 @@
 /**
- * What: RoamlyTheme — the Material 3 dark theme wrapper (Midnight Nomad color scheme + typography).
+ * What: RoamlyTheme - the Material 3 dark theme wrapper (Midnight Nomad color scheme + typography).
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 package com.roamly.app.ui.theme
 
@@ -9,7 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 
-// Midnight Nomad is dark-first — no light scheme needed
+// Midnight Nomad is dark-first - no light scheme needed
 private val MidnightColorScheme = darkColorScheme(
     primary = RoamlyElectric,
     onPrimary = RoamlyMidnight,

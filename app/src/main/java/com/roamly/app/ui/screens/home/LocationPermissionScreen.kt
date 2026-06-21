@@ -2,7 +2,7 @@
  * What: Pre-permission rationale screen explaining why Roamly needs location, then requesting the
  *       location (+ Android 13 notification) runtime permissions before starting trip recording.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 package com.roamly.app.ui.screens.home
 
@@ -96,7 +96,7 @@ fun LocationPermissionScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // ── GPS icon ──────────────────────────────────────────────────
+            // GPS icon
             Box(
                 modifier = Modifier
                     .size(100.dp)
@@ -119,7 +119,7 @@ fun LocationPermissionScreen(
                 )
             }
 
-            // ── Heading ───────────────────────────────────────────────────
+            // Heading
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -133,7 +133,7 @@ fun LocationPermissionScreen(
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    text = "Roamly passively records your route while you navigate with Google Maps — building your personal travel map in the background.",
+                    text = "Roamly passively records your route while you navigate with Google Maps - building your personal travel map in the background.",
                     fontFamily = NunitoFamily,
                     fontSize = 15.sp,
                     color = RoamlyTextMuted,
@@ -142,7 +142,7 @@ fun LocationPermissionScreen(
                 )
             }
 
-            // ── Reason cards ──────────────────────────────────────────────
+            // Reason cards
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
@@ -179,7 +179,7 @@ fun LocationPermissionScreen(
                 }
             }
 
-            // ── Action buttons ────────────────────────────────────────────
+            // Action buttons
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(8.dp)

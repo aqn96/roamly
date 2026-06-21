@@ -57,7 +57,7 @@ dependencies {
     implementation(libs.play.services.location)
     // Async image loading for avatars / route photos (URLs stored in Firestore)
     implementation(libs.coil.compose)
-    // Firebase — Auth (email/password) + Cloud Firestore (BoM keeps versions aligned)
+    // Firebase - Auth (email/password) + Cloud Firestore (BoM keeps versions aligned)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)

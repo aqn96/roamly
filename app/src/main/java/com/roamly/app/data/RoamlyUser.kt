@@ -5,7 +5,7 @@ package com.roamly.app.data
  *       fields default so Firestore can deserialize via toObject(); this is the user's profile,
  *       stats, and social counts.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 data class RoamlyUser(
     val uid: String = "",
@@ -23,7 +23,7 @@ data class RoamlyUser(
     val followerCount: Int = 0,
     val followingCount: Int = 0,
 ) {
-    /** Gamified travel level derived from trips logged (shown on the Profile screen). */
+    // Gamified travel level derived from trips logged (shown on the Profile screen).
     val travelLevel: String
         get() = when {
             totalTrips >= 50 -> "Legend"

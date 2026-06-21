@@ -1,8 +1,8 @@
 /**
- * What: The Favorites screen — shows the routes the user bookmarked from Discover (loaded from
+ * What: The Favorites screen - shows the routes the user bookmarked from Discover (loaded from
  *       Firestore via FavoritesViewModel), with an empty state and tap-to-open / un-save.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 package com.roamly.app.ui.screens.favorites
 
@@ -80,7 +80,7 @@ fun FavoritesScreen(
                 .padding(innerPadding)
         ) {
 
-            // ── Top bar ───────────────────────────────────────────────────
+            // Top bar
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -109,7 +109,7 @@ fun FavoritesScreen(
                     CircularProgressIndicator(color = RoamlyElectric)
                 }
             } else if (state.favorites.isEmpty()) {
-                // ── Empty state ───────────────────────────────────────────
+                // Empty state
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -139,7 +139,7 @@ fun FavoritesScreen(
                     }
                 }
             } else {
-                // ── Saved posts list ──────────────────────────────────────
+                // Saved posts list
                 LazyColumn(
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(14.dp)

@@ -1,8 +1,8 @@
 /**
- * What: The Login screen — email/password sign-in driven by AuthViewModel (Firebase Auth), with
+ * What: The Login screen - email/password sign-in driven by AuthViewModel (Firebase Auth), with
  *       inline error + loading states and a link to Sign Up.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 package com.roamly.app.ui.screens.auth
 
@@ -74,7 +74,7 @@ fun LoginScreen(
 
     Box(modifier = Modifier.fillMaxSize().background(RoamlyMidnight)) {
 
-        // ── Hero section ─────────────────────────────────────────────────
+        // Hero section
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -108,7 +108,7 @@ fun LoginScreen(
             }
         }
 
-        // ── Login card ────────────────────────────────────────────────────
+        // Login card
         Card(
             modifier = Modifier
                 .fillMaxWidth()

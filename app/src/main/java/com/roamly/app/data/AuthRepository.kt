@@ -10,7 +10,7 @@ import com.google.firebase.firestore.SetOptions
  *       user's profile document. Suspend functions return Result so ViewModels can surface
  *       success/error cleanly.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  *
  * Firebase handles are lazy so constructing this (e.g. via a ViewModel in a @Preview) never
  * touches an uninitialized FirebaseApp.
@@ -23,7 +23,7 @@ class AuthRepository {
     val currentUid: String? get() = auth.currentUser?.uid
     val isLoggedIn: Boolean get() = auth.currentUser != null
 
-    /** Creates the account and seeds a partial user document with the name/email. */
+    // Creates the account and seeds a partial user document with the name/email.
     suspend fun signUp(fullName: String, email: String, password: String): Result<Unit> = runCatching {
         val result = auth.createUserWithEmailAndPassword(email, password).awaitResult()
         val uid = result.user?.uid ?: error("Sign-up returned no user")
@@ -39,14 +39,14 @@ class AuthRepository {
         Unit
     }
 
-    /** Merges profile fields entered on Create Profile into the signed-in user's document. */
+    // Merges profile fields entered on Create Profile into the signed-in user's document.
     suspend fun saveProfile(user: RoamlyUser): Result<Unit> = runCatching {
         val uid = currentUid ?: error("Not signed in")
         users.document(uid).set(user.copy(uid = uid), SetOptions.merge()).awaitResult()
         Unit
     }
 
-    /** Loads the signed-in user's profile (null if not signed in or no document yet). */
+    // Loads the signed-in user's profile (null if not signed in or no document yet).
     suspend fun loadCurrentProfile(): Result<RoamlyUser?> = runCatching {
         val uid = currentUid ?: return@runCatching null
         users.document(uid).get().awaitResult().toObject(RoamlyUser::class.java)

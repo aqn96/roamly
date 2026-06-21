@@ -26,7 +26,7 @@ import com.roamly.app.data.TrackPoint
  *       fix into TripSession for the UI to draw. This realises the proposal's "Sensor" +
  *       "Foreground Service" design.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  *
  * Mirrors the course Topic 06 NotificationChannel pattern (channel created before notifying).
  */
@@ -71,7 +71,7 @@ class TripLocationService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? = null
 
-    /** Creates the notification channel (idempotent) and promotes the service to foreground. */
+    // Creates the notification channel (idempotent) and promotes the service to foreground.
     private fun startAsForeground() {
         val manager = getSystemService(NotificationManager::class.java)
         val channel = NotificationChannel(

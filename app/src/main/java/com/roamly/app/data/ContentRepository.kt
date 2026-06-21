@@ -10,7 +10,7 @@ import java.util.Date
 import java.util.Locale
 import kotlin.math.roundToInt
 
-/** Free public travel photos (Unsplash) assigned to auto-created posts so the feed shows real imagery. */
+// Free public travel photos (Unsplash) assigned to auto-created posts so the feed shows real imagery.
 private val ROUTE_PHOTOS = listOf(
     "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=70",
     "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=70",
@@ -21,12 +21,12 @@ private val ROUTE_PHOTOS = listOf(
 )
 
 /**
- * What: The Firestore gateway for trips and posts — the "Contribute" + "Unlock" data flow.
+ * What: The Firestore gateway for trips and posts - the "Contribute" + "Unlock" data flow.
  *       Saving a finished trip: (1) writes the trip + GPS route under the user, (2) increments the
  *       user's aggregate stats, and (3) publishes a public post so the route appears in other
  *       travelers' Discover feeds (give-to-get). Also reads trips and the global feed.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  *
  * Firebase handles are lazy so constructing this from a Preview never touches an
  * uninitialized FirebaseApp.
@@ -38,10 +38,8 @@ class ContentRepository {
 
     private fun uid(): String? = auth.currentUser?.uid
 
-    /**
-     * Persists a finished trip and (optionally) shares it as a public post.
-     * @return the number of recommendations unlocked by this contribution.
-     */
+    // Saves a finished trip and optionally shares it as a public post.
+    // Returns how many recommendations this contribution unlocked.
     suspend fun saveTrip(
         points: List<TrackPoint>,
         distanceKm: Double,
@@ -105,7 +103,7 @@ class ContentRepository {
         unlocked
     }
 
-    /** All of the signed-in user's trips, newest first. */
+    // All of the signed-in user's trips, newest first.
     suspend fun getTrips(): Result<List<Trip>> = runCatching {
         val uid = uid() ?: return@runCatching emptyList()
         db.collection("users").document(uid).collection("trips")
@@ -114,9 +112,9 @@ class ContentRepository {
             .toObjects(Trip::class.java)
     }
 
-    // ── Discover feed / posts (multi-user) ──────────────────────────────────
+    // Discover feed / posts (multi-user)
 
-    /** The global Discover feed: every traveler's posts, newest first. */
+    // The global Discover feed: every traveler's posts, newest first.
     suspend fun getFeed(limit: Long = 50): Result<List<RoutePost>> = runCatching {
         db.collection("posts")
             .orderBy("createdAt", Query.Direction.DESCENDING)
@@ -129,14 +127,14 @@ class ContentRepository {
         db.collection("posts").document(postId).get().awaitResult().toObject(RoutePost::class.java)
     }
 
-    /** Whether the signed-in user has liked this post. */
+    // Whether the signed-in user has liked this post.
     suspend fun isLiked(postId: String): Result<Boolean> = runCatching {
         val uid = uid() ?: return@runCatching false
         db.collection("users").document(uid).collection("likes").document(postId)
             .get().awaitResult().exists()
     }
 
-    /** Toggles a like: tracks it per-user and keeps the post's likeCount in sync. Returns new state. */
+    // Toggles a like: tracks it per-user and keeps the post's likeCount in sync. Returns new state.
     suspend fun toggleLike(postId: String): Result<Boolean> = runCatching {
         val uid = uid() ?: error("Not signed in")
         val likeRef = db.collection("users").document(uid).collection("likes").document(postId)
@@ -153,7 +151,7 @@ class ContentRepository {
         }
     }
 
-    // ── Comments ────────────────────────────────────────────────────────────
+    // Comments
 
     suspend fun getComments(postId: String): Result<List<Comment>> = runCatching {
         db.collection("posts").document(postId).collection("comments")
@@ -162,7 +160,7 @@ class ContentRepository {
             .toObjects(Comment::class.java)
     }
 
-    /** Adds a comment authored by the signed-in user and bumps the post's commentCount. */
+    // Adds a comment authored by the signed-in user and bumps the post's commentCount.
     suspend fun addComment(postId: String, text: String): Result<Unit> = runCatching {
         val uid = uid() ?: error("Not signed in")
         val profile = db.collection("users").document(uid).get().awaitResult().toObject(RoamlyUser::class.java)

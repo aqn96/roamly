@@ -5,7 +5,7 @@
  *       navigation off to Google Maps (per the proposal: "Google Maps handles navigation, route
  *       logging is Roamly's own").
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 package com.roamly.app.ui.screens.trip
 
@@ -85,7 +85,7 @@ fun ActiveTripScreen(
     // Start the Foreground Service exactly once when this screen first appears.
     LaunchedEffect(Unit) { tripViewModel.startTrip(context) }
 
-    // Live duration ticker — recomputes once per second while recording.
+    // Live duration ticker - recomputes once per second while recording.
     var elapsedMs by remember { mutableLongStateOf(0L) }
     LaunchedEffect(isRecording) {
         while (isRecording) {
@@ -104,7 +104,7 @@ fun ActiveTripScreen(
             .statusBarsPadding()
     ) {
 
-        // ── Recording indicator — top bar ─────────────────────────────────
+        // Recording indicator - top bar
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -158,7 +158,7 @@ fun ActiveTripScreen(
             }
         }
 
-        // ── Contained map card with the live route polyline ───────────────
+        // Contained map card with the live route polyline
         // DEMO BUILD: the route is rendered on a Compose Canvas over a gradient to keep the app on
         // Firebase's free tier (no Google Maps API key / billing). In production this card would host
         // a Google Maps SDK MapView with a Polyline overlay following the same recorded GPS points.
@@ -206,7 +206,7 @@ fun ActiveTripScreen(
             }
         }
 
-        // ── Live stats card + actions — bottom ────────────────────────────
+        // Live stats card + actions - bottom
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -253,7 +253,7 @@ fun ActiveTripScreen(
                 Text(text = "Navigate with Google Maps", color = RoamlyElectric, fontFamily = NunitoFamily, fontWeight = FontWeight.SemiBold)
             }
 
-            // Stop Trip button — stops the service, then lets the NavGraph route to the summary.
+            // Stop Trip button - stops the service, then lets the NavGraph route to the summary.
             Button(
                 onClick = {
                     tripViewModel.stopTrip(context)
@@ -279,10 +279,8 @@ fun ActiveTripScreen(
     }
 }
 
-/**
- * Draws the recorded route as a connected polyline, normalising lat/lng into the canvas bounds.
- * Latitude is flipped because screen-Y grows downward while latitude grows upward (north).
- */
+// Draws the recorded route as a connected polyline, normalising lat/lng into the canvas bounds.
+// Latitude is flipped because screen-Y grows downward while latitude grows upward (north).
 @Composable
 private fun RoutePolyline(points: List<TrackPoint>, modifier: Modifier = Modifier) {
     Canvas(modifier = modifier) {
@@ -326,7 +324,7 @@ private fun LiveStatItem(value: String, label: String, highlight: Boolean = fals
     }
 }
 
-/** Opens the Google Maps app centred on the latest GPS fix (or a neutral point if none yet). */
+// Opens the Google Maps app centred on the latest GPS fix (or a neutral point if none yet).
 private fun buildMapsIntent(points: List<TrackPoint>): Intent {
     val last = points.lastOrNull()
     val uri = if (last != null) {

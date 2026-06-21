@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
  *       StateFlow so screens can show Loading / errors and react to Success by navigating
  *       (course Topic 06 ViewModel + StateFlow + sealed-state pattern).
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 sealed interface AuthUiState {
     data object Idle : AuthUiState
@@ -96,7 +96,7 @@ class AuthViewModel : ViewModel() {
             .onFailure { _uiState.value = AuthUiState.Error(it.message ?: "Could not save profile") }
     }
 
-    /** Resets back to Idle after a screen has consumed a Success/Error. */
+    // Resets back to Idle after a screen has consumed a Success/Error.
     fun resetState() {
         _uiState.value = AuthUiState.Idle
     }

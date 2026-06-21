@@ -73,9 +73,9 @@ import com.roamly.app.ui.theme.RoamlyTheme
 /**
  * What: Post Detail screen. Loads a single post + its comments from Firestore (via
  *       PostDetailViewModel), and lets the signed-in user like the post, follow the author, and
- *       add comments — the multi-user interaction surface. State flows down; events flow up.
+ *       add comments - the multi-user interaction surface. State flows down; events flow up.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -120,7 +120,7 @@ fun PostDetailScreen(
                 modifier = Modifier.fillMaxSize().padding(innerPadding),
                 contentPadding = PaddingValues(bottom = 24.dp)
             ) {
-                // ── Author header ─────────────────────────────────────────
+                // Author header
                 item {
                     Row(
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
@@ -164,7 +164,7 @@ fun PostDetailScreen(
                     }
                 }
 
-                // ── Route map placeholder ─────────────────────────────────
+                // Route map placeholder
                 item {
                     Box(
                         modifier = Modifier.fillMaxWidth().height(220.dp)
@@ -196,7 +196,7 @@ fun PostDetailScreen(
                     }
                 }
 
-                // ── Post content ──────────────────────────────────────────
+                // Post content
                 item {
                     Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                         Text(text = post.routeTitle, fontFamily = MontserratFamily, fontWeight = FontWeight.ExtraBold, fontSize = 20.sp, color = RoamlyTextLight)
@@ -245,7 +245,7 @@ fun PostDetailScreen(
                     Divider(color = RoamlySlateLight, thickness = 1.dp)
                 }
 
-                // ── Comments header + input ───────────────────────────────
+                // Comments header + input
                 item {
                     Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(text = "Comments", fontFamily = MontserratFamily, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = RoamlyTextLight)
@@ -322,7 +322,7 @@ private fun CommentRow(comment: Comment, onUserClicked: (String) -> Unit) {
     }
 }
 
-/** Coarse "x ago" label from an epoch-millis timestamp. */
+// Coarse "x ago" label from an epoch-millis timestamp.
 private fun relativeTime(createdAt: Long): String {
     if (createdAt <= 0L) return ""
     val diff = System.currentTimeMillis() - createdAt

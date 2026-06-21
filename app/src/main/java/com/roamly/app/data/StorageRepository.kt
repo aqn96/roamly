@@ -8,7 +8,7 @@ import com.google.firebase.storage.FirebaseStorage
  * What: Minimal Firebase Storage gateway for uploading a profile photo and returning its
  *       downloadable URL. The rest of the app still reads/writes profile data through Firestore.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 class StorageRepository {
 

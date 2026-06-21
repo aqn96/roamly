@@ -10,7 +10,7 @@ import kotlin.coroutines.resumeWithException
  *       coroutines so repositories can `await` them inside viewModelScope (course Topic 06
  *       coroutine style). Avoids pulling in an extra coroutines-play-services dependency.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 suspend fun <T> Task<T>.awaitResult(): T = suspendCancellableCoroutine { cont ->
     addOnSuccessListener { cont.resume(it) }

@@ -1,8 +1,8 @@
 /**
- * What: The RoutePost model (doubles as the Firestore "posts" document) and RoutePostCard — the
+ * What: The RoutePost model (doubles as the Firestore "posts" document) and RoutePostCard - the
  *       feed item shown in Discover and Favorites, with like / comment / save actions.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 package com.roamly.app.ui.components
 
@@ -56,11 +56,9 @@ import com.roamly.app.ui.theme.RoamlyTextLight
 import com.roamly.app.ui.theme.RoamlyTextMuted
 import com.roamly.app.ui.theme.RoamlyTheme
 
-/**
- * A shared route post. Doubles as the Firestore "posts/{id}" document model, so every field has a
- * default value (required for Firestore's toObject() deserialization). One user's posts become
- * another user's Discover feed — the multi-user core of the app.
- */
+// A shared route post. Doubles as the Firestore "posts/{id}" document model, so every field has a
+// default value (required for Firestore's toObject() deserialization). One user's posts become
+// another user's Discover feed - the multi-user core of the app.
 data class RoutePost(
     val id: String = "",
     val authorUid: String = "",
@@ -98,7 +96,7 @@ fun RoutePostCard(
     ) {
         Column {
 
-            // ── Map thumbnail placeholder ─────────────────────────────────
+            // Map thumbnail placeholder
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -132,7 +130,7 @@ fun RoutePostCard(
                     }
                 }
 
-                // Unlocked badge — only shown on Discover feed, not on Favorites
+                // Unlocked badge - only shown on Discover feed, not on Favorites
                 if (showUnlockedBadge && post.isUnlocked) {
                     Box(
                         modifier = Modifier
@@ -167,7 +165,7 @@ fun RoutePostCard(
                 }
             }
 
-            // ── Post body ─────────────────────────────────────────────────
+            // Post body
             Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
 
                 // User row
@@ -283,7 +281,7 @@ private fun RoutePostCardPreview() {
                 userLocation = "Tokyo, Japan",
                 distanceAway = "2.4 km away",
                 routeTitle = "Hidden Alley Route in Shibuya",
-                description = "Discovered this amazing path through the back streets of Shibuya — way less crowded than the main crossing.",
+                description = "Discovered this amazing path through the back streets of Shibuya - way less crowded than the main crossing.",
                 tags = listOf("solo", "urban", "japan"),
                 distanceKm = "3.2 km",
                 durationMin = "48 min",

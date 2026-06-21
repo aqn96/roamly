@@ -3,7 +3,7 @@
  *       with Coil's AsyncImage; when no URL is set it renders the caller-supplied fallback
  *       (initials or a person icon). Shared by Home and Profile so both stay in sync.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 package com.roamly.app.ui.components
 
@@ -61,7 +61,7 @@ fun AvatarSurface(
 @Composable
 private fun AvatarSurfacePreview() {
     RoamlyTheme {
-        // No URL → shows the fallback (person icon), the state seen before a photo is uploaded.
+        // No URL means we show the fallback (person icon), the state seen before a photo is uploaded.
         AvatarSurface(
             imageUrl = null,
             modifier = Modifier.size(88.dp),

@@ -1,7 +1,7 @@
 /**
  * What: Unit tests for the RoamlyUser.travelLevel gamification thresholds.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 package com.roamly.app
 

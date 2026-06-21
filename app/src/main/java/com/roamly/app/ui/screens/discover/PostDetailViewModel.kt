@@ -14,10 +14,10 @@ import kotlinx.coroutines.launch
 /**
  * What: The "brain" for the Post Detail screen. Loads a post and its comments from Firestore,
  *       tracks like + follow state for the current user, and handles posting comments, liking, and
- *       following the author — the multi-user interaction layer. One StateFlow UI state
+ *       following the author - the multi-user interaction layer. One StateFlow UI state
  *       (course Topic 06 pattern).
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 data class PostDetailUiState(
     val isLoading: Boolean = true,

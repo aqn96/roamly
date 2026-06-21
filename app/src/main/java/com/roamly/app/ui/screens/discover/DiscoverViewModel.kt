@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
  *       actions. Exposes one StateFlow UI state (course Topic 06 pattern). Supports simple
  *       client-side filtering for the For You / Nearby / Trending / Following chips.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 data class DiscoverUiState(
     val isLoading: Boolean = true,

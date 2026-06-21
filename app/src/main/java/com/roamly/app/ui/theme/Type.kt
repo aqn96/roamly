@@ -1,7 +1,7 @@
 /**
- * What: Typography — Montserrat (headings) + Nunito (body) font families and the Material 3 type scale.
+ * What: Typography - Montserrat (headings) + Nunito (body) font families and the Material 3 type scale.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 package com.roamly.app.ui.theme
 
@@ -13,7 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.roamly.app.R
 
-// Montserrat — bold, adventurous headings
+// Montserrat - bold, adventurous headings
 val MontserratFamily = FontFamily(
     Font(R.font.montserrat_regular, FontWeight.Normal),
     Font(R.font.montserrat_semibold, FontWeight.SemiBold),
@@ -21,7 +21,7 @@ val MontserratFamily = FontFamily(
     Font(R.font.montserrat_extrabold, FontWeight.ExtraBold),
 )
 
-// Nunito — friendly, rounded body text
+// Nunito - friendly, rounded body text
 val NunitoFamily = FontFamily(
     Font(R.font.nunito_regular, FontWeight.Normal),
     Font(R.font.nunito_semibold, FontWeight.SemiBold),

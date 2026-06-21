@@ -12,7 +12,7 @@ import com.roamly.app.ui.theme.RoamlyTheme
  *       theme and launches the type-safe navigation graph (RoamlyNavGraph), which owns every
  *       screen and transition.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

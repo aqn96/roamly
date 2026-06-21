@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
  *       (read from TripSession) to Firestore exactly once, then loads the user's trip history and
  *       all-time stats. Exposed as a single StateFlow UI state (course Topic 06 pattern).
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 data class TripSummaryUiState(
     val isLoading: Boolean = true,

@@ -5,7 +5,7 @@ package com.roamly.app.data
  *       stats plus the full GPS route as an array of {lat,lng} points (the proposal's "Routes as
  *       arrays of GPS coordinates"). All fields default so Firestore can deserialize via toObject().
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 data class Trip(
     val id: String = "",

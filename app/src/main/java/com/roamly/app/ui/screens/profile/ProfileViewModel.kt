@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
  *       users to follow. Handles following the viewed user and suggested users (multi-user).
  *       One StateFlow UI state (course Topic 06 pattern).
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 data class ProfileUiState(
     val isLoading: Boolean = true,
@@ -55,7 +55,7 @@ class ProfileViewModel : ViewModel() {
         }
     }
 
-    /** Follows/unfollows the profile currently being viewed (only meaningful on another's profile). */
+    // Follows/unfollows the profile currently being viewed (only meaningful on another's profile).
     fun toggleFollow() = viewModelScope.launch {
         if (viewedUid.isBlank()) return@launch
         social.toggleFollow(viewedUid).onSuccess { following ->
@@ -63,7 +63,7 @@ class ProfileViewModel : ViewModel() {
         }
     }
 
-    /** Follows a user from the "Travelers to Follow" suggestions. */
+    // Follows a user from the "Travelers to Follow" suggestions.
     fun followSuggested(userId: String) = viewModelScope.launch {
         social.toggleFollow(userId).onSuccess { following ->
             val ids = _uiState.value.followedUserIds.toMutableSet()
@@ -72,6 +72,6 @@ class ProfileViewModel : ViewModel() {
         }
     }
 
-    /** Signs the user out of Firebase; the screen then navigates back to Login. */
+    // Signs the user out of Firebase; the screen then navigates back to Login.
     fun signOut() = authRepo.signOut()
 }

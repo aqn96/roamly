@@ -19,22 +19,22 @@ import kotlinx.coroutines.flow.stateIn
  *       (course Topic 06 ViewModel + StateFlow pattern). The recorded points survive into the
  *       Trip Summary screen via TripSession.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 class TripViewModel : ViewModel() {
 
-    /** Live, ordered GPS samples of the active trip. */
+    // Live, ordered GPS samples of the active trip.
     val routePoints: StateFlow<List<TrackPoint>> = TripSession.points
 
-    /** Whether the Foreground Service is currently logging. */
+    // Whether the Foreground Service is currently logging.
     val isRecording: StateFlow<Boolean> = TripSession.isRecording
 
-    /** Derived state: total distance in kilometres, recomputed whenever the route grows. */
+    // Derived state: total distance in kilometres, recomputed whenever the route grows.
     val distanceKm: StateFlow<Double> = TripSession.points
         .map { TripSession.distanceMeters(it) / 1000.0 }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0.0)
 
-    /** Begins a recording and launches the Foreground Service. */
+    // Begins a recording and launches the Foreground Service.
     fun startTrip(context: Context) {
         if (isRecording.value) return
         TripSession.begin()
@@ -43,7 +43,7 @@ class TripViewModel : ViewModel() {
         )
     }
 
-    /** Stops recording and tears down the Foreground Service. Points stay in TripSession. */
+    // Stops recording and tears down the Foreground Service. Points stay in TripSession.
     fun stopTrip(context: Context) {
         TripSession.end()
         context.stopService(Intent(context, TripLocationService::class.java))

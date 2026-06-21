@@ -99,7 +99,7 @@ followers, following, and suggested travelers to follow.
 routes, and the people they follow. The final version goes a bit further and gives each user a real
 profile page with trip counts, distance traveled, travel level, follower counts, and suggested
 travelers to follow. This is also where the social side starts to feel real, because a profile is no
-longer just a static page — it is a live Firestore document that changes as the user keeps traveling."
+longer just a static page - it is a live Firestore document that changes as the user keeps traveling."
 
 **Suggested time:** 20 seconds
 
@@ -148,7 +148,7 @@ Compose canvas instead of embedding the Google Maps SDK.
 **What to say:** "My original backend diagram included Firebase Authentication, Firestore, Storage,
 and some unlock logic. The final app still follows that same backend idea: Firebase Auth and
 Firestore handle the user data, trip data, and social interactions. The main simplification is just
-the map display — I draw the live route on a Compose canvas instead of embedding the Google Maps SDK,
+the map display - I draw the live route on a Compose canvas instead of embedding the Google Maps SDK,
 which avoids API key and billing setup while still showing the exact GPS route. The architecture is
 still clean: the UI talks to ViewModels, the ViewModels talk to repositories, and the repositories
 are the only layer that knows about Firebase."
@@ -164,8 +164,8 @@ in the background.
 
 **What to say:** "This slide was always about the technical core of the app. I used
 FusedLocationProviderClient with a foreground service so Roamly can keep recording route points while
-the user is doing something else. So the idea didn't change much from the proposal — it’s still the
-phone tracking movement in the background — but the implementation needed the foreground service so
+the user is doing something else. So the idea didn't change much from the proposal - it’s still the
+phone tracking movement in the background - but the implementation needed the foreground service so
 Android would keep it alive. That part taught me the most about permissions, background execution,
 and keeping the UI and service in sync. It also forced me to separate responsibilities carefully: the
 service collects points, a shared session object stores them, and the Compose UI just observes that

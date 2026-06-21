@@ -64,7 +64,7 @@ import com.roamly.app.ui.theme.RoamlyTheme
  *       Shows the latest route, an "unlocked recommendations" badge, aggregate stats, and the
  *       past-trips list.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -104,7 +104,7 @@ fun TripSummaryScreen(
             contentPadding = PaddingValues(bottom = 24.dp)
         ) {
 
-            // ── Latest trip map (Canvas placeholder gradient) ─────────────
+            // Latest trip map (Canvas placeholder gradient)
             item {
                 Box(
                     modifier = Modifier
@@ -120,7 +120,7 @@ fun TripSummaryScreen(
                 }
             }
 
-            // ── Latest trip stats ─────────────────────────────────────────
+            // Latest trip stats
             item {
                 Card(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
@@ -141,7 +141,7 @@ fun TripSummaryScreen(
                 }
             }
 
-            // ── Unlocked badge ────────────────────────────────────────────
+            // Unlocked badge
             if ((latest?.routesUnlocked ?: 0) > 0) {
                 item {
                     Card(
@@ -173,7 +173,7 @@ fun TripSummaryScreen(
                 }
             }
 
-            // ── All-time stats ────────────────────────────────────────────
+            // All-time stats
             item {
                 Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text(text = "All Time Stats", fontFamily = MontserratFamily, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = RoamlyTextLight)
@@ -192,7 +192,7 @@ fun TripSummaryScreen(
                 Divider(color = RoamlySlateLight, modifier = Modifier.padding(horizontal = 16.dp))
             }
 
-            // ── Past trips list ───────────────────────────────────────────
+            // Past trips list
             item {
                 Text(
                     text = "Past Trips",

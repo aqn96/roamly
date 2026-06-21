@@ -1,7 +1,7 @@
 /**
  * What: A reusable full-width primary button in the Roamly style (electric-blue, rounded).
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 package com.roamly.app.ui.components
 

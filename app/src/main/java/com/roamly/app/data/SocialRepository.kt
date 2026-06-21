@@ -6,11 +6,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.roamly.app.ui.components.RoutePost
 
 /**
- * What: The Firestore gateway for social actions — saving/un-saving favorite posts and
- *       following/un-following other travelers — plus reading favorites, follow state, and
+ * What: The Firestore gateway for social actions - saving/un-saving favorite posts and
+ *       following/un-following other travelers - plus reading favorites, follow state, and
  *       suggested users. These power the multi-user features (Favorites screen, follow buttons).
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  *
  * Firebase handles are lazy so constructing this from a Preview never touches an
  * uninitialized FirebaseApp.
@@ -22,9 +22,9 @@ class SocialRepository {
 
     private fun uid(): String? = auth.currentUser?.uid
 
-    // ── Favorites (bookmarks) ───────────────────────────────────────────────
+    // Favorites (bookmarks)
 
-    /** Stores the full post under the user's favorites so the Favorites screen reads in one query. */
+    // Stores the full post under the user's favorites so the Favorites screen reads in one query.
     suspend fun toggleFavorite(post: RoutePost): Result<Boolean> = runCatching {
         val uid = uid() ?: error("Not signed in")
         val favRef = db.collection("users").document(uid).collection("favorites").document(post.id)
@@ -50,7 +50,7 @@ class SocialRepository {
             .get().awaitResult().toObjects(RoutePost::class.java)
     }
 
-    // ── Follows ─────────────────────────────────────────────────────────────
+    // Follows
 
     suspend fun isFollowing(targetUid: String): Result<Boolean> = runCatching {
         val uid = uid() ?: return@runCatching false
@@ -58,7 +58,7 @@ class SocialRepository {
             .get().awaitResult().exists()
     }
 
-    /** Follows/unfollows a user and keeps both follower/following counters in sync. Returns new state. */
+    // Follows/unfollows a user and keeps both follower/following counters in sync. Returns new state.
     suspend fun toggleFollow(targetUid: String): Result<Boolean> = runCatching {
         val uid = uid() ?: error("Not signed in")
         if (uid == targetUid) error("You can't follow yourself")
@@ -79,10 +79,8 @@ class SocialRepository {
         }
     }
 
-    /**
-     * Suggested travelers to follow: other users, excluding self (by uid AND by username, so
-     * accounts that share your username never appear), and anyone already followed.
-     */
+    // Suggested travelers to follow: other users, excluding self (by uid AND by username, so
+    // accounts that share your username never appear), and anyone already followed.
     suspend fun getSuggestedUsers(limit: Int = 10): Result<List<RoamlyUser>> = runCatching {
         val uid = uid()
         val myUsername = if (uid != null) {

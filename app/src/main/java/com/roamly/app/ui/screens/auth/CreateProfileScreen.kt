@@ -1,8 +1,8 @@
 /**
- * What: The Create Profile screen — collects username, home country, travel style/frequency, and
+ * What: The Create Profile screen - collects username, home country, travel style/frequency, and
  *       favorite destination, then persists them to Firestore via AuthViewModel before entering the app.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 package com.roamly.app.ui.screens.auth
 
@@ -95,7 +95,7 @@ fun CreateProfileScreen(
 
     Box(modifier = Modifier.fillMaxSize().background(RoamlyMidnight)) {
 
-        // ── Hero section ─────────────────────────────────────────────────
+        // Hero section
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -125,7 +125,7 @@ fun CreateProfileScreen(
             }
         }
 
-        // ── Profile setup card ────────────────────────────────────────────
+        // Profile setup card
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -157,7 +157,7 @@ fun CreateProfileScreen(
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                // ── Avatar picker ─────────────────────────────────────────
+                // Avatar picker
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Box(
                         modifier = Modifier

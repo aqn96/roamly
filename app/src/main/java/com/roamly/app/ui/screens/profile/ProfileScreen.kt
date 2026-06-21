@@ -75,7 +75,7 @@ import com.roamly.app.ui.theme.RoamlyTheme
  *       and lets the user follow others (own profile shows Edit, others show Follow). The suggested
  *       travelers row drives multi-user discovery. State flows down; events flow up.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 @Composable
 fun ProfileScreen(
@@ -119,7 +119,7 @@ fun ProfileScreen(
             modifier = Modifier.fillMaxSize().padding(innerPadding),
             contentPadding = PaddingValues(bottom = 24.dp)
         ) {
-            // ── Banner + avatar ───────────────────────────────────────────
+            // Banner + avatar
             item {
                 Box(modifier = Modifier.fillMaxWidth()) {
                     Box(
@@ -153,7 +153,7 @@ fun ProfileScreen(
                 }
             }
 
-            // ── Name + action (Edit / Follow) ─────────────────────────────
+            // Name + action (Edit / Follow)
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 16.dp, top = 52.dp, bottom = 4.dp),
@@ -210,7 +210,7 @@ fun ProfileScreen(
                 }
             }
 
-            // ── Location + travel info ────────────────────────────────────
+            // Location + travel info
             item {
                 Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     if (profile.homeCountry.isNotBlank()) InfoChipRow(icon = Icons.Default.Flag, text = profile.homeCountry)
@@ -222,7 +222,7 @@ fun ProfileScreen(
                 }
             }
 
-            // ── Follower / Following counts ───────────────────────────────
+            // Follower / Following counts
             item {
                 Row(modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp), horizontalArrangement = Arrangement.spacedBy(20.dp)) {
                     CountColumn(value = profile.followerCount, label = "Followers")
@@ -231,7 +231,7 @@ fun ProfileScreen(
                 Divider(color = RoamlySlateLight)
             }
 
-            // ── Trip stats ────────────────────────────────────────────────
+            // Trip stats
             item {
                 Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text(text = "Stats", fontFamily = MontserratFamily, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = RoamlyTextLight)
@@ -250,7 +250,7 @@ fun ProfileScreen(
                 Divider(color = RoamlySlateLight)
             }
 
-            // ── Travel level ──────────────────────────────────────────────
+            // Travel level
             item {
                 Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text(text = "Travel Level", fontFamily = MontserratFamily, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = RoamlyTextLight)
@@ -280,7 +280,7 @@ fun ProfileScreen(
                 Divider(color = RoamlySlateLight)
             }
 
-            // ── Suggested travelers to follow ─────────────────────────────
+            // Suggested travelers to follow
             if (state.suggested.isNotEmpty()) {
                 item {
                     Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {

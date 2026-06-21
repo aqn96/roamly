@@ -1,8 +1,8 @@
 /**
- * What: The Sign Up screen — creates a Firebase account via AuthViewModel (with validation +
+ * What: The Sign Up screen - creates a Firebase account via AuthViewModel (with validation +
  *       inline errors), then continues to profile setup.
  * Who:  An Nguyen
- * When: Goal 7 — Final project (Jun 2026)
+ * When: Goal 7 - Final project (Jun 2026)
  */
 package com.roamly.app.ui.screens.auth
 
@@ -74,7 +74,7 @@ fun SignUpScreen(
 
     Box(modifier = Modifier.fillMaxSize().background(RoamlyMidnight)) {
 
-        // ── Hero section ─────────────────────────────────────────────────
+        // Hero section
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -104,7 +104,7 @@ fun SignUpScreen(
             }
         }
 
-        // ── Sign up card ──────────────────────────────────────────────────
+        // Sign up card
         Card(
             modifier = Modifier
                 .fillMaxWidth()
