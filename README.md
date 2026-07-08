@@ -1,234 +1,104 @@
+```markdown
 # Roamly
 
-A passive travel route-logging Android app that rewards you for sharing the routes you actually travel. Contribute your own routes to unlock community recommendations - like Strava, but for travel discovery.
+A passive travel route-logging Android app built on a 100% free, social-first paradigm. Capture the physical paths you travel, level up your explorer status, and interact with an intelligent AI concierge grounded in real community journeys—like Strava, but for travel discovery.
 
-> Built for CS5520 Mobile App Development - Northeastern University (Summer 2026)
+Built for CS5520 Mobile App Development - Northeastern University (Summer 2026)
 
 ---
 
-## What is Roamly?
+## 🗺️ What is Roamly?
 
-1. Tap **Start Trip** - Roamly launches Google Maps for navigation while recording your GPS route in the background via a Foreground Service.
-2. After exploring for at least one day, your contributed route **unlocks 1–2 travel recommendations** from other users.
-3. Browse a social feed of routes shared by nearby travelers, save favorites, and follow other explorers.
+Roamly shifts travel exploration away from static, corporate "top-10" review lists and anchors it in real human movement and community connection. 
+
+* **Passive Tracking:** Tap **Start Trip**—Roamly launches Google Maps for navigation while seamlessly recording your exact GPS telemetry in the background via a persistent `Foreground Service`.
+* **The Social Feed:** Completed journeys auto-publish to a rich, dark-themed `Discover` feed. Browse paths traveled by nearby explorers, leave comments, save favorites, and follow other nomads.
+* **Traveler Levels & Clout:** No paywalls or contribution barriers. Behavior is gamified entirely through social status. Accumulate tracking miles to level up your profile from **Local Nomad** to **Trailblazer**, unlocking exclusive custom profile badges.
+* **watsonx AI Travel Concierge:** A frictionless, open conversational assistant built right into the app. Ask for recommendations in semantic English, and our integrated AI will mine unstructured community route summaries and tips to find your next adventure.
+
+---
+
+## 🧠 The AI Concierge Architecture (watsonx Integration)
+
+Roamly features an autonomous Retrieval-Augmented Generation (RAG) pipeline powered by the **IBM watsonx** ecosystem. Instead of querying a static database, the AI acts as an intelligent indexer of the community’s collective brain:
+
+1. **Telemetry & Text Ingestion:** Completed `RoutePost` collections, user comments, and raw trip telemetry are parsed into structured data documents and indexed within **IBM watsonx Discovery**.
+2. **Conversational Orchestration:** The user interacts with the app via a native Compose chat interface. Natural language queries are processed by **IBM watsonx Assistant** via stateless REST API endpoints managed by Ktor.
+3. **Grounded Synthesis:** When matching travel intents, the assistant pulls contextually relevant, verified community routes from Discovery. A **watsonx.ai foundation model (IBM Granite)** synthesizes a response explicitly grounded in real journeys (e.g., *"Based on a route logged by @aqn96 two weeks ago, you should check out..."*), preventing hallucinations and protecting the authentic vibe of the app.
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology | Language / Spec |
+| :--- | :--- | :--- |
+| **UI** | Jetpack Compose + Material 3 | Kotlin |
+| **Navigation** | Navigation Compose | Type-safe `@Serializable` routes |
+| **Backend** | Firebase Auth + Cloud Firestore + Cloud Storage | Core App Ecosystem |
+| **AI Architecture** | watsonx Assistant + watsonx Discovery + watsonx.ai | IBM Cloud REST APIs (Ktor) |
+| **Location Tracking** | `FusedLocationProviderClient` + Background Foreground Service | Hardware Telemetry |
+| **Image Loading** | Coil (`AsyncImage`) | Avatar & Post Media |
+| **Typography** | Montserrat (headings) + Nunito (body) | Font System |
+| **Targeting** | Min SDK: 28 (Android 9.0) | Target SDK: 37 |
 
 ---
 
 ## 🧪 For Graders / Testers
 
-**1. Run the app** - see [Getting Started](#getting-started) below (open in Android Studio → **Run ▶** on an emulator or device, API 28+). The Firebase config is already included, so **no setup is needed**.
+### 1. Run the App
+Open the project in Android Studio and run ▶ on an emulator or physical device (API 28+). The Firebase configuration file is already bundled within the repository at: `app/google-services.json`. 
 
-> **📁 Firebase config / secrets location (for graders):** the Google services file is committed in the repo at:
-> ```
-> app/google-services.json
-> ```
-> It contains the Firebase **project ID** (`roamly-e7c4d`), **API key**, app ID, and the **Storage bucket** - everything the app needs to reach Auth, Cloud Firestore, and Cloud Storage. It is **not** git-ignored, so it's present after a fresh `git clone`. You do **not** need to create your own Firebase project or add any keys.
+*Verified Environment:* Pixel 8 emulator - Android 16 (API 36), arm64-v8a.
 
-> **✅ Verified on:** **Pixel 8** emulator - **Android 16 (API 36)**, `arm64-v8a`, 1080×2400 @ 420 dpi. The full flow (sign-up, login, GPS trip, posts, profile photo upload, log out) was tested here. Any emulator or physical device on **API 28+** works.
+### 2. Ready-Made Demo Account
+Tap **Sign Up** to create a custom profile, or log in instantly with the grader sandbox credentials:
+* **Email:** `grader@roamly.app`
+* **Password:** `RoamlyDemo1`
 
-**2. Log in with the ready-made demo account** (or tap **Sign Up** to make your own - any email works, no verification needed):
-
-| Email | Password |
-|---|---|
-| `grader@roamly.app` | `RoamlyDemo1` |
-
-**3. What to try:**
-1. **Log In** with the account above → lands on **Home**.
-2. **Start Trip** → allow location → simulate a GPS route in the emulator (Extended Controls ⋮ → **Location** → set points / play a route) → **Stop** → see the trip summary; it auto-publishes a post to **Discover**.
-3. **Discover** tab → open a post → **like**, **comment**, **follow** the author.
-4. **Profile** (top-left avatar) → view stats & travel level → **Edit** to update, or **Log Out** to switch accounts.
-5. **Profile photo:** **Sign Up** → Create Profile → tap the avatar circle → pick a photo. It uploads to Firebase Storage and appears on Home + Profile.
-
-> The demo account is a normal user - feel free to **Log Out** and **Sign Up** with your own to exercise the multi-user features (following others, viewing other profiles).
+### 3. Core Interactions to Test
+* **Home / Track:** Start a trip, allow location permissions, and simulate a GPS route in the emulator (**Extended Controls ⋮ ➔ Location ➔ Play Route**). Tap Stop to watch your telemetry seamlessly auto-publish to the social feed.
+* **Discover / Social:** Explore the feed, tap into a post, leave a comment, or follow an author to test multi-user state synchronization.
+* **AI Concierge Screen:** Navigate to the AI chat view and input open-ended, semantic search queries (e.g., *"Show me a quiet walking route with a steep incline or viewpoint nearby"*). Observe the RAG engine parsing crowdsourced logs to serve conversational recommendations.
 
 ---
 
-## Tech Stack
+## 📁 Project Structure
 
-| Layer | Technology |
-|---|---|
-| Language | Kotlin |
-| UI | Jetpack Compose + Material 3 |
-| Navigation | Navigation Compose (type-safe `@Serializable` routes) |
-| Backend | Firebase Auth (Email/Password) + Cloud Firestore + Cloud Storage |
-| Architecture | ViewModel + StateFlow (UDF), `collectAsStateWithLifecycle` |
-| Location | FusedLocationProviderClient + Foreground Service |
-| Images | Coil (`AsyncImage`) - loads profile photos from Firebase Storage download URLs |
-| Fonts | Montserrat (headings) + Nunito (body) |
-| Min SDK | API 28 (Android 9.0) |
-| Target SDK | API 37 |
+```text
+app/src/main/java/com/roamly/app/
+├── MainActivity.kt          # Main entry point hosting the type-safe NavGraph
+├── navigation/              # Type-safe @Serializable routes + RoamlyNavGraph
+├── data/                    # Models (RoamlyUser, Trip, RoutePost, Comment, TrackPoint) + Repositories
+├── location/                # TripLocationService (Foreground Service Lifecycle) + TripSession
+└── ui/                      # Jetpack Compose Presentation Layer
+    ├── theme/               # "Midnight Nomad" dark-first design tokens (#0F172A base)
+    ├── components/          # Reusable components (RoamlyButton, RoutePostCard, BottomNavBar)
+    └── screens/             # ViewModels + Composables mapped strictly by feature boundaries
+        ├── auth/            # Login, Sign Up, and Profile Initialization
+        ├── home/            # Map overview, Active Tracking state toggles
+        ├── discover/        # Social feed, post details, dynamic community threads
+        └── ai_concierge/    # Ktor-brokered chat screens feeding into the watsonx engine
+
+```
 
 ---
 
 ## ⚠️ Firebase Secrets Management
 
-**For CS5520 final project submission (until June 23rd):** The Firebase configuration file `google-services.json` is included in this repo per Professor Miazi's instructions.
-
-**Graders:** The Firebase secrets file is located at:
-```
-app/google-services.json
-```
-
-After June 23rd, this file will be removed and added to `.gitignore` before publishing the code publicly.
+For CS5520 final project submission (until June 23rd): The Firebase configuration file `google-services.json` is included in this repo per permissions. After June 23rd, this file will be wiped from git history and appended to `.gitignore` before the codebase goes fully open-source.
 
 ---
 
-## Getting Started
-
-### Prerequisites
-- Android Studio (latest stable)
-- Android SDK 37 installed
-- Java 11+
-
-### Clone and run
-```bash
-git clone https://github.com/aqn96/roamly.git
-```
-1. Open **Android Studio**
-2. File → Open → select the `roamly/` folder
-3. Wait for Gradle sync to complete (Android Studio auto-generates `local.properties`)
-4. Run on an emulator or physical device (API 28+)
-
-> `local.properties` is excluded from version control intentionally - it contains your local SDK path and is auto-generated by Android Studio on first open.
-
-### Firebase setup (required for auth + cloud data)
-
-The app talks to Firebase, so each developer supplies their own config. **For CS5520 final project:** the professor has approved keeping `google-services.json` in the repo through June 23rd for submission purposes.
-
-1. Create a project at [console.firebase.google.com](https://console.firebase.google.com).
-2. **Add an Android app** with package name **`com.roamly.app`**, download **`google-services.json`**,
-   and place it in the **`app/`** folder (next to `app/build.gradle.kts`).
-3. **Authentication → Sign-in method →** enable **Email/Password** (leave Email-link off).
-4. **Firestore Database → Create database →** choose a location → **Start in test mode**.
-   *(Creating the database also enables the Cloud Firestore API. If writes fail with
-   `PERMISSION_DENIED`, enable the [Cloud Firestore API](https://console.cloud.google.com/apis/library/firestore.googleapis.com) and wait ~1 min.)*
-5. **Storage → Get started →** **Start in test mode** → pick the same location (e.g. `nam5` / `US`).
-   This creates the default bucket (`gs://<project>.firebasestorage.app`) used for profile photos
-   at `profile_photos/{uid}/…`. Profile photo upload is the only feature that needs Storage; the
-   rest of the app works without it.
-   - **Heads-up:** newer Firebase projects must be on the **Blaze (pay-as-you-go)** plan to enable
-     Storage - the console upgrades you when you click *Get started*. Blaze includes the same free
-     Spark quota (≈5 GB stored, 1 GB/day downloaded), so avatar-scale usage stays at **$0**. Set a
-     Google Cloud budget alert if you want a safety net.
-   - **Before sharing the project,** tighten **Storage → Rules** from test mode to authenticated
-     access so the bucket isn't world-readable:
-     ```
-     rules_version = '2';
-     service firebase.storage {
-       match /b/{bucket}/o {
-         match /{allPaths=**} { allow read, write: if request.auth != null; }
-       }
-     }
-     ```
-
-No Maps API key is needed - route maps are drawn on a Compose Canvas and navigation hands off to the
-Google Maps app. Auth and Firestore stay within the free tier; Cloud Storage requires the Blaze plan
-but stays at no cost for this app's usage.
-
-> **Post-submission reminder:** After June 23rd, remove `google-services.json` and add it to `.gitignore` before making the repo public.
-
----
-
-## Project Structure
-
-```
-app/src/main/java/com/roamly/app/
-├── MainActivity.kt          # Hosts the navigation graph
-├── navigation/              # Type-safe @Serializable routes + RoamlyNavGraph
-├── data/                    # Models (RoamlyUser, Trip, RoutePost, Comment, TrackPoint)
-│                            #   + Firestore repositories (Auth/Content/Social)
-├── location/                # TripLocationService (Foreground Service) + TripSession
-├── ui/                      # Compose screens (each feature has its own ViewModel) + theme + components
-│   ├── theme/
-│   │   ├── Color.kt         # Midnight Nomad color system
-│   │   ├── Theme.kt
-│   │   └── Type.kt          # Montserrat + Nunito typography
-│   ├── components/          # Reusable UI components
-│   │   ├── RoamlyButton.kt
-│   │   ├── RoamlyTextField.kt
-│   │   ├── SocialSignInButton.kt
-│   │   ├── BottomNavBar.kt
-│   │   └── RoutePostCard.kt
-│   └── screens/
-│       ├── auth/
-│       │   ├── LoginScreen.kt
-│       │   ├── SignUpScreen.kt
-│       │   └── CreateProfileScreen.kt
-│       ├── home/
-│       │   ├── HomeScreen.kt
-│       │   └── LocationPermissionScreen.kt
-│       ├── trip/
-│       │   ├── ActiveTripScreen.kt
-│       │   └── TripSummaryScreen.kt
-│       ├── discover/
-│       │   ├── DiscoverScreen.kt
-│       │   └── PostDetailScreen.kt
-│       ├── profile/
-│       │   └── ProfileScreen.kt
-│       └── favorites/
-│           └── FavoritesScreen.kt
-docs/
-└── Roamly_ Travel app.pdf   # Project proposal (Goal 5)
-```
-
----
-
-## Screens
-
-| Screen | Description |
-|---|---|
-| Login | Hero gradient, email/password, social sign-in |
-| Sign Up | Account creation form |
-| Create Profile | Avatar, travel style, frequency, favorite destination |
-| Home | Map + search bar + recommended routes + Start Trip |
-| Location Permission | Pre-permission rationale screen before OS dialog |
-| Active Trip | Live map, timer, distance, recording banner, Stop Trip |
-| Trip Summary | Route map, stats, unlocked badge, past trips history |
-| Discover | Social feed with filter chips (For You / Nearby / Trending / Following) |
-| Post Detail | Full post, comments, similar posts from same location |
-| Profile | Banner, avatar, stats, travel level, suggested travelers |
-| Favorites | Saved/bookmarked routes from the Discover feed |
-
----
-
-## Design System - Midnight Nomad
-
-Dark-first theme optimized for battery efficiency during passive background recording.
-
-| Token | Value | Usage |
-|---|---|---|
-| Background | `#0F172A` | All screen backgrounds |
-| Card surface | `#1E293B` | Cards, bottom sheets |
-| Electric blue | `#38BDF8` | Primary accent, buttons |
-| Aurora green | `#34D399` | Achievements, unlocked state |
-| Text primary | `#E2E8F0` | Headings and body |
-| Text muted | `#94A3B8` | Subtitles, placeholders |
-
----
-
-## Current Status
-
-| Milestone | Description | Status |
-|---|---|---|
-| Proposal + wireframes | App concept, screens, backend design | ✅ Complete |
-| UI screens | All screens built with Compose, dark theme, reusable components | ✅ Complete |
-| Navigation | Type-safe NavGraph wiring all screens + bottom-nav tabs | ✅ Complete |
-| GPS trip recording | Foreground Service + FusedLocationProvider + live route polyline | ✅ Complete |
-| Auth + profile | Email/password Firebase Auth + Firestore profile + session persistence | ✅ Complete |
-| Trips + contribution posts | Recorded trips saved to Firestore, auto-published as feed posts | ✅ Complete |
-| Multi-user + cloud data | Discover feed, likes, comments, favorites, follows in Firestore | ✅ Complete |
-| Code docs | What/Who/When headers + `@Preview` on all Composables | ✅ Complete |
-
-> ⚠️ To run with cloud data, enable **Cloud Firestore** in your Firebase project (see *Firebase setup* above).
->
-> See [`docs/PROGRESS.md`](docs/PROGRESS.md) for a per-stage build log (used to build the final presentation).
-
----
-
-## Course Info
+## 🎓 Course Info
 
 **CS5520 Mobile App Development**
+
 Northeastern University - Summer 2026 Session A
 
-**Student:** An Nguyen
-**GitHub:** [@aqn96](https://github.com/aqn96)
+*Student:* An Nguyen
+
+*GitHub:* [@aqn96](https://github.com/aqn96)
+
+```
+
+```
