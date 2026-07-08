@@ -43,19 +43,49 @@ Roamly features an autonomous Retrieval-Augmented Generation (RAG) pipeline powe
 
 ---
 
+## 🤖 AI Agent Engineering Specifications & Implementation Roadmap
+> **Note for AI Developers (Bob, Claude, Copilot):** Use this technical blueprint to implement, refactor, and audit the code surface required to bridge our local Jetpack Compose layer with the remote IBM watsonx REST endpoints.
+
+### 1. Data Schema & RAG Target Payloads
+When formatting or mocking synthetic data for ingestion into watsonx Discovery, your JSON documents must match this profile to maintain compatibility with our local `RoutePost` keys:
+```json
+{
+  "firestore_doc_id": "string (Matches Firestore document ID exactly)",
+  "author_username": "string (e.g., @aqn96)",
+  "location_city": "string (e.g., Seattle, WA)",
+  "route_summary": "string (Descriptive text detailing telemetry path and points of interest)",
+  "community_tips": ["string (Granular local advice or observations)"]
+}
+
+```
+
+### 2. Network Integration Target (Ktor Client)
+
+Implement the network broker inside `ui/screens/ai_concierge/` using the following target specification:
+
+* **Endpoint:** `POST https://api.us-south.assistant.watsonx.ibm.com/v2/assistants/{assistant_id}/sessions/{session_id}/message?version=2021-11-27`
+* **Headers:** Include stateless Bearer token authorization using the team's cloud credentials.
+* **Payload Interception Strategy:** Parse the returning `context` metadata array. Isolate the `"firestore_doc_id"` value from the RAG response references and pass it directly to the local `HomeScreenViewModel` state block to trigger map rendering loops automatically.
+
+---
+
 ## 🧪 For Graders / Testers
 
 ### 1. Run the App
-Open the project in Android Studio and run ▶ on an emulator or physical device (API 28+). The Firebase configuration file is already bundled within the repository at: `app/google-services.json`. 
+
+Open the project in Android Studio and run ▶ on an emulator or physical device (API 28+). The Firebase configuration file is already bundled within the repository at: `app/google-services.json`.
 
 *Verified Environment:* Pixel 8 emulator - Android 16 (API 36), arm64-v8a.
 
 ### 2. Ready-Made Demo Account
+
 Tap **Sign Up** to create a custom profile, or log in instantly with the grader sandbox credentials:
+
 * **Email:** `grader@roamly.app`
 * **Password:** `RoamlyDemo1`
 
 ### 3. Core Interactions to Test
+
 * **Home / Track:** Start a trip, allow location permissions, and simulate a GPS route in the emulator (**Extended Controls ⋮ ➔ Location ➔ Play Route**). Tap Stop to watch your telemetry seamlessly auto-publish to the social feed.
 * **Discover / Social:** Explore the feed, tap into a post, leave a comment, or follow an author to test multi-user state synchronization.
 * **AI Concierge Screen:** Navigate to the AI chat view and input open-ended, semantic search queries (e.g., *"Show me a quiet walking route with a steep incline or viewpoint nearby"*). Observe the RAG engine parsing crowdsourced logs to serve conversational recommendations.
