@@ -1,7 +1,7 @@
 ```markdown
 # Roamly
 
-A passive travel route-logging Android app built on a 100% free, social-first paradigm. Capture the physical paths you travel, level up your explorer status, and interact with an intelligent AI concierge grounded in real community journeys—like Strava, but for travel discovery.
+A passive, activity-logging Android application built on a 100% free, social-first paradigm. Capture the physical paths you travel, earn exploration clout, and interact with an intelligent AI concierge grounded in real community journeys—like Strava, but optimized for travel and local discovery.
 
 Built for CS5520 Mobile App Development - Northeastern University (Summer 2026)
 
@@ -9,11 +9,16 @@ Built for CS5520 Mobile App Development - Northeastern University (Summer 2026)
 
 ## 🗺️ What is Roamly?
 
-Roamly shifts travel exploration away from static, corporate "top-10" review lists and anchors it in real human movement and community connection. 
+Roamly shifts travel exploration away from static review lists and anchors it entirely in real human movement and automated tracking. The user flow is completely streamlined:
 
-* **Passive Tracking:** Tap **Start Trip**—Roamly launches Google Maps for navigation while seamlessly recording your exact GPS telemetry in the background via a persistent `Foreground Service`.
+```text
+[User Onboarding] ➔ [Semantic Search Query] ➔ [watsonx RAG Selection] ➔ [Passive Foreground Logging] ➔ [Automated Arrival Detection] ➔ [Score & Level Accumulation]
+
+```
+
+* **Passive Tracking:** Tap **Start Trip**—Roamly launches Google Maps for navigation while seamlessly recording your exact GPS telemetry in the background via a persistent `Foreground Service` even when the screen is locked.
 * **The Social Feed:** Completed journeys auto-publish to a rich, dark-themed `Discover` feed. Browse paths traveled by nearby explorers, leave comments, save favorites, and follow other nomads.
-* **Traveler Levels & Clout:** No paywalls or contribution barriers. Behavior is gamified entirely through social status. Accumulate tracking miles to level up your profile from **Local Nomad** to **Trailblazer**, unlocking exclusive custom profile badges.
+* **Traveler Levels & Clout:** No paywalls or contribution barriers. Behavior is gamified entirely through social status. Accumulate tracking miles to level up your profile from **Local Nomad** to **Trailblazer**, unlocking profile flairs and exclusive high-tier routing.
 * **watsonx AI Travel Concierge:** A frictionless, open conversational assistant built right into the app. Ask for recommendations in semantic English, and our integrated AI will mine unstructured community route summaries and tips to find your next adventure.
 
 ---
@@ -31,7 +36,7 @@ Roamly features an autonomous Retrieval-Augmented Generation (RAG) pipeline powe
 ## 🛠️ Tech Stack
 
 | Layer | Technology | Language / Spec |
-| :--- | :--- | :--- |
+| --- | --- | --- |
 | **UI** | Jetpack Compose + Material 3 | Kotlin |
 | **Navigation** | Navigation Compose | Type-safe `@Serializable` routes |
 | **Backend** | Firebase Auth + Cloud Firestore + Cloud Storage | Core App Ecosystem |
@@ -44,10 +49,13 @@ Roamly features an autonomous Retrieval-Augmented Generation (RAG) pipeline powe
 ---
 
 ## 🤖 AI Agent Engineering Specifications & Implementation Roadmap
-> **Note for AI Developers (Bob, Claude, Copilot):** Use this technical blueprint to implement, refactor, and audit the code surface required to bridge our local Jetpack Compose layer with the remote IBM watsonx REST endpoints.
+
+> **Note for AI Developers (Bob, Claude Code, Copilot):** Use this strict technical specification sheet to automatically implement, audit, and refactor the code surfaces required for this workflow.
 
 ### 1. Data Schema & RAG Target Payloads
+
 When formatting or mocking synthetic data for ingestion into watsonx Discovery, your JSON documents must match this profile to maintain compatibility with our local `RoutePost` keys:
+
 ```json
 {
   "firestore_doc_id": "string (Matches Firestore document ID exactly)",
@@ -65,7 +73,21 @@ Implement the network broker inside `ui/screens/ai_concierge/` using the followi
 
 * **Endpoint:** `POST https://api.us-south.assistant.watsonx.ibm.com/v2/assistants/{assistant_id}/sessions/{session_id}/message?version=2021-11-27`
 * **Headers:** Include stateless Bearer token authorization using the team's cloud credentials.
-* **Payload Interception Strategy:** Parse the returning `context` metadata array. Isolate the `"firestore_doc_id"` value from the RAG response references and pass it directly to the local `HomeScreenViewModel` state block to trigger map rendering loops automatically.
+* **Payload Interception Strategy:** Parse the returning context metadata array. Isolate the `"firestore_doc_id"` value from the RAG response references and pass it directly to the local `HomeScreenViewModel` state block to trigger map rendering loops automatically.
+
+### 3. Dwell-Time Arrival Detection State Machine
+
+In `location/TripLocationService.kt`, audit the incoming `TrackPoint` telemetry processor to detect destination arrival passively:
+
+* **Condition:** Monitor incoming streaming coordinates. If current velocity drops to near zero ($< 0.5\text{ m/s}$) inside a tight coordinate boundary ($< 20\text{ meters}$) sustained over a continuous 3-to-5 minute window, flag a destination arrival state change.
+* **Action:** Programmatically freeze background tracking, persist the accumulated stream array, and trigger a contextual slide/navigation action bringing `TripSummaryScreen` to the foreground.
+
+### 4. Dynamic RAG Filter & Score Synchronization
+
+When completing a trip, update the user profile state in Firestore:
+
+* Increment total score variables to update the user's local `TravelerLevel`.
+* **RAG Downstream Mapping:** When dispatching queries from high-tier users via the Ktor client to watsonx Assistant, append the user's tier metadata as a filter constraint. Instruct the RAG pipeline to omit high-traffic commercial pins and exclusively index low-traffic, low-frequency documents from Discovery to surface hidden gem recommendations.
 
 ---
 
@@ -79,16 +101,15 @@ Open the project in Android Studio and run ▶ on an emulator or physical device
 
 ### 2. Ready-Made Demo Account
 
-Tap **Sign Up** to create a custom profile, or log in instantly with the grader sandbox credentials:
+Log in instantly with the grader sandbox credentials:
 
 * **Email:** `grader@roamly.app`
 * **Password:** `RoamlyDemo1`
 
 ### 3. Core Interactions to Test
 
-* **Home / Track:** Start a trip, allow location permissions, and simulate a GPS route in the emulator (**Extended Controls ⋮ ➔ Location ➔ Play Route**). Tap Stop to watch your telemetry seamlessly auto-publish to the social feed.
-* **Discover / Social:** Explore the feed, tap into a post, leave a comment, or follow an author to test multi-user state synchronization.
-* **AI Concierge Screen:** Navigate to the AI chat view and input open-ended, semantic search queries (e.g., *"Show me a quiet walking route with a steep incline or viewpoint nearby"*). Observe the RAG engine parsing crowdsourced logs to serve conversational recommendations.
+* **Home / Semantic Search:** Go to the search interface and type: *"I want to visit the supermarket"* or *"Show me a dog park."* Observe the map rendering an optimal route suggestion based on the AI response.
+* **Passive Tracking:** Click **Start Trip**, simulate location changes in your emulator settings, lock or background the device view, and stop the trip to observe code completion and automatic score accumulation inside your user profile.
 
 ---
 
